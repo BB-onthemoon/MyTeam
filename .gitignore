@@ -1,0 +1,27 @@
+# ==========================================================
+# MyTeam — เก็บเฉพาะ "ระบบ Team" (.claude/ + CLAUDE.md + tooling)
+# ไม่เก็บงาน Dashboard จริง และ artifact เฉพาะเครื่อง
+# ==========================================================
+
+# --- Dependencies ---
+node_modules/
+
+# --- งาน Dashboard จริง (ไม่ใช่ระบบ Team) ---
+/app/
+/landing-page-pj/
+/plant_status/
+/plant_status_rework/
+/product-stock/
+/weatherAPI/
+/our_team/
+
+# --- ไฟล์เฉพาะเครื่อง / ความเป็นส่วนตัว ---
+.claude/settings.local.json
+
+# --- Artifact / screenshot ชั่วคราวที่ root ---
+/test-step1-2cards.png
+/*.png
+
+# --- ระบบ ---
+.DS_Store
+Thumbs.db

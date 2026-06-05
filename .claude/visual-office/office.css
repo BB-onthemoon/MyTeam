@@ -1,0 +1,2125 @@
+/* =====================================================
+   DESIGN TOKENS
+   palette: warm retro 8-bit limited set
+   olive-green + cream + warm brown (cozy, เข้ากับ sprite)
+===================================================== */
+:root {
+  /* background หน้าจอ */
+  --bg-page: #1a1508;
+  --bg-mid: #2a1f0e;
+
+  /* ห้อง — กำแพงและพื้น */
+  --wall-color: #5a6b3a;
+  --wall-top: #4a5a2e;
+  --wall-side: #48552c;
+  --wall-border: #2e3a1a;
+  --baseboard: #3a4820;
+
+  /* พื้น — warm cream tile */
+  --floor-a: #ddd5a8;
+  --floor-b: #ccc494;
+  --floor-line: #b8a870;
+  --floor-border: #2e3a1a;
+
+  /* พรม */
+  --rug-base: #8b4a3a;
+  --rug-border: #6a3028;
+  --rug-pattern: #a85848;
+
+  /* โต๊ะ */
+  --desk-surface: #c8a455;
+  --desk-edge: #8a6428;
+  --desk-border: #2e2010;
+  --monitor-body: #2a2a35;
+  --monitor-screen: #1a2a1a;
+
+  /* ตกแต่ง */
+  --plant-pot: #7a4c28;
+  --plant-l1: #3a6820;
+  --plant-l2: #4a7a2a;
+  --plant-l3: #5a8a34;
+  --window-frame: #6a7840;
+  --window-glass: #9ab8c4;
+  --clock-face: #d4c47a;
+  --clock-border: #6a5020;
+  --poster-bg: #4a5a30;
+
+  /* มุมกาแฟ ☕ */
+  --counter-surface: #9a6b3a; /* ไม้ espresso เข้มกว่าโต๊ะ ให้แยกออกจากกัน */
+  --counter-edge: #6a4724;
+  --machine-body: #34343e;
+  --machine-head: #c8763a; /* แถบหัวชงสีกาแฟอุ่น */
+  --mug-1: #ece3d2; /* ถ้วยครีม */
+  --mug-2: #d46a8a; /* ถ้วยชมพู (โทน Elysia) */
+
+  /* ประตู + พรมเช็ดเท้า 🚪 (D) */
+  --door: #6a4426;
+  --door-frame: #3a2410;
+  --door-knob: #d9b25a;
+  --mat: #7a5a32;
+
+  /* panel UI */
+  --panel-bg: rgba(255, 255, 255, 0.04);
+  --panel-border: rgba(255, 255, 255, 0.1);
+  --ink-light: #f5f0e8;
+  --ink-muted: #9a8b6e;
+
+  --px-border: 3px solid #1e1a0a;
+
+  /* sidebar tokens — เพิ่มเฉพาะที่ยังไม่มี */
+  --sidebar-w: 30%; /* S012: กว้าง 30% ของจอ (เดิม 240px) — desktop เท่านั้น, mobile override เป็น 1fr */
+  --sidebar-bg: rgba(255, 255, 255, 0.025);
+  --sidebar-border: rgba(255, 255, 255, 0.09);
+  --section-gap: 1px solid rgba(255, 255, 255, 0.06);
+
+  /* S015: color panel tokens — prefix cp- เพื่อไม่ชนกับ --panel-bg เดิม */
+  --cp-bg: #1e1a0e;                               /* พื้นหลัง panel (เข้มกว่า --bg-page เล็กน้อย) */
+  --cp-header-bg: #252010;                        /* header เข้มกว่า body นิด = hierarchy */
+  --cp-border: #3a3018;                           /* border 2px รอบ panel */
+  --cp-section-line: 1px solid rgba(255, 255, 255, 0.06); /* เส้นแบ่งแถวบาง */
+  --cp-row-hover: rgba(255, 255, 255, 0.04);     /* hover state บน color-row */
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Segoe UI", "Tahoma", sans-serif;
+  background: radial-gradient(
+    ellipse at 50% 0%,
+    var(--bg-mid) 0%,
+    var(--bg-page) 60%
+  );
+  min-height: 100vh;
+  color: var(--ink-light);
+}
+
+/* =====================================================
+   ROOT LAYOUT — sidebar ซ้าย 240px + main ขวายืดเต็ม
+   topbar อยู่บนสุดของคอลัมน์ขวา ทั้ง 2 แถวใช้ grid-area
+===================================================== */
+.layout {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  grid-template-columns: var(--sidebar-w) 1fr;
+  grid-template-areas:
+    "sidebar  topbar"
+    "sidebar  main";
+  min-height: 100vh;
+}
+
+/* =====================================================
+   TOPBAR — ย้ายมาอยู่ grid area "topbar"
+   ลบ max-width + width: 100% ออก เพราะ grid จัดการให้
+===================================================== */
+.topbar {
+  grid-area: topbar;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.topbar__left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* pixel building icon — CSS only */
+.topbar__icon {
+  width: 28px;
+  height: 28px;
+  background:
+    linear-gradient(#1a2a1a, #1a2a1a) 4px 4px / 6px 5px no-repeat,
+    linear-gradient(#1a2a1a, #1a2a1a) 15px 4px / 6px 5px no-repeat,
+    linear-gradient(#1a2a1a, #1a2a1a) 4px 13px / 6px 5px no-repeat,
+    linear-gradient(#1a2a1a, #1a2a1a) 15px 13px / 6px 5px no-repeat,
+    linear-gradient(#1a2a1a, #1a2a1a) 9px 20px / 10px 8px no-repeat,
+    #5a6b3a;
+  border: var(--px-border);
+  border-radius: 2px;
+  image-rendering: pixelated;
+  flex-shrink: 0;
+}
+
+.topbar h1 {
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  color: var(--ink-light);
+}
+
+.topbar__sub {
+  font-size: 12px;
+  color: var(--ink-muted);
+  letter-spacing: 0.4px;
+}
+
+/* "updated X ago" — JS จะ update text ใน element นี้ */
+.topbar__updated {
+  font-size: 12px;
+  color: var(--ink-muted);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.05);
+  padding: 5px 12px;
+  border-radius: 4px;
+  letter-spacing: 0.3px;
+}
+
+/* =====================================================
+   SIDEBAR — Step 3
+   grid area "sidebar" — ทอดยาว 2 แถว (topbar + main)
+   border-right บาง เลี่ยง AI tell (ขอบหนาด้านเดียว)
+===================================================== */
+.sidebar {
+  grid-area: sidebar;
+  background: var(--sidebar-bg);
+  border-right: 1px solid var(--sidebar-border);
+  display: flex;
+  flex-direction: column;
+  /* sidebar scroll เอง ไม่ดัน layout */
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* scrollbar sidebar — เหมือน feed scroll */
+.sidebar::-webkit-scrollbar {
+  width: 3px;
+}
+.sidebar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.sidebar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 2px;
+}
+
+/* sb-body — wrapper เนื้อหาทั้งหมด (ใช้ toggle mobile ได้ภายหลัง) */
+.sb-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+}
+
+/* ---- section divider ---- */
+.sb-section {
+  border-bottom: var(--section-gap);
+}
+
+/* section สุดท้าย (feed) ยืดเต็มพื้นที่ที่เหลือ */
+.sb-section:last-child {
+  border-bottom: none;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  /* สำคัญ: ป้องกัน flex child โป่งเกิน — ให้ scroll ได้ */
+  min-height: 0;
+}
+
+/* eyebrow label — แบ่ง section ใน sidebar */
+.sb-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.7px;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  padding: 10px 14px 3px;
+}
+
+/* =====================================================
+   SECTION 1 — SESSION CARD
+===================================================== */
+.session-card {
+  margin: 0 12px 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  padding: 12px 14px;
+}
+
+.session-card__row {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.session-card__session-label {
+  font-size: 11px;
+  color: var(--ink-muted);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+
+.session-card__session-value {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--ink-light);
+  line-height: 1;
+}
+
+.session-card__step-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 2px;
+}
+
+.session-card__step-num {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--ink-light);
+  background: rgba(255, 255, 255, 0.1);
+  padding: 1px 6px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.session-card__step-label {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.75);
+  line-height: 1.3;
+}
+
+.session-card__time {
+  margin-top: 8px;
+  font-size: 12px;
+  color: var(--ink-muted);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  padding-top: 8px;
+}
+
+/* =====================================================
+   SECTION 2 — TEAM LIST
+===================================================== */
+.team-list {
+  list-style: none;
+  padding: 0 0 8px;
+}
+
+.team-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  padding: 7px 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+  transition: background 0.15s ease-out;
+}
+
+.team-item:last-child {
+  border-bottom: none;
+}
+
+.team-item:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+/* status dot — ขนาดเดียวกับ dot ในห้อง (8×8) */
+.team-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 4px;
+}
+
+.team-info {
+  flex: 1;
+  /* ป้องกัน text overflow ออกนอก column */
+  min-width: 0;
+}
+
+.team-info__header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 2px;
+}
+
+.team-info__name {
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.team-info__status {
+  font-size: 11px;
+  color: var(--ink-muted);
+  letter-spacing: 0.3px;
+}
+
+.team-info__task {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.55);
+  line-height: 1.35;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+/* agent name colors — ตรงกับสีใน office.html */
+.c-elysia {
+  color: #ff8faf;
+}
+.c-sakura {
+  color: #ffb7c5;
+}
+.c-mobius {
+  color: #6fcf30;
+}
+.c-aponia {
+  color: #eee100;
+}
+
+/* =====================================================
+   SECTION 3 — ACTIVITY FEED (ย้ายจาก bottom-section)
+===================================================== */
+/* sb-feed-inner: scroll container — min-height: 0 สำคัญมาก */
+.sb-feed-inner {
+  flex: 0 0 auto;
+  overflow-y: auto;
+  padding-bottom: 0 px;
+  margin-bottom: 0;
+  min-height: 0;
+}
+
+.sb-feed-inner::-webkit-scrollbar {
+  width: 3px;
+}
+.sb-feed-inner::-webkit-scrollbar-track {
+  background: transparent;
+}
+.sb-feed-inner::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 2px;
+}
+
+.sb-feed-list {
+  list-style: none;
+  padding: 0;
+}
+
+/* feed count label ในหัว section */
+.sb-feed-count {
+  font-size: 11px;
+  color: var(--ink-muted);
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+/* S012: ปุ่ม "ดูทั้งหมด" — full width ใต้ feed, ไม่ถูก flex กด */
+.sb-feed-showall {
+  margin: 0;
+  flex-shrink: 0;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.03);
+  border: none;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  color: var(--ink-muted);
+  font-family: inherit;
+  font-size: 11px;
+  letter-spacing: 0.3px;
+  padding: 8px 14px;
+  cursor: pointer;
+  text-align: center;
+  transition:
+    background 0.15s ease-out,
+    color 0.15s ease-out;
+}
+
+.sb-feed-showall:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--ink-light);
+}
+
+.sb-feed-showall:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.3);
+  outline-offset: -2px;
+}
+
+/* =====================================================
+   LEGEND — ท้าย sidebar (ไม่ scroll)
+===================================================== */
+.sb-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 10px;
+  padding: 8px 14px;
+  border-top: var(--section-gap);
+  background: rgba(255, 255, 255, 0.02);
+  /* ป้องกันถูก flex กด */
+  flex-shrink: 0;
+}
+
+/* =====================================================
+   MAIN — พื้นที่หลักในคอลัมน์ขวา (grid area "main")
+   padding ครอบคลุมทั้ง error-banner + stage-wrap
+===================================================== */
+.main {
+  grid-area: main;
+  padding: 16px 24px 28px;
+  overflow-y: auto;
+}
+
+/* =====================================================
+   STAGE — กรอบห้อง top-down
+   ลบ max-width + padding ออก เพราะ .main รับไปแล้ว
+===================================================== */
+.stage-wrap {
+  width: 100%;
+}
+
+.room {
+  position: relative;
+  width: 100%;
+  /* ความสูงรวมคงที่ → แบ่ง กำแพง:พื้น = 1:3 ด้วย flex (Step 1, S014)
+     กำแพง flex:1 / พื้น flex:3 ทำงานสัมพันธ์กับ --room-h ตัวนี้ตัวเดียว
+     ปรับ --room-h ที่เดียว = ปรับขนาดห้องทั้งใบ (และ breakpoint override ด้านล่าง) */
+  --room-h: 632px;
+  height: var(--room-h);
+  display: flex;
+  flex-direction: column;
+  border: var(--px-border);
+  border-radius: 0;
+  overflow: hidden;
+  background: var(--floor-a);
+}
+
+/* กำแพงด้านบน */
+.wall-top {
+  width: 100%;
+  /* flex:1 = 1 ส่วนใน 4 ของ --room-h → คู่กับ floor-area flex:3 ได้ 1:3 (S014)
+     min-height:0 ให้ flex หดได้จริง, ไม่ค้างที่ความสูง content */
+  flex: 1 1 0;
+  min-height: 0;
+  background: var(--wall-color);
+  border-bottom: var(--px-border);
+  position: relative;
+  background-image:
+    linear-gradient(rgba(0, 0, 0, 0.15) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.1) 1px, transparent 1px);
+  background-size: 24px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 40px;
+}
+
+/* =====================================================
+   WALL DECORATIONS
+===================================================== */
+.wall-window {
+  width: 80px;
+  height: 52px;
+  background: var(--window-glass);
+  border: var(--px-border);
+  position: relative;
+  background-image:
+    linear-gradient(var(--window-frame) 3px, transparent 3px),
+    linear-gradient(90deg, var(--window-frame) 3px, transparent 3px);
+  background-size:
+    100% 50%,
+    50% 100%;
+  background-position:
+    0 50%,
+    50% 0;
+  background-repeat: no-repeat;
+  image-rendering: pixelated;
+}
+
+.wall-window::after {
+  content: "";
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: 14px;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.35);
+}
+
+.wall-clock {
+  width: 36px;
+  height: 36px;
+  background: var(--clock-face);
+  border: var(--px-border);
+  border-radius: 50%;
+  position: relative;
+  image-rendering: pixelated;
+}
+
+.wall-clock::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 2px;
+  height: 10px;
+  background: #1e1a0a;
+  transform: translate(-50%, -100%);
+  transform-origin: bottom center;
+}
+
+.wall-clock::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 8px;
+  height: 2px;
+  background: #1e1a0a;
+  transform: translate(-50%, -50%);
+}
+
+.wall-poster {
+  width: 44px;
+  height: 52px;
+  background: var(--poster-bg);
+  border: var(--px-border);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  image-rendering: pixelated;
+  overflow: hidden;
+}
+
+.wall-poster::before {
+  content: "";
+  position: absolute;
+  inset: 4px;
+  background:
+    linear-gradient(45deg, rgba(255, 255, 255, 0.08) 25%, transparent 25%),
+    linear-gradient(-45deg, rgba(255, 255, 255, 0.08) 25%, transparent 25%);
+  background-size: 8px 8px;
+}
+
+/* =====================================================
+   FLOOR AREA
+===================================================== */
+.floor-area {
+  position: relative;
+  /* flex:3 = 3 ส่วนใน 4 ของ --room-h → กำแพง:พื้น = 1:3 (S014)
+     เป็น flex column เพื่อให้ .room-inner (flex:1) เติมเต็มพื้นที่พื้นที่เหลือ
+     min-height:0 ให้พื้นบีบลงได้จริงตามที่ Owner เลือก (คุมรวมเท่าเดิม บีบพื้น) */
+  flex: 3 1 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  background-color: var(--floor-a);
+  background-image:
+    linear-gradient(var(--floor-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--floor-line) 1px, transparent 1px),
+    linear-gradient(var(--floor-b) 50%, transparent 50%),
+    linear-gradient(90deg, var(--floor-b) 50%, transparent 50%);
+  background-size: 48px 48px;
+}
+
+/* กำแพงซ้าย-ขวา (top-down view) */
+.floor-area::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 12px;
+  background: var(--wall-side);
+  border-right: var(--px-border);
+}
+
+.floor-area::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 12px;
+  background: var(--wall-side);
+  border-left: var(--px-border);
+}
+
+/* =====================================================
+   RUG
+===================================================== */
+.rug {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 70%;
+  height: 72%;
+  background: var(--rug-base);
+  border: 4px solid var(--rug-border);
+  background-image:
+    linear-gradient(var(--rug-pattern) 2px, transparent 2px),
+    linear-gradient(90deg, var(--rug-pattern) 2px, transparent 2px);
+  background-size: 20px 20px;
+  z-index: 0;
+}
+
+.rug::after {
+  content: "";
+  position: absolute;
+  inset: 4px;
+  border: 2px solid var(--rug-pattern);
+}
+
+/* =====================================================
+   WORKSTATION GRID — 2×2
+   TL=Elysia, TR=Sakura, BL=Mobius, BR=Aponia
+===================================================== */
+.room-inner {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  /* คอลัมน์กว้างคงที่ + จัดกลุ่มกึ่งกลาง → ดึงโต๊ะซ้าย-ขวาเข้าหากัน
+     cell คงที่ → task-bubble (ตอน working) ล้นได้โดยไม่ดันโต๊ะให้เขยื้อน
+     คุมระยะช่องกลางด้วย --desk-aisle ตัวเดียว ปรับง่าย */
+  grid-template-columns: 200px 200px;
+  grid-template-rows: 1fr 1fr;
+  justify-content: center;
+  column-gap: var(--desk-aisle, 80px);
+  row-gap: 16px;
+  padding: 28px 32px 16px;
+  /* S014: เดิม min-height:520px (พื้นยืดตาม content) → เปลี่ยนเป็น flex:1 เติมเต็ม
+     floor-area ที่ถูกคุมด้วย flex:3 ของ --room-h แทน → พื้นบีบลงได้ตามอัตราส่วน 1:3
+     min-height:0 จำเป็น ไม่งั้น grid 2 แถวจะดันความสูงเกินโควตา flex */
+  flex: 1;
+  min-height: 0;
+  /* S015: ดันโต๊ะทั้ง grid ขึ้น 52px — เดิม content โต๊ะแถวล่างล้นออกนอก cell
+     ทำให้ 2 โต๊ะล่างหลุดใต้พรม + name-tag หลุดขอบล่างห้อง (วัดได้ -47/-15px)
+     translateY ดันเฉพาะโต๊ะ ไม่กระทบ deco (ต้นไม้/มุมกาแฟ) ที่อยู่นอก .room-inner */
+  transform: translateY(-52px);
+}
+
+.ws {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0;
+  position: relative;
+}
+
+.ws-top .char {
+  opacity: 1;
+}
+.ws-bottom .char {
+  opacity: 1;
+}
+
+/* =====================================================
+   CHARACTER + DESK
+===================================================== */
+.char-wrap {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* ตัวละครอยู่ "หลัง" โต๊ะ (z ต่ำกว่า desk) → โต๊ะบังท่อนล่าง ดูเหมือนนั่งทำงาน */
+  z-index: 1;
+  /* overlap มากขึ้น (-16→-30) ให้โต๊ะบังลำตัวช่วงล่างของตัวละคร */
+  margin-bottom: -30px;
+}
+
+/* task bubble — JS จะ toggle hidden attribute */
+.task-bubble {
+  background: rgba(15, 12, 5, 0.88);
+  border: 2px solid rgba(255, 255, 255, 0.18);
+  border-radius: 3px;
+  padding: 3px 8px;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.8);
+  white-space: nowrap;
+  margin-bottom: 4px;
+  position: relative;
+}
+
+/* speech bubble tail */
+.task-bubble::after {
+  content: "";
+  position: absolute;
+  bottom: -5px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 5px solid rgba(255, 255, 255, 0.18);
+}
+
+/* ซ่อน task bubble เมื่อ task ว่าง */
+.task-bubble[hidden] {
+  display: none;
+}
+
+.char {
+  display: block;
+  height: 120px;
+  width: auto;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.55));
+}
+
+/* =====================================================
+   DESK — top-down view
+===================================================== */
+.desk {
+  position: relative;
+  width: 160px;
+  /* โต๊ะอยู่หน้าตัวละคร (z สูงกว่า char-wrap) เพื่อบังท่อนล่าง */
+  z-index: 2;
+}
+
+.desk__surface {
+  width: 100%;
+  height: 52px;
+  background: var(--desk-surface);
+  border: var(--px-border);
+  background-image: linear-gradient(
+    rgba(255, 255, 255, 0.07) 1px,
+    transparent 1px
+  );
+  background-size: 100% 6px;
+  position: relative;
+  border-radius: 2px;
+}
+
+.monitor {
+  position: absolute;
+  top: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.monitor__screen {
+  width: 48px;
+  height: 32px;
+  background: var(--monitor-screen);
+  border: 2px solid var(--monitor-body);
+  border-radius: 2px;
+  background-image: radial-gradient(
+    ellipse at 50% 40%,
+    var(--agent-glow, rgba(100, 200, 100, 0.25)) 0%,
+    transparent 70%
+  );
+  image-rendering: pixelated;
+}
+
+.monitor__stand {
+  width: 8px;
+  height: 4px;
+  background: var(--monitor-body);
+}
+
+.desk__edge {
+  width: 100%;
+  height: 8px;
+  background: var(--desk-edge);
+  border: var(--px-border);
+  border-top: none;
+  border-radius: 0 0 2px 2px;
+}
+
+/* =====================================================
+   NAME TAG
+===================================================== */
+.name-tag {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(15, 12, 5, 0.9);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  padding: 4px 10px 4px 7px;
+  /* pill shape — ตั้งใจ: สร้าง visual contrast กับ desk/wall ที่ขอบตรง */
+  border-radius: 999px;
+  margin-top: 6px;
+  white-space: nowrap;
+  z-index: 3;
+}
+
+.name-tag__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.name-tag__name {
+  font-size: 13px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 0.2px;
+}
+
+/* role sign บนโต๊ะ (S014) — ย้ายมาจากข้างชื่อ → เป็นป้ายตั้งหน้าโต๊ะแทน
+   วางที่ขอบหน้าโต๊ะ กึ่งกลาง เหมือนป้ายชื่อตำแหน่งบนโต๊ะทำงานจริง */
+.desk-sign {
+  position: absolute;
+  /* ชิดฝั่งซ้ายของโต๊ะ (ฝั่งขวามี desk-item อยู่แล้ว) — S014 ปรับตาม Owner
+     bottom สูงขึ้นจากขอบล่างโต๊ะอีกนิด (6 → 14px) */
+  left: 8px;
+  bottom: 14px;
+  z-index: 3;
+  background: rgba(15, 12, 5, 0.92);
+  border: 2px solid rgba(255, 255, 255, 0.22);
+  border-radius: 3px;
+  padding: 1px 6px;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  line-height: 1.5;
+  color: #fff;
+  white-space: nowrap;
+  image-rendering: pixelated;
+}
+
+/* status dot colors */
+.dot-idle {
+  background: #888;
+}
+.dot-working {
+  background: #f5c400;
+  box-shadow: 0 0 4px #f5c400;
+}
+.dot-waiting {
+  background: #4a9ff5;
+  box-shadow: 0 0 4px #4a9ff5;
+}
+.dot-reviewing {
+  background: #a855f7;
+  box-shadow: 0 0 4px #a855f7;
+}
+.dot-done {
+  background: #4ade80;
+  box-shadow: 0 0 4px #4ade80;
+}
+
+/* agent monitor glow สีตาม agent */
+.ws-elysia {
+  --agent-glow: rgba(255, 64, 129, 0.35);
+}
+.ws-sakura {
+  --agent-glow: rgba(255, 183, 197, 0.3);
+}
+.ws-mobius {
+  --agent-glow: rgba(63, 155, 0, 0.35);
+}
+.ws-aponia {
+  --agent-glow: rgba(238, 225, 0, 0.35);
+}
+
+/* =====================================================
+   DESK ITEMS — ของประจำตัวแต่ละ agent วางบน desk__surface
+   มุมขวาของโต๊ะ ไม่ทับ monitor (monitor อยู่กึ่งกลาง)
+===================================================== */
+.desk-item {
+  position: absolute;
+  top: 16px;
+  right: 12px;
+  z-index: 2;
+  image-rendering: pixelated;
+}
+
+/* ── Elysia: แก้วกาแฟชมพู (top-down) ── */
+.desk-item--mug {
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  border: 2px solid #1e1a0a;
+  background: #FF8FAF;
+}
+.desk-item--mug::before {
+  /* ผิวกาแฟในแก้ว */
+  content: "";
+  position: absolute;
+  inset: 2px;
+  border-radius: 50%;
+  background: #4a2c18;
+}
+.desk-item--mug::after {
+  /* หูจับ */
+  content: "";
+  position: absolute;
+  right: -5px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 5px;
+  height: 7px;
+  border: 2px solid #1e1a0a;
+  border-left: none;
+  border-radius: 0 4px 4px 0;
+}
+
+/* ── Sakura: จานสีศิลปิน ── */
+.desk-item--palette {
+  width: 20px;
+  height: 15px;
+  background: #ece3d2;
+  border: 2px solid #1e1a0a;
+  /* ทรงหยดน้ำของจานสี */
+  border-radius: 60% 60% 55% 55%;
+}
+.pal-dot {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+}
+.pal-dot--1 {
+  background: #FFB7C5; /* ชมพู Sakura */
+  top: 3px;
+  left: 3px;
+}
+.pal-dot--2 {
+  background: #6fa8dc; /* ฟ้า */
+  top: 3px;
+  right: 4px;
+}
+.pal-dot--3 {
+  background: #f5c400; /* เหลือง */
+  bottom: 3px;
+  left: 7px;
+}
+
+/* ── Mobius: การ์ดโค้ด เส้นเขียว ── */
+.desk-item--code {
+  width: 17px;
+  height: 15px;
+  background: #1e2a18;
+  border: 2px solid #1e1a0a;
+  border-radius: 2px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2px;
+  padding: 0 3px;
+}
+.desk-item--code span {
+  height: 2px;
+  background: #6fcf30; /* เขียว Mobius */
+  border-radius: 1px;
+}
+.desk-item--code span:nth-child(1) {
+  width: 85%;
+}
+.desk-item--code span:nth-child(2) {
+  width: 55%;
+}
+.desk-item--code span:nth-child(3) {
+  width: 70%;
+}
+
+/* ── Aponia: แว่นขยายขอบเหลือง ── */
+.desk-item--magnifier {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  border: 3px solid #d9c200; /* เหลือง Aponia */
+  background: rgba(154, 184, 196, 0.55); /* เลนส์ */
+}
+.desk-item--magnifier::after {
+  /* ด้ามจับ */
+  content: "";
+  position: absolute;
+  width: 3px;
+  height: 8px;
+  background: #7a5e10;
+  bottom: -7px;
+  right: -2px;
+  transform: rotate(-40deg);
+  border-radius: 1px;
+}
+
+/* =====================================================
+   WORKING ANIMATION — เล่นเมื่อ agent.status === "working"
+   JS เซ็ต [data-status="working"] ที่ .ws → CSS trigger จากตรงนี้
+     • ตัวละคร bob เบา ๆ (ขยับเหมือนกำลังง่วนทำงาน)
+     • จอ monitor กะพริบ active (เหมือนกำลังพิมพ์)
+     • dot สถานะเต้นเป็นจังหวะ (ใช้ทั้ง sidebar + ห้อง)
+===================================================== */
+.ws[data-status="working"] .char {
+  animation: work-bob 1.4s ease-in-out infinite;
+}
+@keyframes work-bob {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-4px); }
+}
+
+.ws[data-status="working"] .monitor__screen {
+  animation: work-screen 0.9s steps(2, end) infinite;
+}
+@keyframes work-screen {
+  0%, 100% { filter: brightness(1); }
+  50%      { filter: brightness(1.55); }
+}
+
+/* เล่นเฉพาะ dot สถานะจริง (name-tag ในห้อง + team list) — ยกเว้น swatch ใน legend
+   ป้องกัน legend "working" กระพริบตลอดเวลา ทั้งที่เป็นแค่ตัวอย่างสีอ้างอิง */
+.dot-working:not(.legend-dot) {
+  animation: work-dot 1.2s ease-in-out infinite;
+}
+@keyframes work-dot {
+  0%, 100% { box-shadow: 0 0 4px #f5c400; }
+  50%      { box-shadow: 0 0 9px 2px #f5c400; }
+}
+
+/* reduced-motion จัดการรวมที่บล็อกเดียวท้ายไฟล์ (เลี่ยงความซ้ำซ้อน — QA Aponia S013) */
+
+/* =====================================================
+   CORNER DECORATIONS — เหลือแค่ 2 มุมล่าง (BL + BR)
+   ตัดมุมบนออก เพราะ wall decorations บนครอบคลุมพื้นที่นั้นอยู่แล้ว
+   2 มุมล่างสมมาตรยังคง cozy feel + ไม่รกมุมบน
+===================================================== */
+.deco-wrap {
+  position: absolute;
+  z-index: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.deco-plant-bl {
+  bottom: 16px;
+  left: 20px;
+}
+.deco-plant-br {
+  bottom: 16px;
+  right: 20px;
+}
+
+.plant-pot {
+  width: 22px;
+  height: 16px;
+  background: var(--plant-pot);
+  border: 2px solid #3a2a10;
+  border-radius: 0 0 3px 3px;
+}
+
+.plant-leaves {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.leaf-stem {
+  width: 4px;
+  height: 6px;
+  background: #2e4a10;
+}
+
+.leaf-l1 {
+  width: 26px;
+  height: 12px;
+  background: var(--plant-l1);
+  border-radius: 2px;
+  margin: 1px 0;
+}
+
+.leaf-l2 {
+  width: 20px;
+  height: 10px;
+  background: var(--plant-l2);
+  border-radius: 2px;
+  margin: 1px 0;
+}
+
+.leaf-l3 {
+  width: 14px;
+  height: 8px;
+  background: var(--plant-l3);
+  border-radius: 2px;
+  margin: 1px 0;
+}
+
+/* =====================================================
+   ☕ COFFEE CORNER — มุมบนซ้ายของพื้น (cozy)
+   เคาน์เตอร์ top-down: surface (หน้าบน) + edge (ขอบหน้า)
+   ใช้เทคนิคเดียวกับ .desk ให้กลมกลืน
+===================================================== */
+.deco-coffee {
+  top: 16px;
+  left: 18px;
+}
+
+.coffee-counter {
+  position: relative;
+  width: 84px;
+}
+
+.coffee-counter__surface {
+  position: relative;
+  width: 100%;
+  height: 38px;
+  background: var(--counter-surface);
+  border: var(--px-border);
+  border-radius: 2px;
+  /* เส้นลายไม้แนวนอนจาง ๆ เหมือน desk__surface */
+  background-image: linear-gradient(
+    rgba(255, 255, 255, 0.06) 1px,
+    transparent 1px
+  );
+  background-size: 100% 6px;
+}
+
+.coffee-counter__edge {
+  width: 100%;
+  height: 8px;
+  background: var(--counter-edge);
+  border: var(--px-border);
+  border-top: none;
+  border-radius: 0 0 2px 2px;
+}
+
+/* เครื่องชงกาแฟ — วางมุมซ้ายบนเคาน์เตอร์ */
+.coffee-machine {
+  position: absolute;
+  top: 5px;
+  left: 8px;
+}
+
+.coffee-machine__head {
+  width: 22px;
+  height: 7px;
+  background: var(--machine-head);
+  border: 2px solid var(--machine-body);
+  border-radius: 2px 2px 0 0;
+}
+
+.coffee-machine__body {
+  width: 22px;
+  height: 18px;
+  background: var(--machine-body);
+  border: 2px solid #1e1a0a;
+  border-top: none;
+  border-radius: 0 0 2px 2px;
+  /* ช่องวางถ้วย/ไฟสถานะเล็ก ๆ */
+  background-image: radial-gradient(
+    circle at 50% 78%,
+    rgba(200, 118, 58, 0.9) 0 2px,
+    transparent 3px
+  );
+}
+
+/* ไอกาแฟกรุ่น ๆ ลอยขึ้นเหนือเครื่อง — เบา ๆ สบายตา */
+.coffee-steam {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 4px;
+}
+
+.coffee-steam span {
+  width: 3px;
+  height: 10px;
+  background: linear-gradient(
+    to top,
+    rgba(255, 255, 255, 0.5),
+    transparent
+  );
+  border-radius: 2px;
+  animation: coffee-steam-rise 2.6s ease-in-out infinite;
+}
+
+.coffee-steam span:nth-child(2) {
+  animation-delay: 1.3s;
+}
+
+@keyframes coffee-steam-rise {
+  0% {
+    opacity: 0;
+    transform: translateY(2px) scaleY(0.7);
+  }
+  40% {
+    opacity: 0.8;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-6px) scaleY(1.1);
+  }
+}
+
+/* ถ้วยกาแฟ top-down — วงกลม + หูจับเล็ก */
+.coffee-mug {
+  position: absolute;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  border: 2px solid #1e1a0a;
+  top: 12px;
+}
+
+/* ขอบในถ้วย = ผิวกาแฟ */
+.coffee-mug::before {
+  content: "";
+  position: absolute;
+  inset: 2px;
+  border-radius: 50%;
+  background: #4a2c18;
+}
+
+/* หูจับถ้วย */
+.coffee-mug::after {
+  content: "";
+  position: absolute;
+  right: -5px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 5px;
+  height: 7px;
+  border: 2px solid #1e1a0a;
+  border-left: none;
+  border-radius: 0 4px 4px 0;
+}
+
+.coffee-mug--1 {
+  background: var(--mug-1);
+  right: 26px;
+}
+
+.coffee-mug--2 {
+  background: var(--mug-2);
+  right: 6px;
+}
+
+/* =====================================================
+   🚪 ประตู (D) — flex item ขวาสุดของ wall-top + พรมเช็ดเท้าบนพื้น
+===================================================== */
+.wall-door {
+  width: 46px;
+  /* สูง 2/3 ของกำแพง — % คิดจากความสูง .wall-top (flex container) อัตโนมัติ
+     ถ้ากำแพงเปลี่ยนขนาด (--room-h) ประตูสเกลตามเอง ไม่ต้อง hardcode px (S014) */
+  height: 66.667%;
+  /* วัดจากระดับพื้น: ยึดประตูไว้ที่ขอบล่างกำแพง (=ระดับพื้น) แทนกึ่งกลาง
+     (override align-items:center ของ .wall-top เฉพาะประตู) */
+  align-self: flex-end;
+  background: var(--door);
+  border: var(--px-border);
+  border-radius: 2px 2px 0 0;
+  position: relative;
+  flex-shrink: 0;
+  image-rendering: pixelated;
+}
+.wall-door__panel {
+  position: absolute;
+  inset: 5px 5px 8px 5px;
+  border: 2px solid var(--door-frame);
+  border-radius: 1px;
+}
+.wall-door__knob {
+  position: absolute;
+  right: 5px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--door-knob);
+}
+
+/* พรมเช็ดเท้า — จัดให้ center ตรงกับประตูบนกำแพง (S014)
+   ประตูอยู่ขวาสุดของ wall-top (padding 40px) → right:39 ทำให้ center พรม = center ประตู
+   (≤768 wall padding 20px ประตูขยับ → มี override ใน media query) */
+.deco-mat {
+  top: 14px;
+  right: 39px;
+}
+.door-mat {
+  width: 48px;
+  height: 20px;
+  background: var(--mat);
+  border: var(--px-border);
+  border-radius: 3px;
+  /* แถบกลางพรม "welcome" จาง ๆ */
+  background-image: linear-gradient(
+    90deg,
+    transparent 44%,
+    rgba(0, 0, 0, 0.18) 44% 56%,
+    transparent 56%
+  );
+}
+
+/* bookshelf บนกำแพง — เป็น flex item ปกติใน wall-top
+   ไม่ใช้ absolute เพื่อไม่ทับ clock และ decoration อื่น */
+.bookshelf {
+  display: flex;
+  gap: 2px;
+  align-items: flex-end;
+  height: 36px;
+}
+
+.book {
+  width: 8px;
+  border-radius: 1px 1px 0 0;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+}
+
+/* =====================================================
+   ERROR BANNER — แสดงเมื่อ fetch ล้มเหลวครั้งแรก
+   JS จะ toggle hidden attribute
+===================================================== */
+.error-banner {
+  /* ไม่ต้องการ width/max-width/margin แนวนอนแล้ว
+     .main เป็นตัว pad ให้ครบ */
+  background: rgba(200, 80, 40, 0.15);
+  border: 1px solid rgba(200, 80, 40, 0.4);
+  border-radius: 4px;
+  padding: 8px 16px;
+  font-size: 12px;
+  color: #f5b8a0;
+  letter-spacing: 0.2px;
+  margin-bottom: 12px;
+}
+
+.error-banner[hidden] {
+  display: none;
+}
+
+/* =====================================================
+   FEED ITEM — JS inject class เหล่านี้ลง #js-feed-list ใน sidebar
+   ยังคงไว้เพราะ JS renderActivityFeed ยังใช้ class เดิม
+   Step 5 จะ migrate JS + class พร้อมกัน
+===================================================== */
+.feed-item {
+  display: grid;
+  grid-template-columns: 52px 76px 1fr;
+  align-items: center;
+  gap: 0 10px;
+  padding: 7px 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  font-size: 12px;
+}
+
+.feed-item:last-child {
+  border-bottom: none;
+}
+.feed-item:hover {
+  background: rgba(255, 255, 255, 0.025);
+}
+
+/* empty state เมื่อ feed ว่าง */
+.feed-empty {
+  padding: 16px 14px;
+  text-align: center;
+  font-size: 12px;
+  color: var(--ink-muted);
+}
+
+.feed-time {
+  color: var(--ink-muted);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+
+.feed-agent {
+  font-weight: 700;
+  font-size: 12px;
+}
+.feed-action {
+  color: rgba(255, 255, 255, 0.65);
+  font-size: 12px;
+}
+
+/* สีชื่อ agent ใน feed — ยังคงไว้ใน Step 4 เพราะ JS ยังใช้ */
+.agent-elysia {
+  color: #ff8faf;
+}
+.agent-sakura {
+  color: #ffb7c5;
+}
+.agent-mobius {
+  color: #6fcf30;
+}
+.agent-aponia {
+  color: #eee100;
+}
+
+/* legend item + dot — ใช้ทั้งใน sb-legend และ legend ทั่วไป */
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  color: var(--ink-muted);
+}
+
+.legend-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* =====================================================
+   S012: ACTIVITY DRAWER — slide-in จากซ้าย แสดง 10 รายการ
+   state คุมด้วย class .is-open (JS toggle) — markup ใส่ hidden ตอนปิดสนิท
+===================================================== */
+
+/* backdrop — ฉากหลังจางๆ คลิกเพื่อปิด */
+.feed-drawer-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  background: rgba(0, 0, 0, 0.55);
+  /* fade เข้า/ออก — เริ่มที่ opacity 0 */
+  opacity: 0;
+  transition: opacity 0.28s ease-out;
+}
+
+.feed-drawer-backdrop.is-open {
+  opacity: 1;
+}
+
+/* drawer panel — ชิดซ้าย เต็มความสูงจอ */
+.feed-drawer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  width: min(360px, 86vw);
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-page);
+  border-right: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 4px 0 24px rgba(0, 0, 0, 0.45);
+  /* เริ่มซ่อนทางซ้าย แล้ว slide เข้าเมื่อ .is-open */
+  transform: translateX(-100%);
+  transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.feed-drawer.is-open {
+  transform: translateX(0);
+}
+
+/* หัว drawer — title + ปุ่มปิด */
+.feed-drawer__head {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.feed-drawer__title {
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  color: var(--ink-light);
+}
+
+.feed-drawer__close {
+  background: none;
+  border: none;
+  color: var(--ink-muted);
+  font-size: 22px;
+  line-height: 1;
+  padding: 0 4px;
+  cursor: pointer;
+  transition: color 0.15s ease-out;
+}
+
+.feed-drawer__close:hover {
+  color: var(--ink-light);
+}
+
+.feed-drawer__close:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.3);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* body — scroll เฉพาะ list ข้างใน */
+.feed-drawer__body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.feed-drawer__body::-webkit-scrollbar {
+  width: 4px;
+}
+.feed-drawer__body::-webkit-scrollbar-track {
+  background: transparent;
+}
+.feed-drawer__body::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.14);
+  border-radius: 2px;
+}
+
+/* list ใน drawer reuse .feed-item เดิม (หน้าตาเหมือน sidebar) */
+.feed-drawer__list {
+  list-style: none;
+  padding: 4px 0 12px;
+}
+
+/* ลด motion สำหรับผู้ใช้ที่ตั้ง prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  .feed-drawer,
+  .feed-drawer-backdrop {
+    transition: none;
+  }
+}
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+@media (max-width: 900px) {
+  /* S014: คุมความสูงรวมห้องต่อ breakpoint → flex 1:3 สเกลตามเอง
+     (≤768 จะ override ค่านี้อีกที — ดู media query ด้านล่าง) */
+  .room { --room-h: 560px; }
+  /* stage-wrap ไม่มี padding ของตัวเองแล้ว — .main จัดการ */
+  .room-inner {
+    gap: 10px;
+    padding: 8px 16px;
+    /* S014: floor ถูกคุมด้วย flex:3 ของ --room-h แล้ว → min-height:0 ให้บีบได้ตาม 1:3 */
+    min-height: 0;
+    /* S015: จอเล็กลด shift เป็น 40 — ที่ -52 ตัวละครบนเกือบชนกำแพง (char เหลือ +1px)
+       ครอบ ≤768 มือถือด้วย (≤768 ไม่ override transform → สืบทอดค่านี้) */
+    transform: translateY(-40px);
+  }
+  .desk {
+    width: 140px;
+  }
+  .char {
+    height: 100px;
+  }
+}
+
+@media (max-width: 600px) {
+  .room-inner {
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+    padding: 6px 10px;
+    /* S014: ใช้ flex:1 เติม floor แทน min-height (ดู ≤768 ที่ override --room-h สำหรับมือถือ) */
+    min-height: 0;
+  }
+  .desk {
+    width: 110px;
+  }
+  .desk__surface {
+    height: 38px;
+  }
+  .char {
+    height: 80px;
+  }
+  .char-wrap {
+    margin-bottom: -10px;
+  }
+  .name-tag {
+    padding: 3px 7px;
+  }
+  .name-tag__name {
+    font-size: 12px;
+  }
+  .task-bubble {
+    font-size: 10px;
+  }
+  .monitor__screen {
+    width: 36px;
+    height: 24px;
+  }
+  .wall-top {
+    /* S014: ความสูงกำแพงมาจาก flex:1 ของ --room-h แล้ว — เหลือแค่ padding (เดิม height:52px = dead) */
+    padding: 0 20px;
+  }
+  .wall-window {
+    width: 56px;
+    height: 36px;
+  }
+  .topbar h1 {
+    font-size: 14px;
+  }
+  .feed-item {
+    grid-template-columns: 44px 64px 1fr;
+    font-size: 12px;
+  }
+}
+
+/* =====================================================
+   MOBILE SIDEBAR TOGGLE BAR
+   แสดงเฉพาะ mobile ≤768px — ซ่อนบน desktop
+===================================================== */
+.sb-toggle-bar {
+  /* ซ่อนบน desktop — JS toggle ใช้ได้เฉพาะ mobile */
+  display: none;
+  width: 100%;
+  /* reset button styles */
+  background: rgba(255, 255, 255, 0.03);
+  border: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  cursor: pointer;
+  color: var(--ink-muted);
+  font-family: inherit;
+  /* layout */
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 14px;
+  font-size: 12px;
+  letter-spacing: 0.3px;
+  user-select: none;
+  /* ไม่มี outline ขณะ hover — ใช้สีพื้นหลังแทน */
+  outline: none;
+}
+
+.sb-toggle-bar:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.sb-toggle-bar:focus-visible {
+  /* accessibility: แสดง focus ring เฉพาะตอน keyboard nav */
+  outline: 2px solid rgba(255, 255, 255, 0.3);
+  outline-offset: -2px;
+}
+
+.sb-toggle-bar__arrow {
+  font-size: 10px;
+  transition: transform 0.2s ease-out;
+}
+
+/* เมื่อ collapsed → หมุนลูกศร 180 องศา (▲ → ▼) */
+.sb-toggle-bar[aria-expanded="false"] .sb-toggle-bar__arrow {
+  transform: rotate(180deg);
+}
+
+/* =====================================================
+   RESPONSIVE — mobile ≤ 768px
+   layout เปลี่ยนเป็น single-column: topbar บน, sidebar กลาง, main ล่าง
+   sidebar ย้ายมาแสดงเป็น panel บนสุดก่อนห้อง
+===================================================== */
+@media (max-width: 768px) {
+  .layout {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto 1fr;
+    grid-template-areas:
+      "topbar"
+      "sidebar"
+      "main";
+  }
+
+  /* sidebar mobile — เปลี่ยนจาก vertical bar เป็น horizontal panel */
+  .sidebar {
+    border-right: none;
+    border-bottom: 1px solid var(--sidebar-border);
+    /* ปล่อย overflow ตามธรรมชาติ เพราะมี toggle ควบคุมแล้ว */
+    overflow-y: visible;
+  }
+
+  /* toggle bar แสดงบน mobile */
+  .sb-toggle-bar {
+    display: flex;
+  }
+
+  /* collapsed: ซ่อน sb-body — เฉพาะ mobile เพราะ desktop ไม่มีปุ่มเปิดคืน (QA S011 MAJOR fix) */
+  .sb-body--collapsed {
+    display: none;
+  }
+
+  /* feed บน mobile จำกัดความสูงเพื่อไม่กิน viewport */
+  .sb-feed-inner {
+    max-height: 160px;
+    overflow-y: auto;
+  }
+
+  /* room ย่อขนาดเล็กลงบน mobile ≤768px
+     S014: --room-h ตัวนี้ชนะ ≤900 (มาทีหลังใน source) → ครอบทุกจอ ≤768 รวมมือถือ ≤600 */
+  .room { --room-h: 480px; }
+  .room-inner {
+    gap: 8px;
+    padding: 16px 20px 12px;
+    /* S014: flex:1 เติม floor แทน min-height คงที่ → รักษาอัตราส่วน 1:3 */
+    min-height: 0;
+  }
+
+  .desk {
+    width: 130px;
+  }
+  .desk__surface {
+    height: 42px;
+  }
+  .char {
+    height: 96px;
+  }
+  .char-wrap {
+    margin-bottom: -12px;
+  }
+  .wall-top {
+    /* S014: ความสูงกำแพงมาจาก flex:1 ของ --room-h แล้ว — เหลือแค่ padding (เดิม height:52px = dead) */
+    padding: 0 20px;
+  }
+  .wall-window {
+    width: 56px;
+    height: 36px;
+  }
+
+  /* S014: wall padding เหลือ 20px (จาก 40) ประตูขยับเข้าขวา → พรมตามให้ center ตรงประตู */
+  .deco-mat {
+    right: 19px;
+  }
+
+  /* task bubble บน mobile — ให้ wrap ได้ ไม่ล้น viewport */
+  .task-bubble {
+    white-space: normal;
+    max-width: 120px;
+    text-align: center;
+  }
+}
+
+/* =====================================================
+   S015: COLOR PANEL — trigger + panel + color rows
+   ทุก token ใช้ prefix --cp- ไม่ override --panel-bg เดิม
+   transition ของ panel ถูกครอบโดย prefers-reduced-motion block ด้านล่าง
+   ไม่ต้องเพิ่ม reduced-motion ซ้ำ
+===================================================== */
+
+/* --- Trigger Button --- */
+/* ปุ่ม 40x40 วาง fixed มุมล่างขวา — pixel art square (border-radius 2px) */
+.color-panel-trigger {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  z-index: 200;
+
+  width: 40px;
+  height: 40px;
+
+  background: var(--cp-header-bg);
+  border: var(--px-border);
+  border-radius: 2px;
+
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  transition: background 0.15s ease-out, border-color 0.15s ease-out;
+}
+
+.color-panel-trigger:hover {
+  background: #302810;
+  border-color: #5a4820;
+}
+
+.color-panel-trigger:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.3);
+  outline-offset: 2px;
+}
+
+/* icon — จานสีรูปหยดน้ำ, CSS only เหมือน .topbar__icon */
+.color-panel-trigger__icon {
+  width: 22px;
+  height: 18px;
+  position: relative;
+  background: #ece3d2;
+  border: 2px solid #1e1a0a;
+  border-radius: 60% 60% 50% 50%;
+  image-rendering: pixelated;
+}
+
+/* จุดสีบนจาน — ::before จุดชมพู (พรม), ::after จุดเหลือง (โต๊ะ) */
+.color-panel-trigger__icon::before,
+.color-panel-trigger__icon::after {
+  content: "";
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+}
+
+.color-panel-trigger__icon::before {
+  background: var(--rug-base);
+  top: 4px;
+  left: 3px;
+}
+
+.color-panel-trigger__icon::after {
+  background: var(--desk-surface);
+  top: 4px;
+  right: 4px;
+}
+
+/* จุดที่ 3 — span แยก (กำแพง), กึ่งกลางด้านล่าง */
+.color-panel-trigger__dot3 {
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--wall-color);
+  bottom: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* label "สีห้อง" ใต้ปุ่ม — บอก purpose ชัด, ซ่อนบน mobile */
+.color-panel-trigger__label {
+  position: absolute;
+  bottom: -18px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 11px;
+  color: var(--ink-muted);
+  white-space: nowrap;
+  letter-spacing: 0.3px;
+  pointer-events: none;
+}
+
+/* --- Color Panel --- */
+/* floating panel 280px, fixed มุมล่างขวา เหนือ trigger */
+.color-panel {
+  position: fixed;
+  bottom: 80px;
+  right: 28px;
+  z-index: 199;
+
+  width: 280px;
+
+  background: var(--cp-bg);
+  border: 2px solid var(--cp-border);
+  border-radius: 3px;
+  overflow: hidden;
+
+  /* shadow แยก panel ออกจาก room ด้านหลัง */
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.55), 0 2px 8px rgba(0, 0, 0, 0.35);
+}
+
+/* ป้องกัน hidden attribute ถูก override โดย display rule อื่นในไฟล์ */
+.color-panel[hidden] {
+  display: none;
+}
+
+/* --- Panel Header --- */
+.color-panel__head {
+  background: var(--cp-header-bg);
+  border-bottom: var(--cp-section-line);
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.color-panel__title {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  color: var(--ink-light);
+  text-transform: uppercase;
+}
+
+.color-panel__close {
+  background: none;
+  border: none;
+  color: var(--ink-muted);
+  font-size: 18px;
+  line-height: 1;
+  padding: 0 2px;
+  cursor: pointer;
+  transition: color 0.12s ease-out;
+}
+
+.color-panel__close:hover {
+  color: var(--ink-light);
+}
+
+.color-panel__close:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.3);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* --- Note Banner (ข้อมูล derive) --- */
+.color-panel__note {
+  padding: 8px 14px;
+  background: rgba(200, 164, 85, 0.08);
+  border-bottom: var(--cp-section-line);
+  font-size: 12px;
+  color: var(--ink-muted);
+  line-height: 1.5;
+}
+
+.color-panel__note strong {
+  color: #c8a455;
+  font-weight: 600;
+}
+
+/* --- Panel Body --- */
+.color-panel__body {
+  padding: 12px 0 4px;
+}
+
+/* --- Color Row --- */
+/* layout: [swatch 20x20] [label flex:1] [input-wrap 52x32] */
+.color-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 14px;
+  border-bottom: var(--cp-section-line);
+  transition: background 0.12s ease-out;
+}
+
+.color-row:last-child {
+  border-bottom: none;
+}
+
+.color-row:hover {
+  background: var(--cp-row-hover);
+}
+
+/* swatch — แสดงสีปัจจุบันของ element (JS set inline background) */
+.color-row__swatch {
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 2px;
+  flex-shrink: 0;
+  image-rendering: pixelated;
+}
+
+/* label: ชื่อ element (ภาษาไทย บนสุด) + ชื่อ CSS var (ล่าง เบา) */
+.color-row__label {
+  flex: 1;
+  min-width: 0;
+}
+
+.color-row__label-th {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-light);
+  line-height: 1.2;
+}
+
+.color-row__label-var {
+  font-size: 11px;
+  color: var(--ink-muted);
+  letter-spacing: 0.2px;
+  line-height: 1.3;
+}
+
+/* input wrapper — กำหนดขนาด 52x32, input ยืดเต็ม wrapper */
+.color-row__input-wrap {
+  flex-shrink: 0;
+  width: 52px;
+  height: 32px;
+  border: 2px solid rgba(255, 255, 255, 0.22);
+  border-radius: 2px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.05);
+  cursor: pointer;
+}
+
+.color-row__input-wrap:hover {
+  border-color: rgba(255, 255, 255, 0.45);
+}
+
+/* input type=color — reset browser chrome, ขยายออก 4px ทุกด้านให้สีเต็ม wrapper */
+.color-row__input {
+  width: calc(100% + 8px);
+  height: calc(100% + 8px);
+  margin: -4px;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  display: block;
+}
+
+/* --- Panel Footer (Reset button) --- */
+/* Reset = destructive action — วางแยกจาก rows ชัดเจน */
+.color-panel__foot {
+  padding: 10px 14px 12px;
+  border-top: var(--cp-section-line);
+  display: flex;
+  justify-content: flex-end;
+}
+
+.color-panel__reset {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 2px;
+  color: var(--ink-muted);
+  font-family: inherit;
+  font-size: 12px;
+  letter-spacing: 0.3px;
+  padding: 5px 14px;
+  cursor: pointer;
+  transition: background 0.12s ease-out, color 0.12s ease-out, border-color 0.12s ease-out;
+}
+
+.color-panel__reset:hover {
+  background: rgba(200, 80, 40, 0.12);
+  border-color: rgba(200, 80, 40, 0.35);
+  color: #f5b8a0;
+}
+
+.color-panel__reset:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.3);
+  outline-offset: 2px;
+}
+
+/* --- Responsive ≤768px: panel เป็น bottom sheet --- */
+@media (max-width: 768px) {
+  /* trigger เล็กลงนิด ย้าย position ให้ไม่ทับ content */
+  .color-panel-trigger {
+    bottom: 20px;
+    right: 16px;
+    width: 36px;
+    height: 36px;
+  }
+
+  /* ซ่อน label บน mobile — ไม่มีพื้นที่เพียงพอ */
+  .color-panel-trigger__label {
+    display: none;
+  }
+
+  /* panel: เต็มความกว้าง bottom sheet, โค้งด้านบน, max-height 80vh */
+  .color-panel {
+    bottom: 68px;
+    right: 0;
+    left: 0;
+    width: 100%;
+    border-left: none;
+    border-right: none;
+    border-radius: 4px 4px 0 0;
+    max-height: 80vh;
+    overflow-y: auto;
+  }
+
+  /* note ซ่อนบน mobile — ไม่ critical ต่อ action */
+  .color-panel__note {
+    display: none;
+  }
+}
+
+/* prefers-reduced-motion: เคารพผู้ใช้ที่ลดการเคลื่อนไหว (บล็อกเดียวรวมศูนย์)
+   ใช้ pattern มาตรฐาน 0.01ms แทน none → animation/transition จบแทบทันที
+   (ไม่วนซ้ำ ไม่มี motion) แต่ end-state ยังทำงาน จึงไม่ตัด interaction feedback
+   ทิ้งทั้งดุ้นเหมือน `none` (refine ตามข้อสังเกต QA Aponia S013) */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

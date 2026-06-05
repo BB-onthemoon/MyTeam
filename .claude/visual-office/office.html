@@ -1,0 +1,596 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dashboard Dev Team — Visual Office</title>
+  <!-- favicon inline — ป้องกัน browser ขอ /favicon.ico แล้ว 404 รก console -->
+  <link rel="icon" href="data:,">
+  <!-- External CSS stylesheet -->
+  <link rel="stylesheet" href="office.css">
+</head>
+<body>
+
+  <div class="layout">
+
+    <!-- ==================================================
+         SIDEBAR — Step 4
+         Section 1: Session card
+         Section 2: Team list 4 คน
+         Section 3: Activity feed + legend
+         JS ใน Step 5 จะ wire ข้อมูลจริง — รอบนี้ใส่ dummy ก่อน
+    ================================================== -->
+    <aside class="sidebar" aria-label="Team status and activity">
+
+      <!-- mobile toggle bar — แสดงเฉพาะ ≤768px
+           JS จะ toggle class sb-body--collapsed บน .sb-body เมื่อกดปุ่มนี้ -->
+      <button class="sb-toggle-bar"
+              id="js-sb-toggle-btn"
+              type="button"
+              aria-expanded="true"
+              aria-controls="sb-body">
+        <span>สถานะทีม</span>
+        <span class="sb-toggle-bar__arrow" aria-hidden="true">▲</span>
+      </button>
+
+      <div class="sb-body" id="sb-body">
+
+        <!-- ---- Section 1: Session / Step ---- -->
+        <div class="sb-section">
+          <div class="sb-label">Session</div>
+          <div class="session-card">
+            <div class="session-card__row">
+              <span class="session-card__session-label">S</span>
+              <span class="session-card__session-value" id="js-sb-session">011</span>
+            </div>
+            <div class="session-card__step-row">
+              <span class="session-card__step-num" id="js-sb-step-num">Step 4</span>
+              <span class="session-card__step-label" id="js-sb-step-label">Sidebar HTML</span>
+            </div>
+            <div class="session-card__time" id="js-sb-time">อัปเดตเมื่อสักครู่</div>
+          </div>
+        </div>
+
+        <!-- ---- Section 2: Team status รายคน ---- -->
+        <div class="sb-section">
+          <div class="sb-label">ทีม</div>
+          <ul class="team-list" aria-label="team status">
+
+            <li class="team-item">
+              <span class="team-dot dot-idle" id="js-sb-dot-Elysia" aria-hidden="true"></span>
+              <div class="team-info">
+                <div class="team-info__header">
+                  <span class="team-info__name c-elysia">Elysia</span>
+                  <span class="team-info__status" id="js-sb-status-Elysia">idle</span>
+                </div>
+                <div class="team-info__task" id="js-sb-task-Elysia">—</div>
+              </div>
+            </li>
+
+            <li class="team-item">
+              <span class="team-dot dot-idle" id="js-sb-dot-Sakura" aria-hidden="true"></span>
+              <div class="team-info">
+                <div class="team-info__header">
+                  <span class="team-info__name c-sakura">Sakura</span>
+                  <span class="team-info__status" id="js-sb-status-Sakura">idle</span>
+                </div>
+                <div class="team-info__task" id="js-sb-task-Sakura">—</div>
+              </div>
+            </li>
+
+            <li class="team-item">
+              <span class="team-dot dot-working" id="js-sb-dot-Mobius" aria-hidden="true"></span>
+              <div class="team-info">
+                <div class="team-info__header">
+                  <span class="team-info__name c-mobius">Mobius</span>
+                  <span class="team-info__status" id="js-sb-status-Mobius">working</span>
+                </div>
+                <div class="team-info__task" id="js-sb-task-Mobius">code sidebar HTML Step 4</div>
+              </div>
+            </li>
+
+            <li class="team-item">
+              <span class="team-dot dot-idle" id="js-sb-dot-Aponia" aria-hidden="true"></span>
+              <div class="team-info">
+                <div class="team-info__header">
+                  <span class="team-info__name c-aponia">Aponia</span>
+                  <span class="team-info__status" id="js-sb-status-Aponia">idle</span>
+                </div>
+                <div class="team-info__task" id="js-sb-task-Aponia">—</div>
+              </div>
+            </li>
+
+          </ul>
+        </div>
+
+        <!-- ---- Section 3: Activity Feed ---- -->
+        <div class="sb-section" role="region" aria-labelledby="js-sb-feed-heading">
+          <div class="sb-label" style="display:flex; align-items:center; justify-content:space-between; padding-right:14px;">
+            <span id="js-sb-feed-heading">Activity</span>
+            <span class="sb-feed-count" id="js-sb-feed-count">—</span>
+          </div>
+
+          <div class="sb-feed-inner">
+            <ul class="sb-feed-list"
+                id="js-feed-list"
+                role="log"
+                aria-live="polite"
+                aria-label="activity log">
+              <!-- JS render 5 รายการล่าสุดที่นี่ (S012 — เดิม 10) -->
+              <!-- รอบนี้ JS เดิมยังชี้ #js-feed-list มาที่ element นี้ได้ทันที -->
+            </ul>
+          </div>
+
+          <!-- S012: ปุ่มเปิด drawer ดู activity 10 รายการล่าสุด -->
+          <button type="button"
+                  class="sb-feed-showall"
+                  id="js-feed-showall"
+                  aria-haspopup="dialog"
+                  aria-controls="js-feed-drawer">
+            ดูทั้งหมด
+          </button>
+
+          <!-- legend — ท้าย sidebar ไม่ scroll -->
+          <div class="sb-legend" aria-label="status legend">
+            <span class="legend-item">
+              <span class="legend-dot dot-idle"></span>idle
+            </span>
+            <span class="legend-item">
+              <span class="legend-dot dot-working"></span>working
+            </span>
+            <span class="legend-item">
+              <span class="legend-dot dot-waiting"></span>waiting
+            </span>
+            <span class="legend-item">
+              <span class="legend-dot dot-reviewing"></span>reviewing
+            </span>
+            <span class="legend-item">
+              <span class="legend-dot dot-done"></span>done
+            </span>
+          </div>
+
+        </div><!-- /.sb-section feed -->
+
+      </div><!-- /.sb-body -->
+    </aside>
+
+    <!-- =====================================================
+         reading order 1: TOPBAR
+    ===================================================== -->
+    <header class="topbar">
+      <div class="topbar__left">
+        <div class="topbar__icon" aria-hidden="true"></div>
+        <div>
+          <h1>Dashboard Dev Team</h1>
+          <div class="topbar__sub" id="js-topbar-sub">Visual Office · Session —</div>
+        </div>
+      </div>
+      <!-- JS จะ update text นี้ทุก refresh -->
+      <span class="topbar__updated" id="js-updated-label">—</span>
+    </header>
+
+    <!-- =====================================================
+         reading order 2: MAIN — error banner + ห้อง office
+    ===================================================== -->
+    <main class="main" role="main">
+
+      <!-- error banner — แสดงเมื่อ fetch ล้มเหลวครั้งแรก -->
+      <div class="error-banner" id="js-error-banner" hidden role="alert">
+        ⚠️ โหลดข้อมูลบางส่วนไม่สำเร็จ — ลองรีเฟรช หรือเปิดผ่าน Live Server
+      </div>
+
+  <!-- =====================================================
+       reading order 2: ROOM — top-down view
+  ===================================================== -->
+  <div class="stage-wrap">
+    <div class="room" role="region" aria-label="Virtual Office Room">
+
+      <!-- กำแพงด้านบน (wall strip + decorations) -->
+      <!-- wall-top: flex row เรียง [window] [clock] [bookshelf] [poster+window]
+           ทุกชิ้นเป็น flex item → ไม่มี absolute ที่ทับกัน -->
+      <div class="wall-top" aria-hidden="true">
+        <div class="wall-window"></div>
+
+        <div class="wall-clock"></div>
+
+        <!-- bookshelf เป็น flex item ปกติ ไม่ใช้ absolute -->
+        <div class="bookshelf" aria-hidden="true">
+          <div class="book" style="height:28px; background:#8b4a3a;"></div>
+          <div class="book" style="height:32px; background:#3a6848;"></div>
+          <div class="book" style="height:24px; background:#c8a455;"></div>
+          <div class="book" style="height:30px; background:#6a4a8a;"></div>
+          <div class="book" style="height:26px; background:#4a7a5a;"></div>
+          <div class="book" style="height:34px; background:#8a5028;"></div>
+          <div class="book" style="height:22px; background:#5a6b3a;"></div>
+        </div>
+
+        <div style="display:flex; align-items:center; gap:16px;">
+          <div class="wall-poster"></div>
+          <div class="wall-window"></div>
+        </div>
+
+        <!-- 🚪 ประตูห้อง (D) — ขวาสุดของผนัง -->
+        <div class="wall-door">
+          <div class="wall-door__panel"></div>
+          <div class="wall-door__knob"></div>
+        </div>
+      </div>
+
+      <!-- พื้นที่พื้น + โต๊ะ -->
+      <div class="floor-area">
+        <div class="rug" aria-hidden="true"></div>
+
+        <!-- ☕ มุมกาแฟ — มุมบนซ้ายของพื้น (cozy corner)
+             เคาน์เตอร์ใช้เทคนิค surface+edge เดียวกับโต๊ะ ให้ดูมีมิติ top-down -->
+        <div class="deco-wrap deco-coffee" aria-hidden="true">
+          <div class="coffee-counter">
+            <div class="coffee-counter__surface">
+              <!-- เครื่องชงกาแฟ + ไอกรุ่น ๆ -->
+              <div class="coffee-machine">
+                <div class="coffee-steam">
+                  <span></span><span></span>
+                </div>
+                <div class="coffee-machine__head"></div>
+                <div class="coffee-machine__body"></div>
+              </div>
+              <!-- ถ้วยกาแฟ 2 ใบวางบนเคาน์เตอร์ -->
+              <div class="coffee-mug coffee-mug--1"></div>
+              <div class="coffee-mug coffee-mug--2"></div>
+            </div>
+            <div class="coffee-counter__edge"></div>
+          </div>
+        </div>
+
+        <!-- 🚪 พรมเช็ดเท้าหน้าประตู (D) — มุมบนขวา สมมาตรกับมุมกาแฟมุมบนซ้าย -->
+        <div class="deco-wrap deco-mat" aria-hidden="true">
+          <div class="door-mat"></div>
+        </div>
+
+        <!-- ต้นไม้ 2 มุมล่าง (ลดจาก 4 มุม ตาม Owner สั่ง) -->
+        <div class="deco-wrap deco-plant-bl" aria-hidden="true">
+          <div class="plant-leaves">
+            <div class="leaf-l3"></div>
+            <div class="leaf-l2"></div>
+            <div class="leaf-l1"></div>
+            <div class="leaf-stem"></div>
+          </div>
+          <div class="plant-pot"></div>
+        </div>
+
+        <div class="deco-wrap deco-plant-br" aria-hidden="true">
+          <div class="plant-leaves">
+            <div class="leaf-l3"></div>
+            <div class="leaf-l2"></div>
+            <div class="leaf-l1"></div>
+            <div class="leaf-stem"></div>
+          </div>
+          <div class="plant-pot"></div>
+        </div>
+
+        <!-- =========================================
+             WORKSTATION GRID 2×2
+             TL=Elysia, TR=Sakura, BL=Mobius, BR=Aponia
+             data-agent: JS ใช้หา element ตามชื่อ
+        ========================================= -->
+        <div class="room-inner">
+
+          <!-- Elysia — TL -->
+          <section class="ws ws-top ws-elysia" data-agent="Elysia" aria-label="Elysia — PM">
+            <div class="char-wrap">
+              <!-- task-bubble: JS จะ set text + toggle hidden -->
+              <div class="task-bubble" id="js-bubble-Elysia" hidden></div>
+              <img class="char"
+                   src="./character_pixel/Elysia_pixel.png"
+                   alt="Elysia"
+                   width="90" height="120">
+            </div>
+            <div class="desk">
+              <div class="desk__surface">
+                <div class="monitor">
+                  <div class="monitor__screen"></div>
+                  <div class="monitor__stand"></div>
+                </div>
+                <!-- ของประจำตัว Elysia (PM) — แก้วกาแฟชมพู -->
+                <div class="desk-item desk-item--mug" aria-hidden="true"></div>
+              </div>
+              <div class="desk__edge"></div>
+              <!-- ป้าย role บนโต๊ะ (ย้ายมาจากข้างชื่อ S014) -->
+              <div class="desk-sign">PM</div>
+            </div>
+            <div class="name-tag">
+              <!-- dot: JS จะ set class สีตาม status -->
+              <span class="name-tag__dot dot-idle" id="js-dot-Elysia"></span>
+              <span class="name-tag__name" style="color:#FF8FAF">Elysia</span>
+            </div>
+          </section>
+
+          <!-- Sakura — TR -->
+          <section class="ws ws-top ws-sakura" data-agent="Sakura" aria-label="Sakura — UX/UI">
+            <div class="char-wrap">
+              <div class="task-bubble" id="js-bubble-Sakura" hidden></div>
+              <img class="char"
+                   src="./character_pixel/Sakura_pixel.png"
+                   alt="Sakura"
+                   width="90" height="120">
+            </div>
+            <div class="desk">
+              <div class="desk__surface">
+                <div class="monitor">
+                  <div class="monitor__screen"></div>
+                  <div class="monitor__stand"></div>
+                </div>
+                <!-- ของประจำตัว Sakura (UX/UI) — จานสีศิลปิน -->
+                <div class="desk-item desk-item--palette" aria-hidden="true">
+                  <span class="pal-dot pal-dot--1"></span>
+                  <span class="pal-dot pal-dot--2"></span>
+                  <span class="pal-dot pal-dot--3"></span>
+                </div>
+              </div>
+              <div class="desk__edge"></div>
+              <!-- ป้าย role บนโต๊ะ (ย้ายมาจากข้างชื่อ S014) -->
+              <div class="desk-sign">UI</div>
+            </div>
+            <div class="name-tag">
+              <span class="name-tag__dot dot-idle" id="js-dot-Sakura"></span>
+              <span class="name-tag__name" style="color:#FFB7C5">Sakura</span>
+            </div>
+          </section>
+
+          <!-- Mobius — BL -->
+          <section class="ws ws-bottom ws-mobius" data-agent="Mobius" aria-label="Mobius — Developer">
+            <div class="char-wrap">
+              <div class="task-bubble" id="js-bubble-Mobius" hidden></div>
+              <img class="char"
+                   src="./character_pixel/Mobius_pixel.png"
+                   alt="Mobius"
+                   width="90" height="120">
+            </div>
+            <div class="desk">
+              <div class="desk__surface">
+                <div class="monitor">
+                  <div class="monitor__screen"></div>
+                  <div class="monitor__stand"></div>
+                </div>
+                <!-- ของประจำตัว Mobius (Dev) — การ์ดโค้ดเส้นเขียว -->
+                <div class="desk-item desk-item--code" aria-hidden="true">
+                  <span></span><span></span><span></span>
+                </div>
+              </div>
+              <div class="desk__edge"></div>
+              <!-- ป้าย role บนโต๊ะ (ย้ายมาจากข้างชื่อ S014) -->
+              <div class="desk-sign">DEV</div>
+            </div>
+            <div class="name-tag">
+              <span class="name-tag__dot dot-idle" id="js-dot-Mobius"></span>
+              <span class="name-tag__name" style="color:#6fcf30">Mobius</span>
+            </div>
+          </section>
+
+          <!-- Aponia — BR -->
+          <section class="ws ws-bottom ws-aponia" data-agent="Aponia" aria-label="Aponia — QA">
+            <div class="char-wrap">
+              <div class="task-bubble" id="js-bubble-Aponia" hidden></div>
+              <img class="char"
+                   src="./character_pixel/Aponia_pixel.png"
+                   alt="Aponia"
+                   width="90" height="120">
+            </div>
+            <div class="desk">
+              <div class="desk__surface">
+                <div class="monitor">
+                  <div class="monitor__screen"></div>
+                  <div class="monitor__stand"></div>
+                </div>
+                <!-- ของประจำตัว Aponia (QA) — แว่นขยายขอบเหลือง -->
+                <div class="desk-item desk-item--magnifier" aria-hidden="true"></div>
+              </div>
+              <div class="desk__edge"></div>
+              <!-- ป้าย role บนโต๊ะ (ย้ายมาจากข้างชื่อ S014) -->
+              <div class="desk-sign">QA</div>
+            </div>
+            <div class="name-tag">
+              <span class="name-tag__dot dot-idle" id="js-dot-Aponia"></span>
+              <span class="name-tag__name" style="color:#eee100">Aponia</span>
+            </div>
+          </section>
+
+        </div><!-- /.room-inner -->
+      </div><!-- /.floor-area -->
+    </div><!-- /.room -->
+  </div><!-- /.stage-wrap -->
+
+    </main><!-- /.main -->
+
+  </div><!-- /.layout -->
+
+  <!-- =====================================================
+       S012: ACTIVITY DRAWER — slide-in จากซ้าย แสดง 10 รายการล่าสุด
+       วางนอก .layout เพื่อเป็น top-level overlay (z-index ไม่ติด grid)
+       hidden default — JS toggle .is-open ตอนเปิด/ปิด
+       ปิดได้ด้วย: คลิก backdrop / ปุ่ม X / Esc
+  ===================================================== -->
+  <div class="feed-drawer-backdrop" id="js-feed-backdrop" hidden></div>
+
+  <aside class="feed-drawer" id="js-feed-drawer"
+         role="dialog"
+         aria-modal="true"
+         aria-labelledby="js-feed-drawer-title"
+         hidden>
+    <div class="feed-drawer__head">
+      <span class="feed-drawer__title" id="js-feed-drawer-title">Activity ล่าสุด</span>
+      <button type="button"
+              class="feed-drawer__close"
+              id="js-feed-drawer-close"
+              aria-label="ปิด">×</button>
+    </div>
+    <div class="feed-drawer__body">
+      <ul class="feed-drawer__list"
+          id="js-feed-drawer-list"
+          role="log"
+          aria-live="polite"
+          aria-label="activity log ทั้งหมด">
+        <!-- JS render 10 รายการล่าสุดที่นี่ -->
+      </ul>
+    </div>
+  </aside>
+
+  <!-- =====================================================
+       S015: COLOR PANEL TRIGGER — ปุ่มเปิด panel ปรับสีห้อง
+       วาง fixed มุมล่างขวา นอก .layout เพื่อเป็น top-level overlay
+       (เหมือน feed-drawer ที่วางนอก .layout)
+       hidden default — JS toggle aria-expanded + panel hidden ตอนเปิด/ปิด
+  ===================================================== -->
+  <button class="color-panel-trigger"
+          type="button"
+          id="js-color-trigger"
+          aria-label="ปรับแต่งสีห้อง"
+          aria-expanded="false"
+          aria-controls="js-color-panel">
+    <div class="color-panel-trigger__icon" aria-hidden="true">
+      <span class="color-panel-trigger__dot3"></span>
+    </div>
+    <span class="color-panel-trigger__label">สีห้อง</span>
+  </button>
+
+  <!-- =====================================================
+       S015: COLOR PANEL — floating panel มุมล่างขวา
+       state default = hidden (ปิด) — เปิดด้วย #js-color-trigger
+       role="dialog" aria-modal="false" เพราะ panel ลอยอยู่
+       ผู้ใช้ยังโต้ตอบกับห้องด้านหลังได้ (ไม่ใช่ modal สนิท)
+
+       reading order เมื่อเปิด:
+       1 → header (title + close button)
+       2 → note ข้อมูล derive pattern
+       3 → 4 color rows (พื้น → กำแพง → โต๊ะ → พรม)
+       4 → reset button
+  ===================================================== -->
+  <div class="color-panel"
+       id="js-color-panel"
+       role="dialog"
+       aria-modal="false"
+       aria-label="ปรับแต่งสีห้อง"
+       hidden>
+
+    <!-- header: title + close -->
+    <div class="color-panel__head">
+      <span class="color-panel__title">ปรับสีห้อง</span>
+      <button type="button"
+              class="color-panel__close"
+              id="js-color-panel-close"
+              aria-label="ปิดหน้าต่างปรับสี">×</button>
+    </div>
+
+    <!-- note: บอก user ว่าเลือก 1 สี ระบบ derive เฉดย่อยให้ -->
+    <div class="color-panel__note" aria-live="polite">
+      เลือก <strong>สีหลัก 1 สี</strong> ต่อ element — ระบบจะสร้างเฉดย่อยให้อัตโนมัติ
+    </div>
+
+    <!-- color rows: 4 element -->
+    <div class="color-panel__body">
+
+      <!-- Row 1: พื้น (floor)
+           data-target="floor" → JS map ไปยัง --floor-a / --floor-b / --floor-line -->
+      <div class="color-row">
+        <div class="color-row__swatch"
+             id="js-swatch-floor"
+             aria-hidden="true"
+             title="สีพื้นปัจจุบัน"></div>
+        <div class="color-row__label">
+          <div class="color-row__label-th">พื้น</div>
+          <div class="color-row__label-var">--floor-a</div>
+        </div>
+        <div class="color-row__input-wrap" title="เลือกสีพื้น">
+          <input type="color"
+                 class="color-row__input"
+                 id="color-floor"
+                 value="#ddd5a8"
+                 aria-label="เลือกสีพื้น"
+                 data-target="floor">
+        </div>
+      </div>
+
+      <!-- Row 2: กำแพง (wall)
+           data-target="wall" → JS map ไปยัง --wall-color / --wall-top / --wall-side / --wall-border -->
+      <div class="color-row">
+        <div class="color-row__swatch"
+             id="js-swatch-wall"
+             aria-hidden="true"
+             title="สีกำแพงปัจจุบัน"></div>
+        <div class="color-row__label">
+          <div class="color-row__label-th">กำแพง</div>
+          <div class="color-row__label-var">--wall-color</div>
+        </div>
+        <div class="color-row__input-wrap" title="เลือกสีกำแพง">
+          <input type="color"
+                 class="color-row__input"
+                 id="color-wall"
+                 value="#5a6b3a"
+                 aria-label="เลือกสีกำแพง"
+                 data-target="wall">
+        </div>
+      </div>
+
+      <!-- Row 3: โต๊ะ (desk)
+           data-target="desk" → JS map ไปยัง --desk-surface / --desk-edge / --desk-border -->
+      <div class="color-row">
+        <div class="color-row__swatch"
+             id="js-swatch-desk"
+             aria-hidden="true"
+             title="สีโต๊ะปัจจุบัน"></div>
+        <div class="color-row__label">
+          <div class="color-row__label-th">โต๊ะ</div>
+          <div class="color-row__label-var">--desk-surface</div>
+        </div>
+        <div class="color-row__input-wrap" title="เลือกสีโต๊ะ">
+          <input type="color"
+                 class="color-row__input"
+                 id="color-desk"
+                 value="#c8a455"
+                 aria-label="เลือกสีโต๊ะ"
+                 data-target="desk">
+        </div>
+      </div>
+
+      <!-- Row 4: พรม (rug)
+           data-target="rug" → JS map ไปยัง --rug-base / --rug-border / --rug-pattern -->
+      <div class="color-row">
+        <div class="color-row__swatch"
+             id="js-swatch-rug"
+             aria-hidden="true"
+             title="สีพรมปัจจุบัน"></div>
+        <div class="color-row__label">
+          <div class="color-row__label-th">พรม</div>
+          <div class="color-row__label-var">--rug-base</div>
+        </div>
+        <div class="color-row__input-wrap" title="เลือกสีพรม">
+          <input type="color"
+                 class="color-row__input"
+                 id="color-rug"
+                 value="#8b4a3a"
+                 aria-label="เลือกสีพรม"
+                 data-target="rug">
+        </div>
+      </div>
+
+    </div><!-- /.color-panel__body -->
+
+    <!-- footer: reset button (destructive action แยกไว้ชัดเจน) -->
+    <div class="color-panel__foot">
+      <button type="button"
+              class="color-panel__reset"
+              id="js-color-reset"
+              aria-label="คืนค่าสีเริ่มต้นทั้งหมด">
+        คืนค่าเริ่มต้น
+      </button>
+    </div>
+
+  </div><!-- /.color-panel -->
+
+  <!-- =====================================================
+       JS: fetch + update DOM
+       แยกเป็น function ย่อยๆ อ่านง่าย
+  ===================================================== -->
+  <script src="office.js"></script>
+
+</body>
+</html>

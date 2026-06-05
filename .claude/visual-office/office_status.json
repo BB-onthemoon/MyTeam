@@ -1,0 +1,28 @@
+{
+    "updated_at":  "2026-06-05T15:23:23+07:00",
+    "current_session":  "016",
+    "current_step":  6,
+    "step_label":  "Session 016 ปิด - Chart City Comparison (ApexCharts) เสร็จ + ผ่าน Owner verify (แก้ tooltip clip)",
+    "agents":  {
+                   "Elysia":  {
+                                  "color":  "#FF4081",
+                                  "status":  "idle",
+                                  "task":  ""
+                              },
+                   "Sakura":  {
+                                  "color":  "#FFB7C5",
+                                  "status":  "idle",
+                                  "task":  ""
+                              },
+                   "Mobius":  {
+                                  "color":  "#3f9b00",
+                                  "status":  "idle",
+                                  "task":  ""
+                              },
+                   "Aponia":  {
+                                  "color":  "#eee100",
+                                  "status":  "idle",
+                                  "task":  ""
+                              }
+               }
+}

@@ -1,0 +1,1811 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dashboard Dev Team — Visual Office</title>
+  <!-- favicon inline — ป้องกัน browser ขอ /favicon.ico แล้ว 404 รก console -->
+  <link rel="icon" href="data:,">
+  <style>
+    /* =====================================================
+       DESIGN TOKENS
+       palette: warm retro 8-bit limited set
+       olive-green + cream + warm brown (cozy, เข้ากับ sprite)
+    ===================================================== */
+    :root {
+      /* background หน้าจอ */
+      --bg-page:       #1a1508;
+      --bg-mid:        #2a1f0e;
+
+      /* ห้อง — กำแพงและพื้น */
+      --wall-color:    #5a6b3a;
+      --wall-top:      #4a5a2e;
+      --wall-side:     #48552c;
+      --wall-border:   #2e3a1a;
+      --baseboard:     #3a4820;
+
+      /* พื้น — warm cream tile */
+      --floor-a:       #ddd5a8;
+      --floor-b:       #ccc494;
+      --floor-line:    #b8a870;
+      --floor-border:  #2e3a1a;
+
+      /* พรม */
+      --rug-base:      #8b4a3a;
+      --rug-border:    #6a3028;
+      --rug-pattern:   #a85848;
+
+      /* โต๊ะ */
+      --desk-surface:  #c8a455;
+      --desk-edge:     #8a6428;
+      --desk-border:   #2e2010;
+      --monitor-body:  #2a2a35;
+      --monitor-screen:#1a2a1a;
+
+      /* ตกแต่ง */
+      --plant-pot:     #7a4c28;
+      --plant-l1:      #3a6820;
+      --plant-l2:      #4a7a2a;
+      --plant-l3:      #5a8a34;
+      --window-frame:  #6a7840;
+      --window-glass:  #9ab8c4;
+      --clock-face:    #d4c47a;
+      --clock-border:  #6a5020;
+      --poster-bg:     #4a5a30;
+
+      /* panel UI */
+      --panel-bg:      rgba(255,255,255,0.04);
+      --panel-border:  rgba(255,255,255,0.10);
+      --ink-light:     #f5f0e8;
+      --ink-muted:     #9a8b6e;
+
+      --px-border:     3px solid #1e1a0a;
+
+      /* sidebar tokens — เพิ่มเฉพาะที่ยังไม่มี */
+      --sidebar-w:      240px;
+      --sidebar-bg:     rgba(255,255,255,0.025);
+      --sidebar-border: rgba(255,255,255,0.09);
+      --section-gap:    1px solid rgba(255,255,255,0.06);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: "Segoe UI", "Tahoma", sans-serif;
+      background: radial-gradient(ellipse at 50% 0%, var(--bg-mid) 0%, var(--bg-page) 60%);
+      min-height: 100vh;
+      color: var(--ink-light);
+    }
+
+    /* =====================================================
+       ROOT LAYOUT — sidebar ซ้าย 240px + main ขวายืดเต็ม
+       topbar อยู่บนสุดของคอลัมน์ขวา ทั้ง 2 แถวใช้ grid-area
+    ===================================================== */
+    .layout {
+      display: grid;
+      grid-template-rows: auto 1fr;
+      grid-template-columns: var(--sidebar-w) 1fr;
+      grid-template-areas:
+        "sidebar  topbar"
+        "sidebar  main";
+      min-height: 100vh;
+    }
+
+    /* =====================================================
+       TOPBAR — ย้ายมาอยู่ grid area "topbar"
+       ลบ max-width + width: 100% ออก เพราะ grid จัดการให้
+    ===================================================== */
+    .topbar {
+      grid-area: topbar;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 24px 10px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .topbar__left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* pixel building icon — CSS only */
+    .topbar__icon {
+      width: 28px;
+      height: 28px;
+      background:
+        linear-gradient(#1a2a1a, #1a2a1a) 4px 4px / 6px 5px no-repeat,
+        linear-gradient(#1a2a1a, #1a2a1a) 15px 4px / 6px 5px no-repeat,
+        linear-gradient(#1a2a1a, #1a2a1a) 4px 13px / 6px 5px no-repeat,
+        linear-gradient(#1a2a1a, #1a2a1a) 15px 13px / 6px 5px no-repeat,
+        linear-gradient(#1a2a1a, #1a2a1a) 9px 20px / 10px 8px no-repeat,
+        #5a6b3a;
+      border: var(--px-border);
+      border-radius: 2px;
+      image-rendering: pixelated;
+      flex-shrink: 0;
+    }
+
+    .topbar h1 {
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      color: var(--ink-light);
+    }
+
+    .topbar__sub {
+      font-size: 12px;
+      color: var(--ink-muted);
+      letter-spacing: 0.4px;
+    }
+
+    /* "updated X ago" — JS จะ update text ใน element นี้ */
+    .topbar__updated {
+      font-size: 12px;
+      color: var(--ink-muted);
+      border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(255,255,255,0.05);
+      padding: 5px 12px;
+      border-radius: 4px;
+      letter-spacing: 0.3px;
+    }
+
+    /* =====================================================
+       SIDEBAR — Step 3
+       grid area "sidebar" — ทอดยาว 2 แถว (topbar + main)
+       border-right บาง เลี่ยง AI tell (ขอบหนาด้านเดียว)
+    ===================================================== */
+    .sidebar {
+      grid-area: sidebar;
+      background: var(--sidebar-bg);
+      border-right: 1px solid var(--sidebar-border);
+      display: flex;
+      flex-direction: column;
+      /* sidebar scroll เอง ไม่ดัน layout */
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+
+    /* scrollbar sidebar — เหมือน feed scroll */
+    .sidebar::-webkit-scrollbar { width: 3px; }
+    .sidebar::-webkit-scrollbar-track { background: transparent; }
+    .sidebar::-webkit-scrollbar-thumb {
+      background: rgba(255,255,255,0.12);
+      border-radius: 2px;
+    }
+
+    /* sb-body — wrapper เนื้อหาทั้งหมด (ใช้ toggle mobile ได้ภายหลัง) */
+    .sb-body {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      min-height: 0;
+    }
+
+    /* ---- section divider ---- */
+    .sb-section {
+      border-bottom: var(--section-gap);
+    }
+
+    /* section สุดท้าย (feed) ยืดเต็มพื้นที่ที่เหลือ */
+    .sb-section:last-child {
+      border-bottom: none;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      /* สำคัญ: ป้องกัน flex child โป่งเกิน — ให้ scroll ได้ */
+      min-height: 0;
+    }
+
+    /* eyebrow label — แบ่ง section ใน sidebar */
+    .sb-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.7px;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      padding: 10px 14px 6px;
+    }
+
+    /* =====================================================
+       SECTION 1 — SESSION CARD
+    ===================================================== */
+    .session-card {
+      margin: 0 12px 12px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.10);
+      border-radius: 4px;
+      padding: 12px 14px;
+    }
+
+    .session-card__row {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      margin-bottom: 4px;
+    }
+
+    .session-card__session-label {
+      font-size: 11px;
+      color: var(--ink-muted);
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      flex-shrink: 0;
+    }
+
+    .session-card__session-value {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--ink-light);
+      line-height: 1;
+    }
+
+    .session-card__step-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 2px;
+    }
+
+    .session-card__step-num {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--ink-light);
+      background: rgba(255,255,255,0.10);
+      padding: 1px 6px;
+      border-radius: 2px;
+      flex-shrink: 0;
+    }
+
+    .session-card__step-label {
+      font-size: 13px;
+      color: rgba(255,255,255,0.75);
+      line-height: 1.3;
+    }
+
+    .session-card__time {
+      margin-top: 8px;
+      font-size: 12px;
+      color: var(--ink-muted);
+      border-top: 1px solid rgba(255,255,255,0.06);
+      padding-top: 8px;
+    }
+
+    /* =====================================================
+       SECTION 2 — TEAM LIST
+    ===================================================== */
+    .team-list {
+      list-style: none;
+      padding: 0 0 8px;
+    }
+
+    .team-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 9px;
+      padding: 8px 14px;
+      border-bottom: 1px solid rgba(255,255,255,0.03);
+      transition: background 0.15s ease-out;
+    }
+
+    .team-item:last-child { border-bottom: none; }
+
+    .team-item:hover { background: rgba(255,255,255,0.03); }
+
+    /* status dot — ขนาดเดียวกับ dot ในห้อง (8×8) */
+    .team-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      margin-top: 4px;
+    }
+
+    .team-info {
+      flex: 1;
+      /* ป้องกัน text overflow ออกนอก column */
+      min-width: 0;
+    }
+
+    .team-info__header {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 2px;
+    }
+
+    .team-info__name {
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    .team-info__status {
+      font-size: 11px;
+      color: var(--ink-muted);
+      letter-spacing: 0.3px;
+    }
+
+    .team-info__task {
+      font-size: 12px;
+      color: rgba(255,255,255,0.55);
+      line-height: 1.35;
+      overflow: hidden;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      line-clamp: 2;
+      -webkit-box-orient: vertical;
+    }
+
+    /* agent name colors — ตรงกับสีใน office.html */
+    .c-elysia { color: #FF8FAF; }
+    .c-sakura  { color: #FFB7C5; }
+    .c-mobius  { color: #6fcf30; }
+    .c-aponia  { color: #eee100; }
+
+    /* =====================================================
+       SECTION 3 — ACTIVITY FEED (ย้ายจาก bottom-section)
+    ===================================================== */
+    /* sb-feed-inner: scroll container — min-height: 0 สำคัญมาก */
+    .sb-feed-inner {
+      flex: 1;
+      overflow-y: auto;
+      min-height: 0;
+    }
+
+    .sb-feed-inner::-webkit-scrollbar { width: 3px; }
+    .sb-feed-inner::-webkit-scrollbar-track { background: transparent; }
+    .sb-feed-inner::-webkit-scrollbar-thumb {
+      background: rgba(255,255,255,0.12);
+      border-radius: 2px;
+    }
+
+    .sb-feed-list {
+      list-style: none;
+      padding: 0 0 8px;
+    }
+
+    /* feed count label ในหัว section */
+    .sb-feed-count {
+      font-size: 11px;
+      color: var(--ink-muted);
+      font-weight: 400;
+      text-transform: none;
+      letter-spacing: 0;
+    }
+
+    /* =====================================================
+       LEGEND — ท้าย sidebar (ไม่ scroll)
+    ===================================================== */
+    .sb-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px 10px;
+      padding: 8px 14px;
+      border-top: var(--section-gap);
+      background: rgba(255,255,255,0.02);
+      /* ป้องกันถูก flex กด */
+      flex-shrink: 0;
+    }
+
+    /* =====================================================
+       MAIN — พื้นที่หลักในคอลัมน์ขวา (grid area "main")
+       padding ครอบคลุมทั้ง error-banner + stage-wrap
+    ===================================================== */
+    .main {
+      grid-area: main;
+      padding: 16px 24px 28px;
+      overflow-y: auto;
+    }
+
+    /* =====================================================
+       STAGE — กรอบห้อง top-down
+       ลบ max-width + padding ออก เพราะ .main รับไปแล้ว
+    ===================================================== */
+    .stage-wrap {
+      width: 100%;
+    }
+
+    .room {
+      position: relative;
+      width: 100%;
+      border: var(--px-border);
+      border-radius: 0;
+      overflow: hidden;
+      background: var(--floor-a);
+    }
+
+    /* กำแพงด้านบน */
+    .wall-top {
+      width: 100%;
+      height: 72px;
+      background: var(--wall-color);
+      border-bottom: var(--px-border);
+      position: relative;
+      background-image:
+        linear-gradient(rgba(0,0,0,0.15) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,0,0,0.10) 1px, transparent 1px);
+      background-size: 24px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+    }
+
+    /* =====================================================
+       WALL DECORATIONS
+    ===================================================== */
+    .wall-window {
+      width: 80px;
+      height: 52px;
+      background: var(--window-glass);
+      border: var(--px-border);
+      position: relative;
+      background-image:
+        linear-gradient(var(--window-frame) 3px, transparent 3px),
+        linear-gradient(90deg, var(--window-frame) 3px, transparent 3px);
+      background-size: 100% 50%, 50% 100%;
+      background-position: 0 50%, 50% 0;
+      background-repeat: no-repeat;
+      image-rendering: pixelated;
+    }
+
+    .wall-window::after {
+      content: '';
+      position: absolute;
+      top: 4px;
+      left: 4px;
+      width: 14px;
+      height: 8px;
+      background: rgba(255,255,255,0.35);
+    }
+
+    .wall-clock {
+      width: 36px;
+      height: 36px;
+      background: var(--clock-face);
+      border: var(--px-border);
+      border-radius: 50%;
+      position: relative;
+      image-rendering: pixelated;
+    }
+
+    .wall-clock::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 2px;
+      height: 10px;
+      background: #1e1a0a;
+      transform: translate(-50%, -100%);
+      transform-origin: bottom center;
+    }
+
+    .wall-clock::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 8px;
+      height: 2px;
+      background: #1e1a0a;
+      transform: translate(-50%, -50%);
+    }
+
+    .wall-poster {
+      width: 44px;
+      height: 52px;
+      background: var(--poster-bg);
+      border: var(--px-border);
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      image-rendering: pixelated;
+      overflow: hidden;
+    }
+
+    .wall-poster::before {
+      content: '';
+      position: absolute;
+      inset: 4px;
+      background:
+        linear-gradient(45deg, rgba(255,255,255,0.08) 25%, transparent 25%),
+        linear-gradient(-45deg, rgba(255,255,255,0.08) 25%, transparent 25%);
+      background-size: 8px 8px;
+    }
+
+    /* =====================================================
+       FLOOR AREA
+    ===================================================== */
+    .floor-area {
+      position: relative;
+      padding: 20px;
+      background-color: var(--floor-a);
+      background-image:
+        linear-gradient(var(--floor-line) 1px, transparent 1px),
+        linear-gradient(90deg, var(--floor-line) 1px, transparent 1px),
+        linear-gradient(var(--floor-b) 50%, transparent 50%),
+        linear-gradient(90deg, var(--floor-b) 50%, transparent 50%);
+      background-size: 48px 48px;
+    }
+
+    /* กำแพงซ้าย-ขวา (top-down view) */
+    .floor-area::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 12px;
+      background: var(--wall-side);
+      border-right: var(--px-border);
+    }
+
+    .floor-area::after {
+      content: '';
+      position: absolute;
+      right: 0; top: 0; bottom: 0;
+      width: 12px;
+      background: var(--wall-side);
+      border-left: var(--px-border);
+    }
+
+    /* =====================================================
+       RUG
+    ===================================================== */
+    .rug {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 70%;
+      height: 72%;
+      background: var(--rug-base);
+      border: 4px solid var(--rug-border);
+      background-image:
+        linear-gradient(var(--rug-pattern) 2px, transparent 2px),
+        linear-gradient(90deg, var(--rug-pattern) 2px, transparent 2px);
+      background-size: 20px 20px;
+      z-index: 0;
+    }
+
+    .rug::after {
+      content: '';
+      position: absolute;
+      inset: 4px;
+      border: 2px solid var(--rug-pattern);
+    }
+
+    /* =====================================================
+       WORKSTATION GRID — 2×2
+       TL=Elysia, TR=Sakura, BL=Mobius, BR=Aponia
+    ===================================================== */
+    .room-inner {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      gap: 16px;
+      padding: 28px 32px 16px;
+      /* ขยายจาก 400px → 520px เพื่อให้ห้องดูโอ่โถงขึ้น (Owner สั่ง) */
+      min-height: 520px;
+    }
+
+    .ws {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 0;
+      position: relative;
+    }
+
+    .ws-top .char { opacity: 1; }
+    .ws-bottom .char { opacity: 1; }
+
+    /* =====================================================
+       CHARACTER + DESK
+    ===================================================== */
+    .char-wrap {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      z-index: 2;
+      margin-bottom: -16px;
+    }
+
+    /* task bubble — JS จะ toggle hidden attribute */
+    .task-bubble {
+      background: rgba(15, 12, 5, 0.88);
+      border: 2px solid rgba(255,255,255,0.18);
+      border-radius: 3px;
+      padding: 3px 8px;
+      font-size: 11px;
+      color: rgba(255,255,255,0.80);
+      white-space: nowrap;
+      margin-bottom: 4px;
+      position: relative;
+    }
+
+    /* speech bubble tail */
+    .task-bubble::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 0;
+      border-left: 4px solid transparent;
+      border-right: 4px solid transparent;
+      border-top: 5px solid rgba(255,255,255,0.18);
+    }
+
+    /* ซ่อน task bubble เมื่อ task ว่าง */
+    .task-bubble[hidden] { display: none; }
+
+    .char {
+      display: block;
+      height: 120px;
+      width: auto;
+      image-rendering: pixelated;
+      image-rendering: crisp-edges;
+      filter: drop-shadow(0 4px 6px rgba(0,0,0,0.55));
+    }
+
+    /* =====================================================
+       DESK — top-down view
+    ===================================================== */
+    .desk {
+      position: relative;
+      width: 160px;
+      z-index: 1;
+    }
+
+    .desk__surface {
+      width: 100%;
+      height: 52px;
+      background: var(--desk-surface);
+      border: var(--px-border);
+      background-image:
+        linear-gradient(rgba(255,255,255,0.07) 1px, transparent 1px);
+      background-size: 100% 6px;
+      position: relative;
+      border-radius: 2px;
+    }
+
+    .monitor {
+      position: absolute;
+      top: 4px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .monitor__screen {
+      width: 48px;
+      height: 32px;
+      background: var(--monitor-screen);
+      border: 2px solid var(--monitor-body);
+      border-radius: 2px;
+      background-image: radial-gradient(
+        ellipse at 50% 40%,
+        var(--agent-glow, rgba(100,200,100,0.25)) 0%,
+        transparent 70%
+      );
+      image-rendering: pixelated;
+    }
+
+    .monitor__stand {
+      width: 8px;
+      height: 4px;
+      background: var(--monitor-body);
+    }
+
+    .desk__edge {
+      width: 100%;
+      height: 8px;
+      background: var(--desk-edge);
+      border: var(--px-border);
+      border-top: none;
+      border-radius: 0 0 2px 2px;
+    }
+
+    /* =====================================================
+       NAME TAG
+    ===================================================== */
+    .name-tag {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(15, 12, 5, 0.90);
+      border: 2px solid rgba(255,255,255,0.20);
+      padding: 4px 10px 4px 7px;
+      /* pill shape — ตั้งใจ: สร้าง visual contrast กับ desk/wall ที่ขอบตรง */
+      border-radius: 999px;
+      margin-top: 6px;
+      white-space: nowrap;
+      z-index: 3;
+    }
+
+    .name-tag__dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .name-tag__name {
+      font-size: 13px;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: 0.2px;
+    }
+
+    /* status dot colors */
+    .dot-idle      { background: #888; }
+    .dot-working   { background: #f5c400; box-shadow: 0 0 4px #f5c400; }
+    .dot-waiting   { background: #4a9ff5; box-shadow: 0 0 4px #4a9ff5; }
+    .dot-reviewing { background: #a855f7; box-shadow: 0 0 4px #a855f7; }
+    .dot-done      { background: #4ade80; box-shadow: 0 0 4px #4ade80; }
+
+    /* agent monitor glow สีตาม agent */
+    .ws-elysia { --agent-glow: rgba(255,64,129,0.35); }
+    .ws-sakura { --agent-glow: rgba(255,183,197,0.30); }
+    .ws-mobius { --agent-glow: rgba(63,155,0,0.35); }
+    .ws-aponia { --agent-glow: rgba(238,225,0,0.35); }
+
+    /* =====================================================
+       CORNER DECORATIONS — เหลือแค่ 2 มุมล่าง (BL + BR)
+       ตัดมุมบนออก เพราะ wall decorations บนครอบคลุมพื้นที่นั้นอยู่แล้ว
+       2 มุมล่างสมมาตรยังคง cozy feel + ไม่รกมุมบน
+    ===================================================== */
+    .deco-wrap {
+      position: absolute;
+      z-index: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .deco-plant-bl { bottom: 16px; left: 20px; }
+    .deco-plant-br { bottom: 16px; right: 20px; }
+
+    .plant-pot {
+      width: 22px;
+      height: 16px;
+      background: var(--plant-pot);
+      border: 2px solid #3a2a10;
+      border-radius: 0 0 3px 3px;
+    }
+
+    .plant-leaves {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .leaf-stem {
+      width: 4px;
+      height: 6px;
+      background: #2e4a10;
+    }
+
+    .leaf-l1 {
+      width: 26px;
+      height: 12px;
+      background: var(--plant-l1);
+      border-radius: 2px;
+      margin: 1px 0;
+    }
+
+    .leaf-l2 {
+      width: 20px;
+      height: 10px;
+      background: var(--plant-l2);
+      border-radius: 2px;
+      margin: 1px 0;
+    }
+
+    .leaf-l3 {
+      width: 14px;
+      height: 8px;
+      background: var(--plant-l3);
+      border-radius: 2px;
+      margin: 1px 0;
+    }
+
+    /* bookshelf บนกำแพง — เป็น flex item ปกติใน wall-top
+       ไม่ใช้ absolute เพื่อไม่ทับ clock และ decoration อื่น */
+    .bookshelf {
+      display: flex;
+      gap: 2px;
+      align-items: flex-end;
+      height: 36px;
+    }
+
+    .book {
+      width: 8px;
+      border-radius: 1px 1px 0 0;
+      border: 1px solid rgba(0,0,0,0.3);
+    }
+
+    /* =====================================================
+       ERROR BANNER — แสดงเมื่อ fetch ล้มเหลวครั้งแรก
+       JS จะ toggle hidden attribute
+    ===================================================== */
+    .error-banner {
+      /* ไม่ต้องการ width/max-width/margin แนวนอนแล้ว
+         .main เป็นตัว pad ให้ครบ */
+      background: rgba(200, 80, 40, 0.15);
+      border: 1px solid rgba(200, 80, 40, 0.40);
+      border-radius: 4px;
+      padding: 8px 16px;
+      font-size: 12px;
+      color: #f5b8a0;
+      letter-spacing: 0.2px;
+      margin-bottom: 12px;
+    }
+
+    .error-banner[hidden] { display: none; }
+
+    /* =====================================================
+       FEED ITEM — JS inject class เหล่านี้ลง #js-feed-list ใน sidebar
+       ยังคงไว้เพราะ JS renderActivityFeed ยังใช้ class เดิม
+       Step 5 จะ migrate JS + class พร้อมกัน
+    ===================================================== */
+    .feed-item {
+      display: grid;
+      grid-template-columns: 52px 76px 1fr;
+      align-items: center;
+      gap: 0 10px;
+      padding: 7px 14px;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      font-size: 12px;
+    }
+
+    .feed-item:last-child { border-bottom: none; }
+    .feed-item:hover { background: rgba(255,255,255,0.025); }
+
+    /* empty state เมื่อ feed ว่าง */
+    .feed-empty {
+      padding: 16px 14px;
+      text-align: center;
+      font-size: 12px;
+      color: var(--ink-muted);
+    }
+
+    .feed-time {
+      color: var(--ink-muted);
+      font-size: 11px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .feed-agent { font-weight: 700; font-size: 12px; }
+    .feed-action { color: rgba(255,255,255,0.65); font-size: 12px; }
+
+    /* สีชื่อ agent ใน feed — ยังคงไว้ใน Step 4 เพราะ JS ยังใช้ */
+    .agent-elysia { color: #FF8FAF; }
+    .agent-sakura  { color: #FFB7C5; }
+    .agent-mobius  { color: #6fcf30; }
+    .agent-aponia  { color: #eee100; }
+
+    /* legend item + dot — ใช้ทั้งใน sb-legend และ legend ทั่วไป */
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+      color: var(--ink-muted);
+    }
+
+    .legend-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    /* =====================================================
+       RESPONSIVE
+    ===================================================== */
+    @media (max-width: 900px) {
+      /* stage-wrap ไม่มี padding ของตัวเองแล้ว — .main จัดการ */
+      .room-inner { gap: 10px; padding: 8px 16px; min-height: 420px; }
+      .desk { width: 140px; }
+      .char { height: 100px; }
+    }
+
+    @media (max-width: 600px) {
+      .room-inner {
+        grid-template-columns: 1fr 1fr;
+        gap: 6px;
+        padding: 6px 10px;
+        min-height: 300px;
+      }
+      .desk { width: 110px; }
+      .desk__surface { height: 38px; }
+      .char { height: 80px; }
+      .char-wrap { margin-bottom: -10px; }
+      .name-tag { padding: 3px 7px; }
+      .name-tag__name { font-size: 12px; }
+      .task-bubble { font-size: 10px; }
+      .monitor__screen { width: 36px; height: 24px; }
+      .wall-top { height: 52px; padding: 0 20px; }
+      .wall-window { width: 56px; height: 36px; }
+      .topbar h1 { font-size: 14px; }
+      .feed-item { grid-template-columns: 44px 64px 1fr; font-size: 12px; }
+    }
+
+    /* =====================================================
+       MOBILE SIDEBAR TOGGLE BAR
+       แสดงเฉพาะ mobile ≤768px — ซ่อนบน desktop
+    ===================================================== */
+    .sb-toggle-bar {
+      /* ซ่อนบน desktop — JS toggle ใช้ได้เฉพาะ mobile */
+      display: none;
+      width: 100%;
+      /* reset button styles */
+      background: rgba(255,255,255,0.03);
+      border: none;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      cursor: pointer;
+      color: var(--ink-muted);
+      font-family: inherit;
+      /* layout */
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 14px;
+      font-size: 12px;
+      letter-spacing: 0.3px;
+      user-select: none;
+      /* ไม่มี outline ขณะ hover — ใช้สีพื้นหลังแทน */
+      outline: none;
+    }
+
+    .sb-toggle-bar:hover {
+      background: rgba(255,255,255,0.05);
+    }
+
+    .sb-toggle-bar:focus-visible {
+      /* accessibility: แสดง focus ring เฉพาะตอน keyboard nav */
+      outline: 2px solid rgba(255,255,255,0.30);
+      outline-offset: -2px;
+    }
+
+    .sb-toggle-bar__arrow {
+      font-size: 10px;
+      transition: transform 0.2s ease-out;
+    }
+
+    /* เมื่อ collapsed → หมุนลูกศร 180 องศา (▲ → ▼) */
+    .sb-toggle-bar[aria-expanded="false"] .sb-toggle-bar__arrow {
+      transform: rotate(180deg);
+    }
+
+    /* =====================================================
+       RESPONSIVE — mobile ≤ 768px
+       layout เปลี่ยนเป็น single-column: topbar บน, sidebar กลาง, main ล่าง
+       sidebar ย้ายมาแสดงเป็น panel บนสุดก่อนห้อง
+    ===================================================== */
+    @media (max-width: 768px) {
+      .layout {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto 1fr;
+        grid-template-areas:
+          "topbar"
+          "sidebar"
+          "main";
+      }
+
+      /* sidebar mobile — เปลี่ยนจาก vertical bar เป็น horizontal panel */
+      .sidebar {
+        border-right: none;
+        border-bottom: 1px solid var(--sidebar-border);
+        /* ปล่อย overflow ตามธรรมชาติ เพราะมี toggle ควบคุมแล้ว */
+        overflow-y: visible;
+      }
+
+      /* toggle bar แสดงบน mobile */
+      .sb-toggle-bar {
+        display: flex;
+      }
+
+      /* collapsed: ซ่อน sb-body — เฉพาะ mobile เพราะ desktop ไม่มีปุ่มเปิดคืน (QA S011 MAJOR fix) */
+      .sb-body--collapsed {
+        display: none;
+      }
+
+      /* feed บน mobile จำกัดความสูงเพื่อไม่กิน viewport */
+      .sb-feed-inner {
+        max-height: 160px;
+        overflow-y: auto;
+      }
+
+      /* room ย่อขนาดเล็กลงบน mobile ≤768px */
+      .room-inner {
+        gap: 8px;
+        padding: 16px 20px 12px;
+        min-height: 340px;
+      }
+
+      .desk { width: 130px; }
+      .desk__surface { height: 42px; }
+      .char { height: 96px; }
+      .char-wrap { margin-bottom: -12px; }
+      .wall-top { height: 52px; padding: 0 20px; }
+      .wall-window { width: 56px; height: 36px; }
+
+      /* task bubble บน mobile — ให้ wrap ได้ ไม่ล้น viewport */
+      .task-bubble {
+        white-space: normal;
+        max-width: 120px;
+        text-align: center;
+      }
+    }
+
+    /* prefers-reduced-motion: ไม่ animate ถ้า user ตั้งค่าไว้ */
+    @media (prefers-reduced-motion: reduce) {
+      * { animation: none !important; transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="layout">
+
+    <!-- ==================================================
+         SIDEBAR — Step 4
+         Section 1: Session card
+         Section 2: Team list 4 คน
+         Section 3: Activity feed + legend
+         JS ใน Step 5 จะ wire ข้อมูลจริง — รอบนี้ใส่ dummy ก่อน
+    ================================================== -->
+    <aside class="sidebar" aria-label="Team status and activity">
+
+      <!-- mobile toggle bar — แสดงเฉพาะ ≤768px
+           JS จะ toggle class sb-body--collapsed บน .sb-body เมื่อกดปุ่มนี้ -->
+      <button class="sb-toggle-bar"
+              id="js-sb-toggle-btn"
+              type="button"
+              aria-expanded="true"
+              aria-controls="sb-body">
+        <span>สถานะทีม</span>
+        <span class="sb-toggle-bar__arrow" aria-hidden="true">▲</span>
+      </button>
+
+      <div class="sb-body" id="sb-body">
+
+        <!-- ---- Section 1: Session / Step ---- -->
+        <div class="sb-section">
+          <div class="sb-label">Session</div>
+          <div class="session-card">
+            <div class="session-card__row">
+              <span class="session-card__session-label">S</span>
+              <span class="session-card__session-value" id="js-sb-session">011</span>
+            </div>
+            <div class="session-card__step-row">
+              <span class="session-card__step-num" id="js-sb-step-num">Step 4</span>
+              <span class="session-card__step-label" id="js-sb-step-label">Sidebar HTML</span>
+            </div>
+            <div class="session-card__time" id="js-sb-time">อัปเดตเมื่อสักครู่</div>
+          </div>
+        </div>
+
+        <!-- ---- Section 2: Team status รายคน ---- -->
+        <div class="sb-section">
+          <div class="sb-label">ทีม</div>
+          <ul class="team-list" aria-label="team status">
+
+            <li class="team-item">
+              <span class="team-dot dot-idle" id="js-sb-dot-Elysia" aria-hidden="true"></span>
+              <div class="team-info">
+                <div class="team-info__header">
+                  <span class="team-info__name c-elysia">Elysia</span>
+                  <span class="team-info__status" id="js-sb-status-Elysia">idle</span>
+                </div>
+                <div class="team-info__task" id="js-sb-task-Elysia">—</div>
+              </div>
+            </li>
+
+            <li class="team-item">
+              <span class="team-dot dot-idle" id="js-sb-dot-Sakura" aria-hidden="true"></span>
+              <div class="team-info">
+                <div class="team-info__header">
+                  <span class="team-info__name c-sakura">Sakura</span>
+                  <span class="team-info__status" id="js-sb-status-Sakura">idle</span>
+                </div>
+                <div class="team-info__task" id="js-sb-task-Sakura">—</div>
+              </div>
+            </li>
+
+            <li class="team-item">
+              <span class="team-dot dot-working" id="js-sb-dot-Mobius" aria-hidden="true"></span>
+              <div class="team-info">
+                <div class="team-info__header">
+                  <span class="team-info__name c-mobius">Mobius</span>
+                  <span class="team-info__status" id="js-sb-status-Mobius">working</span>
+                </div>
+                <div class="team-info__task" id="js-sb-task-Mobius">code sidebar HTML Step 4</div>
+              </div>
+            </li>
+
+            <li class="team-item">
+              <span class="team-dot dot-idle" id="js-sb-dot-Aponia" aria-hidden="true"></span>
+              <div class="team-info">
+                <div class="team-info__header">
+                  <span class="team-info__name c-aponia">Aponia</span>
+                  <span class="team-info__status" id="js-sb-status-Aponia">idle</span>
+                </div>
+                <div class="team-info__task" id="js-sb-task-Aponia">—</div>
+              </div>
+            </li>
+
+          </ul>
+        </div>
+
+        <!-- ---- Section 3: Activity Feed ---- -->
+        <div class="sb-section" role="region" aria-labelledby="js-sb-feed-heading">
+          <div class="sb-label" style="display:flex; align-items:center; justify-content:space-between; padding-right:14px;">
+            <span id="js-sb-feed-heading">Activity</span>
+            <span class="sb-feed-count" id="js-sb-feed-count">—</span>
+          </div>
+
+          <div class="sb-feed-inner">
+            <ul class="sb-feed-list"
+                id="js-feed-list"
+                role="log"
+                aria-live="polite"
+                aria-label="activity log">
+              <!-- JS จาก Step 5 จะ render <li> ที่นี่ -->
+              <!-- รอบนี้ JS เดิมยังชี้ #js-feed-list มาที่ element นี้ได้ทันที -->
+            </ul>
+          </div>
+
+          <!-- legend — ท้าย sidebar ไม่ scroll -->
+          <div class="sb-legend" aria-label="status legend">
+            <span class="legend-item">
+              <span class="legend-dot dot-idle"></span>idle
+            </span>
+            <span class="legend-item">
+              <span class="legend-dot dot-working"></span>working
+            </span>
+            <span class="legend-item">
+              <span class="legend-dot dot-waiting"></span>waiting
+            </span>
+            <span class="legend-item">
+              <span class="legend-dot dot-reviewing"></span>reviewing
+            </span>
+            <span class="legend-item">
+              <span class="legend-dot dot-done"></span>done
+            </span>
+          </div>
+
+        </div><!-- /.sb-section feed -->
+
+      </div><!-- /.sb-body -->
+    </aside>
+
+    <!-- =====================================================
+         reading order 1: TOPBAR
+    ===================================================== -->
+    <header class="topbar">
+      <div class="topbar__left">
+        <div class="topbar__icon" aria-hidden="true"></div>
+        <div>
+          <h1>Dashboard Dev Team</h1>
+          <div class="topbar__sub" id="js-topbar-sub">Visual Office · Session —</div>
+        </div>
+      </div>
+      <!-- JS จะ update text นี้ทุก refresh -->
+      <span class="topbar__updated" id="js-updated-label">—</span>
+    </header>
+
+    <!-- =====================================================
+         reading order 2: MAIN — error banner + ห้อง office
+    ===================================================== -->
+    <main class="main" role="main">
+
+      <!-- error banner — แสดงเมื่อ fetch ล้มเหลวครั้งแรก -->
+      <div class="error-banner" id="js-error-banner" hidden role="alert">
+        ⚠️ โหลดข้อมูลบางส่วนไม่สำเร็จ — ลองรีเฟรช หรือเปิดผ่าน Live Server
+      </div>
+
+  <!-- =====================================================
+       reading order 2: ROOM — top-down view
+  ===================================================== -->
+  <div class="stage-wrap">
+    <div class="room" role="region" aria-label="Virtual Office Room">
+
+      <!-- กำแพงด้านบน (wall strip + decorations) -->
+      <!-- wall-top: flex row เรียง [window] [clock] [bookshelf] [poster+window]
+           ทุกชิ้นเป็น flex item → ไม่มี absolute ที่ทับกัน -->
+      <div class="wall-top" aria-hidden="true">
+        <div class="wall-window"></div>
+
+        <div class="wall-clock"></div>
+
+        <!-- bookshelf เป็น flex item ปกติ ไม่ใช้ absolute -->
+        <div class="bookshelf" aria-hidden="true">
+          <div class="book" style="height:28px; background:#8b4a3a;"></div>
+          <div class="book" style="height:32px; background:#3a6848;"></div>
+          <div class="book" style="height:24px; background:#c8a455;"></div>
+          <div class="book" style="height:30px; background:#6a4a8a;"></div>
+          <div class="book" style="height:26px; background:#4a7a5a;"></div>
+          <div class="book" style="height:34px; background:#8a5028;"></div>
+          <div class="book" style="height:22px; background:#5a6b3a;"></div>
+        </div>
+
+        <div style="display:flex; align-items:center; gap:16px;">
+          <div class="wall-poster"></div>
+          <div class="wall-window"></div>
+        </div>
+      </div>
+
+      <!-- พื้นที่พื้น + โต๊ะ -->
+      <div class="floor-area">
+        <div class="rug" aria-hidden="true"></div>
+
+        <!-- ต้นไม้ 2 มุมล่าง (ลดจาก 4 มุม ตาม Owner สั่ง) -->
+        <div class="deco-wrap deco-plant-bl" aria-hidden="true">
+          <div class="plant-leaves">
+            <div class="leaf-l3"></div>
+            <div class="leaf-l2"></div>
+            <div class="leaf-l1"></div>
+            <div class="leaf-stem"></div>
+          </div>
+          <div class="plant-pot"></div>
+        </div>
+
+        <div class="deco-wrap deco-plant-br" aria-hidden="true">
+          <div class="plant-leaves">
+            <div class="leaf-l3"></div>
+            <div class="leaf-l2"></div>
+            <div class="leaf-l1"></div>
+            <div class="leaf-stem"></div>
+          </div>
+          <div class="plant-pot"></div>
+        </div>
+
+        <!-- =========================================
+             WORKSTATION GRID 2×2
+             TL=Elysia, TR=Sakura, BL=Mobius, BR=Aponia
+             data-agent: JS ใช้หา element ตามชื่อ
+        ========================================= -->
+        <div class="room-inner">
+
+          <!-- Elysia — TL -->
+          <section class="ws ws-top ws-elysia" data-agent="Elysia" aria-label="Elysia — PM">
+            <div class="char-wrap">
+              <!-- task-bubble: JS จะ set text + toggle hidden -->
+              <div class="task-bubble" id="js-bubble-Elysia" hidden></div>
+              <img class="char"
+                   src="./character_pixel/Elysia_pixel.png"
+                   alt="Elysia"
+                   width="90" height="120">
+            </div>
+            <div class="desk">
+              <div class="desk__surface">
+                <div class="monitor">
+                  <div class="monitor__screen"></div>
+                  <div class="monitor__stand"></div>
+                </div>
+              </div>
+              <div class="desk__edge"></div>
+            </div>
+            <div class="name-tag">
+              <!-- dot: JS จะ set class สีตาม status -->
+              <span class="name-tag__dot dot-idle" id="js-dot-Elysia"></span>
+              <span class="name-tag__name" style="color:#FF8FAF">Elysia</span>
+            </div>
+          </section>
+
+          <!-- Sakura — TR -->
+          <section class="ws ws-top ws-sakura" data-agent="Sakura" aria-label="Sakura — UX/UI">
+            <div class="char-wrap">
+              <div class="task-bubble" id="js-bubble-Sakura" hidden></div>
+              <img class="char"
+                   src="./character_pixel/Sakura_pixel.png"
+                   alt="Sakura"
+                   width="90" height="120">
+            </div>
+            <div class="desk">
+              <div class="desk__surface">
+                <div class="monitor">
+                  <div class="monitor__screen"></div>
+                  <div class="monitor__stand"></div>
+                </div>
+              </div>
+              <div class="desk__edge"></div>
+            </div>
+            <div class="name-tag">
+              <span class="name-tag__dot dot-idle" id="js-dot-Sakura"></span>
+              <span class="name-tag__name" style="color:#FFB7C5">Sakura</span>
+            </div>
+          </section>
+
+          <!-- Mobius — BL -->
+          <section class="ws ws-bottom ws-mobius" data-agent="Mobius" aria-label="Mobius — Developer">
+            <div class="char-wrap">
+              <div class="task-bubble" id="js-bubble-Mobius" hidden></div>
+              <img class="char"
+                   src="./character_pixel/Mobius_pixel.png"
+                   alt="Mobius"
+                   width="90" height="120">
+            </div>
+            <div class="desk">
+              <div class="desk__surface">
+                <div class="monitor">
+                  <div class="monitor__screen"></div>
+                  <div class="monitor__stand"></div>
+                </div>
+              </div>
+              <div class="desk__edge"></div>
+            </div>
+            <div class="name-tag">
+              <span class="name-tag__dot dot-idle" id="js-dot-Mobius"></span>
+              <span class="name-tag__name" style="color:#6fcf30">Mobius</span>
+            </div>
+          </section>
+
+          <!-- Aponia — BR -->
+          <section class="ws ws-bottom ws-aponia" data-agent="Aponia" aria-label="Aponia — QA">
+            <div class="char-wrap">
+              <div class="task-bubble" id="js-bubble-Aponia" hidden></div>
+              <img class="char"
+                   src="./character_pixel/Aponia_pixel.png"
+                   alt="Aponia"
+                   width="90" height="120">
+            </div>
+            <div class="desk">
+              <div class="desk__surface">
+                <div class="monitor">
+                  <div class="monitor__screen"></div>
+                  <div class="monitor__stand"></div>
+                </div>
+              </div>
+              <div class="desk__edge"></div>
+            </div>
+            <div class="name-tag">
+              <span class="name-tag__dot dot-idle" id="js-dot-Aponia"></span>
+              <span class="name-tag__name" style="color:#eee100">Aponia</span>
+            </div>
+          </section>
+
+        </div><!-- /.room-inner -->
+      </div><!-- /.floor-area -->
+    </div><!-- /.room -->
+  </div><!-- /.stage-wrap -->
+
+    </main><!-- /.main -->
+
+  </div><!-- /.layout -->
+
+  <!-- =====================================================
+       JS: fetch + update DOM
+       แยกเป็น function ย่อยๆ อ่านง่าย
+  ===================================================== -->
+  <script>
+    // ---- CONSTANTS ----
+
+    // สีชื่อ agent ใน feed (map ชื่อ → CSS class)
+    const AGENT_COLOR_CLASS = {
+      Elysia: 'agent-elysia',
+      Sakura: 'agent-sakura',
+      Mobius: 'agent-mobius',
+      Aponia: 'agent-aponia',
+    };
+
+    // status → CSS class สำหรับ dot
+    const STATUS_DOT_CLASS = {
+      idle:      'dot-idle',
+      working:   'dot-working',
+      waiting:   'dot-waiting',
+      reviewing: 'dot-reviewing',
+      done:      'dot-done',
+    };
+
+    // ---- STATE ----
+
+    // บอกว่าเคยโหลดสำเร็จมาก่อนหรือยัง
+    // ถ้า true และ fetch พลาดอีก → คงข้อมูลเดิม (ไม่ล้าง DOM)
+    let hasLoadedSuccessfully = false;
+
+    // ---- UTILITY FUNCTIONS ----
+
+    /**
+     * formatTimeAgo — คำนวณเวลาที่ผ่านมาจาก ISO string
+     * คืนค่า "X seconds ago" / "X minutes ago" / "X hours ago"
+     */
+    function formatTimeAgo(isoString) {
+      const updatedDate = new Date(isoString);
+      const now = new Date();
+
+      // clamp ไม่ให้ติดลบ — กรณี timestamp เป็นอนาคต หรือ clock drift เล็กน้อย
+      const diffSeconds = Math.max(0, Math.floor((now - updatedDate) / 1000));
+
+      if (diffSeconds < 5) {
+        // น้อยกว่า 5 วินาที = "just now" ดูเป็นธรรมชาติกว่า "0 seconds ago"
+        return 'อัปเดตเมื่อสักครู่';
+      } else if (diffSeconds < 60) {
+        return `updated ${diffSeconds} seconds ago`;
+      } else if (diffSeconds < 3600) {
+        const minutes = Math.floor(diffSeconds / 60);
+        return `updated ${minutes} min ago`;
+      } else {
+        const hours = Math.floor(diffSeconds / 3600);
+        return `updated ${hours} hr ago`;
+      }
+    }
+
+    /**
+     * formatHHMM — แปลง ISO timestamp เป็น "HH:MM"
+     * แสดงเวลา Bangkok เสมอ ให้ตรงกับ timestamp ที่เก็บ (+07:00)
+     * ไม่ใช้ local time ของเครื่อง เพราะผู้เปิดอาจอยู่ต่าง timezone
+     */
+    function formatHHMM(isoString) {
+      const date = new Date(isoString);
+      return date.toLocaleTimeString('th-TH', {
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: false,
+        timeZone: 'Asia/Bangkok',
+      });
+    }
+
+    // ---- UPDATE FUNCTIONS ----
+
+    /**
+     * updateOfficeStatus — รับ data จาก office_status.json
+     * แล้ว update:
+     *   1. topbar sub text (session number)
+     *   2. sidebar session card (session, step, label, time)
+     *   3. topbar "updated X ago" label
+     *   4. sidebar team status รายคน (dot, status text, task text)
+     *   5. ห้อง: dot สี + task bubble รายคน
+     */
+    function updateOfficeStatus(data) {
+      // ---- 1. topbar sub: "Visual Office · Session NNN" ----
+      const topbarSub = document.getElementById('js-topbar-sub');
+      if (topbarSub && data.current_session != null) {
+        topbarSub.textContent = `Visual Office · Session ${data.current_session}`;
+      }
+
+      // ---- 2. sidebar session card ----
+      const sbSession = document.getElementById('js-sb-session');
+      if (sbSession && data.current_session != null) {
+        sbSession.textContent = data.current_session;
+      }
+
+      const sbStepNum = document.getElementById('js-sb-step-num');
+      if (sbStepNum && data.current_step != null) {
+        sbStepNum.textContent = `Step ${data.current_step}`;
+      }
+
+      const sbStepLabel = document.getElementById('js-sb-step-label');
+      if (sbStepLabel && data.step_label != null) {
+        sbStepLabel.textContent = data.step_label;
+      }
+
+      // sidebar time: "อัปเดตเมื่อ HH:MM · X min ago"
+      const sbTime = document.getElementById('js-sb-time');
+      if (sbTime && data.updated_at) {
+        const hhMM = formatHHMM(data.updated_at);
+        const timeAgo = formatTimeAgo(data.updated_at);
+        // formatTimeAgo คืนข้อความแบบ "updated X min ago" หรือ "อัปเดตเมื่อสักครู่"
+        // ถ้าเป็น "อัปเดตเมื่อสักครู่" ให้แสดงแค่นั้น ไม่ต้องซ้ำ HH:MM
+        if (timeAgo === 'อัปเดตเมื่อสักครู่') {
+          sbTime.textContent = `อัปเดตเมื่อ ${hhMM} · สักครู่`;
+        } else {
+          // "updated X min ago" → แปลงเป็น "อัปเดตเมื่อ HH:MM · X min ago"
+          const agoShort = timeAgo.replace('updated ', '');
+          sbTime.textContent = `อัปเดตเมื่อ ${hhMM} · ${agoShort}`;
+        }
+      }
+
+      // ---- 3. topbar "updated X ago" label มุมขวาบน ----
+      const updatedLabel = document.getElementById('js-updated-label');
+      if (updatedLabel && data.updated_at) {
+        updatedLabel.textContent = formatTimeAgo(data.updated_at);
+      }
+
+      // ---- 4 + 5. วน update แต่ละ agent ----
+      const agents = data.agents;
+      if (!agents) return;
+
+      Object.keys(agents).forEach(function(agentName) {
+        const agentData = agents[agentName];
+
+        // -- 4a. sidebar dot สี --
+        const sbDot = document.getElementById(`js-sb-dot-${agentName}`);
+        if (sbDot) {
+          const allDotClasses = Object.values(STATUS_DOT_CLASS);
+          allDotClasses.forEach(function(cls) { sbDot.classList.remove(cls); });
+          const newClass = STATUS_DOT_CLASS[agentData.status] || STATUS_DOT_CLASS.idle;
+          sbDot.classList.add(newClass);
+        }
+
+        // -- 4b. sidebar status text --
+        const sbStatus = document.getElementById(`js-sb-status-${agentName}`);
+        if (sbStatus) {
+          sbStatus.textContent = agentData.status || 'idle';
+        }
+
+        // -- 4c. sidebar task text --
+        const sbTask = document.getElementById(`js-sb-task-${agentName}`);
+        if (sbTask) {
+          sbTask.textContent = agentData.task?.trim() || '—';
+        }
+
+        // -- 5a. ห้อง: dot สี --
+        const roomDot = document.getElementById(`js-dot-${agentName}`);
+        if (roomDot) {
+          const allDotClasses = Object.values(STATUS_DOT_CLASS);
+          allDotClasses.forEach(function(cls) { roomDot.classList.remove(cls); });
+          const newClass = STATUS_DOT_CLASS[agentData.status] || STATUS_DOT_CLASS.idle;
+          roomDot.classList.add(newClass);
+        }
+
+        // -- 5b. ห้อง: task bubble --
+        const bubbleElement = document.getElementById(`js-bubble-${agentName}`);
+        if (bubbleElement) {
+          const taskText = agentData.task || '';
+          if (taskText.trim() === '') {
+            bubbleElement.hidden = true;
+            bubbleElement.textContent = '';
+          } else {
+            bubbleElement.textContent = taskText;
+            bubbleElement.hidden = false;
+          }
+        }
+      });
+    }
+
+    /**
+     * updateActivityFeed — รับ array ของ log entries (parsed จาก JSONL)
+     * เอา 10 รายการล่าสุด เรียงใหม่→เก่า แล้ว render ลง feed
+     */
+    function updateActivityFeed(logEntries) {
+      // js-feed-list ย้ายมาอยู่ใน sidebar แล้ว (Step 4) — id เดิมยังใช้ได้
+      // js-feed-count เปลี่ยนเป็น js-sb-feed-count ตาม sidebar HTML ใหม่
+      const feedList = document.getElementById('js-feed-list');
+      const feedCount = document.getElementById('js-sb-feed-count');
+      if (!feedList) return;
+
+      // กรอง entry ที่ไม่มี time หรือ agent (ป้องกัน malformed data)
+      const validEntries = logEntries.filter(function(entry) {
+        return entry && entry.time && entry.agent;
+      });
+
+      // เรียงจากเก่าไปใหม่ก่อน (ascending) แล้วเอา 10 ท้าย = 10 ล่าสุด
+      const sorted = validEntries.slice().sort(function(a, b) {
+        return new Date(a.time) - new Date(b.time);
+      });
+      const latest10 = sorted.slice(-10);
+
+      // แสดงใหม่ก่อน เก่าทีหลัง (reverse เพื่อแสดง)
+      const displayEntries = latest10.slice().reverse();
+
+      // update count
+      if (feedCount) {
+        feedCount.textContent = `${displayEntries.length} รายการล่าสุด`;
+      }
+
+      // ถ้าไม่มีข้อมูล แสดง empty state
+      if (displayEntries.length === 0) {
+        feedList.innerHTML = '<li class="feed-empty">ยังไม่มี activity</li>';
+        return;
+      }
+
+      // render แต่ละ entry เป็น <li>
+      const listItems = displayEntries.map(function(entry) {
+        const timeText = formatHHMM(entry.time);
+        const agentName = entry.agent || 'Unknown';
+        const actionText = entry.action || '';
+
+        // หา CSS class สีสำหรับชื่อ agent (fallback = ไม่มีสี)
+        const agentClass = AGENT_COLOR_CLASS[agentName] || '';
+
+        // สร้าง HTML ของ <li> แต่ละบรรทัด
+        return `<li class="feed-item">
+          <span class="feed-time">${escapeHtml(timeText)}</span>
+          <span class="feed-agent ${agentClass}">${escapeHtml(agentName)}</span>
+          <span class="feed-action">${escapeHtml(actionText)}</span>
+        </li>`;
+      });
+
+      feedList.innerHTML = listItems.join('');
+    }
+
+    /**
+     * escapeHtml — ป้องกัน XSS เวลา inject text ลง innerHTML
+     * escape " และ ' เพิ่มเติมด้วย เพื่อ guard กรณีนำค่าไปใส่ใน attribute context ในอนาคต
+     */
+    function escapeHtml(str) {
+      const div = document.createElement('div');
+      div.appendChild(document.createTextNode(str));
+      return div.innerHTML
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    // ---- FETCH FUNCTIONS ----
+
+    /**
+     * fetchOfficeStatus — ดึง office_status.json แล้วส่งให้ updateOfficeStatus
+     * ถ้าล้มเหลวและยังไม่เคยโหลดสำเร็จ → แสดง error banner
+     * ถ้าล้มเหลวแต่เคยโหลดสำเร็จแล้ว → คงข้อมูลเดิม (ไม่ทำอะไร)
+     */
+    async function fetchOfficeStatus() {
+      try {
+        const response = await fetch('./office_status.json', { cache: 'no-store' });
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}`);
+        }
+        const data = await response.json();
+        updateOfficeStatus(data);
+        return true; // โหลดสำเร็จ
+      } catch (error) {
+        console.warn('fetchOfficeStatus failed:', error.message);
+        return false; // โหลดไม่สำเร็จ
+      }
+    }
+
+    /**
+     * fetchActivityLog — ดึง activity_log.jsonl
+     * แยกทีละบรรทัด parse JSON แต่ละบรรทัด (ข้าม blank line)
+     */
+    async function fetchActivityLog() {
+      try {
+        const response = await fetch('./activity_log.jsonl', { cache: 'no-store' });
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}`);
+        }
+        const rawText = await response.text();
+
+        // แยกบรรทัด → parse JSON ทีละบรรทัด → ข้าม blank line หรือ parse error
+        const entries = rawText
+          .split('\n')
+          .filter(function(line) { return line.trim() !== ''; })
+          .map(function(line) {
+            try {
+              return JSON.parse(line);
+            } catch {
+              // บรรทัดไหน parse ไม่ได้ → ข้าม (ไม่ให้ทั้งหมดพัง)
+              return null;
+            }
+          })
+          .filter(function(entry) { return entry !== null; });
+
+        updateActivityFeed(entries);
+        return true;
+      } catch (error) {
+        console.warn('fetchActivityLog failed:', error.message);
+        return false;
+      }
+    }
+
+    /**
+     * showErrorBanner — แสดง banner เล็กๆ บอกให้ใช้ Live Server
+     */
+    function showErrorBanner() {
+      const banner = document.getElementById('js-error-banner');
+      if (banner) banner.hidden = false;
+    }
+
+    /**
+     * hideErrorBanner — ซ่อน banner เมื่อโหลดสำเร็จ
+     */
+    function hideErrorBanner() {
+      const banner = document.getElementById('js-error-banner');
+      if (banner) banner.hidden = true;
+    }
+
+    // ---- MAIN REFRESH CYCLE ----
+
+    /**
+     * refreshAll — fetch ทั้ง 2 ไฟล์พร้อมกัน แล้วจัดการ error state แยกต่อ fetch
+     * เรียกตอน init และทุก 5 วินาที
+     *
+     * Logic:
+     * - statusLoaded / logLoaded ประเมินแยกกัน — ถ้า status สำเร็จ ข้อมูลห้องอัปเดตปกติ
+     *   แม้ log จะ fail ก็ไม่เขียนทับ label ว่า "โหลดไม่ได้"
+     * - hasLoadedSuccessfully = true เมื่อ ทั้งคู่เคยสำเร็จสักครั้ง (เพื่อคง fallback)
+     * - error banner หน่วง 1500ms ก่อนแสดงครั้งแรก — ป้องกัน flash ตอน transient
+     */
+    async function refreshAll() {
+      const [statusLoaded, logLoaded] = await Promise.all([
+        fetchOfficeStatus(),
+        fetchActivityLog(),
+      ]);
+
+      // ถ้า status สำเร็จแล้วยัง mark ว่า "โหลดได้บางส่วน" อย่าเขียนทับ label
+      if (statusLoaded && logLoaded) {
+        hasLoadedSuccessfully = true;
+        hideErrorBanner();
+        return;
+      }
+
+      // ถ้าอย่างน้อยหนึ่งอย่างสำเร็จ และเคยโหลดสำเร็จแล้วก่อนหน้า → คงข้อมูลเดิม
+      if (hasLoadedSuccessfully) {
+        // ไม่ทำอะไร — ข้อมูลเดิมยังค้างอยู่บนหน้าจอ
+        return;
+      }
+
+      // === กรณีที่ยังไม่เคยโหลดสำเร็จเลย (เช่น เปิดผ่าน file://) ===
+
+      // ถ้า status fetch สำเร็จ → อย่าเขียนทับ label ว่าโหลดไม่ได้
+      // ถ้า status fetch ล้มเหลว → แสดง "—" ที่ updated label
+      if (!statusLoaded) {
+        const updatedLabel = document.getElementById('js-updated-label');
+        if (updatedLabel) updatedLabel.textContent = 'ไม่สามารถโหลดข้อมูล';
+      }
+
+      // ถ้า log fetch ล้มเหลว → แสดง empty state ใน feed
+      if (!logLoaded) {
+        const feedList = document.getElementById('js-feed-list');
+        if (feedList && feedList.children.length === 0) {
+          feedList.innerHTML = '<li class="feed-empty">ไม่สามารถโหลด activity — เปิดผ่าน Live Server</li>';
+        }
+        const feedCount = document.getElementById('js-sb-feed-count');
+        if (feedCount) feedCount.textContent = '—';
+      }
+
+      // หน่วง banner ~1500ms ก่อนแสดงครั้งแรก — ป้องกัน flash ตอน transient network
+      setTimeout(function() {
+        // ตรวจอีกครั้งว่ายังไม่ได้โหลดสำเร็จ ก่อนแสดง banner
+        if (!hasLoadedSuccessfully) {
+          showErrorBanner();
+        }
+      }, 1500);
+    }
+
+    // ---- MOBILE SIDEBAR TOGGLE ----
+
+    /**
+     * initSidebarToggle — ผูก click handler บน #js-sb-toggle-btn
+     * กดครั้งหนึ่ง: ยุบ sb-body (เพิ่ม class sb-body--collapsed)
+     * กดอีกครั้ง: ขยาย sb-body (ลบ class sb-body--collapsed)
+     * sync aria-expanded บน button ด้วยทุกครั้ง
+     */
+    function initSidebarToggle() {
+      const toggleBtn = document.getElementById('js-sb-toggle-btn');
+      const sbBody = document.getElementById('sb-body');
+
+      // guard: ถ้าไม่เจอ element ทั้งคู่ ไม่ทำอะไร (ป้องกัน console error)
+      if (!toggleBtn || !sbBody) return;
+
+      toggleBtn.addEventListener('click', function() {
+        const isCurrentlyExpanded = toggleBtn.getAttribute('aria-expanded') === 'true';
+
+        if (isCurrentlyExpanded) {
+          // ยุบ: ซ่อน sb-body
+          sbBody.classList.add('sb-body--collapsed');
+          toggleBtn.setAttribute('aria-expanded', 'false');
+        } else {
+          // ขยาย: แสดง sb-body
+          sbBody.classList.remove('sb-body--collapsed');
+          toggleBtn.setAttribute('aria-expanded', 'true');
+        }
+      });
+    }
+
+    // ---- INIT ----
+
+    // เรียก toggle init หลัง DOM พร้อม (script อยู่ก่อน </body> แล้ว)
+    initSidebarToggle();
+
+    // โหลดครั้งแรกทันทีที่หน้าเปิด
+    refreshAll();
+
+    // auto-refresh ทุก 5 วินาที
+    setInterval(refreshAll, 5000);
+  </script>
+
+</body>
+</html>
