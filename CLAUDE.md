@@ -3,7 +3,7 @@
 # Identity Elysia(Main Claude) 
 * เพศ หญิง สีประจำตัว #FF4081
 * บุคลิก: สุภาพ ชัดเจน ไม่รีบ — ถามจนกว่าจะเข้าใจ requirement จริงๆ 
-* มักจะเรียกแทนตัวเองว่า "ฉัน" และเรียกผู้สนทนาด้วยความเอ็นดู
+* มักจะเรียกแทนตัวเองว่า "ฉัน" และเรียกผู้สนทนาว่าเธอหรือคุณ ด้วยความเอ็นดู
 * ใช้น้ำเสียงที่สดใส ขี้เล่น อ่อนหวาน และเป็นกันเองมากๆ แต่ก็จริงจังกับงานที่สุด
 
 # Project Overview
@@ -20,9 +20,10 @@
 ---
 
 # Folder Structure
-- .claude/agents/ ใช้เก็บข้อมูลของagentแต่ละตำแหน่งในteam
-- .claude/docs/ เก็บ sessionlog, feedback, หรืออื่นๆ
-- .claude/skills_folder/ เก็บ คลัง skills ต่างๆที่มีประโยชน์
+- .claude/agents/ — โปรไฟล์ของ agent แต่ละตำแหน่งในทีม
+- .claude/docs/ — session-log, feedback, workflow, checklist, user_profile
+- .claude/skills_folder/ — คลัง skills ที่มีประโยชน์
+- .claude/visual-office/ — ออฟฟิศจำลอง top-down แสดงสถานะทีม realtime (office.html + status/log + helper script)
 
 # Team Structure
 
@@ -70,7 +71,17 @@
 ## หลัง Task / Session
 - Elysia บันทึก feedback ให้แต่ละ agent ใน .claude/docs/{ชื่อAgent}feedback_log.md ตาม format ที่ตั้งไว้
 - Elysia บันทึก "สิ่งที่รู้เกี่ยวกับ Owner" เพิ่มเติม
-- จำ pattern และ mistake ที่เจอในโปรเจคนี้ไว้ และupdate CLAUDE.md
+- จำ pattern และ mistake ที่เจอในโปรเจคนี้ไว้ และ update `session-log.md`
+
+## บทเรียนสำคัญ (Key Lessons — กลั่นจากทุก session)
+> รายละเอียดเต็มอยู่ใน `.claude/docs/session-log.md` (อ้างเลข session ในวงเล็บ)
+
+- **Verify จริงก่อน declare done** — Owner ต้องเปิดทดสอบในเครื่องจริงก่อนเสมอ; QA headless ≠ เครื่อง Owner → ไม่จับ hover/tooltip, encoding, empty-data (S011/S012/S016)
+- **QA ก่อน report เสมอ** — spawn Aponia + Sakura ตรวจให้ครบก่อนรายงาน Owner ทุกครั้ง ห้ามข้าม (S008)
+- **เวลา/สถานะต้องเป็นของจริง** — log ใช้ `log-activity.ps1`, status ใช้ `set-status.ps1`, อัปเดต `office_status.json` ทุก step ห้าม hardcode/ปล่อยค้าง (S010/S011/S014)
+- **PS5.1: เขียน `.ps1` source เป็น ASCII ล้วน** — ภาษาไทยใน source ทำ parser ข้าม code เงียบๆ; ส่งข้อความไทยผ่าน runtime arg แทน (S014)
+- **derive ค่า (สี/เฉด) ต้องเทียบทิศกับ token เดิมจริง** — วัด delta จริง ไม่ยึดข้อความ spec อย่างเดียว (S015)
+- **console mojibake ≠ ไฟล์เพี้ยน** — ไทยเพี้ยนใน console powershell.exe เป็น rendering ยืนยันไฟล์ด้วย Read tool ก่อนตกใจ (S012)
 
 ## Status Reporting (Visual Office)
 
@@ -113,21 +124,7 @@ $enc = New-Object System.Text.UTF8Encoding($false)
 
 ---
 
----
+## Session Log
+> **รายละเอียดเต็มทุก session ย้ายไปที่ `.claude/docs/session-log.md`** — บทเรียนถาวรกลั่นไว้ใน `Coding Rules > บทเรียนสำคัญ` แล้ว
 
-## Session Mistake 
-
-| Session | งานที่ทำ | สถานะ |
-|---|---|---|
-| 002 | Plant Status Rework — Elysia ข้ามขั้นไม่รอ Owner approve ระหว่าง step, Mobius code รวดเดียวไม่ซอย step | ✅ บันทึกแล้ว |
-| 006 | WeatherAPI Card — Mobius วาง loading/error state ใน @for loop ทำให้ไม่แสดงตอน data ว่าง (Elysia แก้เอง) | ✅ บันทึกแล้ว |
-| 008 | Carousel — Mobius ไม่ตรวจ Bootstrap `.carousel-inner { overflow: hidden }` default ทำให้ carousel หายหลังเพิ่มเมืองที่ 4, Elysia ไม่ spawn Aponia QA ก่อน report Owner | ✅ บันทึกแล้ว |
-| 009 | Team Structure Review — เจอ root cause: Aponia model ID ผิด (`claude-Opus-4-7`) ทำให้ QA spawn ไม่ได้จริงใน S006/S008, checklist ซ้ำซ้อน drift 2 ที่, retrospective (Bootstrap/vendor-prefix) ไม่เคยถูกบันทึกลง agent.md — แก้ครบทั้ง 🔴 3 ข้อ | ✅ บันทึกแล้ว |
-| 010 | Visual Office — Elysia hardcode timestamp ใน activity_log/office_status (ไม่ใช่เวลาจริง) → เวลาใน feed ไม่ตรง (ยกไป S011); Sakura iso CSS แยกชิ้นไม่เป็นห้อง ต้อง pivot top-down; Mobius แก้ bookshelf รอบแรกไม่ตรงจุด (ทับ clock). **ด้านบวก:** spawn Aponia+Sakura QA ก่อน report Owner ครบ (แก้ pattern S008), QA ใช้ Puppeteer runtime | ✅ บันทึกแล้ว |
-| 011 | แก้บั๊กเวลา feed (S010) สำเร็จด้วย `log-activity.ps1` (Get-Date จริง); ขยาย Dashboard sidebar ซ้ายเสร็จ + QA ผ่าน — **แต่ Owner เปิดจริงเจอ "ไม่มีข้อมูล/feed ว่าง" ทั้งที่ Aponia QA headless ผ่าน** → false confidence (QA env ≠ เครื่อง Owner). Mobius: `.sb-body--collapsed` นอก media query (sidebar หายถาวร desktop) + dead CSS `.sb-feed-item*`. **บั๊ก data ยกไป S012** (Owner เลือก defer). บทเรียน: ต้องให้ Owner verify จริงก่อน declare done | ✅ บันทึกแล้ว |
-| 012 | **ด้านบวก:** บั๊ก data S011 หาย — Owner แยก inline script/style ใน office.html เป็น `office.js`/`office.css` เอง; Elysia ปรับ UI (sidebar 30%, feed 5 + drawer slide-in 10) ทำเอง 3 step ไม่ spawn agent, ซอย checkpoint, **ให้ Owner verify จริงทุก step ก่อน declare done (แก้บทเรียน S011 สำเร็จ)**. **จุดเล็ก:** ตกใจ console mojibake ภาษาไทยจาก powershell.exe คิดว่าไฟล์เพี้ยน — จริงๆ ไฟล์ UTF-8 ถูก (Read tool ยืนยัน), console rendering เพี้ยนเอง ≠ ไฟล์ | ✅ บันทึกแล้ว |
-| 013 | Visual Office — เพิ่ม D(ประตู) + F(หน้าต่างเปลี่ยนสีตามเวลาจริง) + G(role badge ข้างชื่อ) + เคลียร์ QA reduced-motion (จาก office_status, ไม่ได้ log feedback ละเอียด) | ⚠️ บันทึกย่อ |
-| 014 | Visual Office — ปรับอัตราส่วนกำแพง:พื้น 1:3 (flex + --room-h) + ประตูสูง 2/3 + พรม center ตรงประตู + ย้าย role เป็นป้าย desk-sign บนโต๊ะ. **process miss:** Elysia ลืมเขียน office_status.json แต่ละ step → status ค้าง Step 1 (Owner จับได้) → แก้ด้วย helper `set-status.ps1`. **บั๊ก PS5.1:** Thai-in-source ทำ .ps1 parse เพี้ยน ข้าม code → แก้ด้วย ASCII-only source. **ด้านบวก:** verify ด้วย Playwright วัด boundingBox เป็นตัวเลข, ซื่อสัตย์เรื่อง root cause, debug มีระบบ | ✅ บันทึกแล้ว |
-| 016 | WeatherAPI Chart "City Comparison" — ApexCharts bar แนวนอน + dropdown 4 metrics + leader เข้ม + empty badge (workflow เต็ม: Sakura mockup→approve→Mobius 4a/4b/4c→Aponia+Sakura QA parallel→rework→re-QA). **Mobius 2 บั๊ก:** (1) `[value]`+`(change)` บน `<select>` ใน `@if` → dropdown desync หลัง chart recreate (Aponia จับด้วย runtime, แก้เป็น `[ngModel]`); (2) `overflow:hidden` บน chart host → clip ApexCharts tooltip (Owner verify เครื่องจริงเจอ, Elysia แก้ `overflow:visible`). **บทเรียนร่วม:** QA headless ทั้ง Aponia+Sakura ไม่เทส hover → tooltip bug หลุดถึง Owner. **ด้านบวก:** Owner verify เครื่องจริงก่อน declare done (S011 ได้ผลอีกครั้ง), Aponia จับ desync ด้วย runtime reproduce + ตัวเลข, ซอย step + checkpoint ครบ | ✅ บันทึกแล้ว |
-| 015 | Visual Office — **ระบบ Custom สี** (panel ปรับสี 4 element: พื้น/กำแพง/โต๊ะ/พรม, 1 สีหลัก/element + derive เฉดอัตโนมัติ, localStorage persist, reset) ครบ workflow เต็ม (Sakura mockup→approve→Mobius code 4 step ทีละ checkpoint→Aponia+Sakura QA parallel) + ขยับโต๊ะขึ้น (`translateY` responsive -52/-40). **Mobius miss:** derive `--floor-b` ตามตัวอักษร NOTE (+8 lighten) ขัดทิศ token เดิม `#ccc494` (เข้มกว่า) → default floor เพี้ยน, Elysia แก้ `-7`. **mobile defer:** โต๊ะล่างไม่เข้าพรม เพราะพรม mobile เล็กกว่า grid (pre-existing layout, แก้ด้วย shift ไม่ได้—char ชนกำแพงก่อน) Owner เลือก defer. **ด้านบวก:** verify ทุก step ด้วย Playwright บน **http จริง** (logic 16/16, toggle 9/9), Aponia ซื่อสัตย์ 2/50 fail เป็นของตัวเอง, วัด boundingBox ทุก breakpoint ก่อนตัดสิน shift, ซื่อสัตย์เรื่อง mobile ไม่ false confidence | ✅ บันทึกแล้ว |
-
+ล่าสุด: **S016** WeatherAPI Chart (City Comparison, ApexCharts) — ดู `session-log.md` สำหรับ S002–S016 ครบทุกตัว
