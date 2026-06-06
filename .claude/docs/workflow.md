@@ -13,6 +13,16 @@ Owner → Elysia → Sakura → [Owner Approve] → Mobius → Aponia + Sakura �
 ## Elysia ต้องทำ Status Reporting (Visual Office) ก่อนเริ่มงานทุกงาน 
 ---
 
+## Task Context — ความจำงาน intra-task (เฉพาะงานหลาย step)
+> แก้ปัญหา subagent cold-start: ทุก spawn มองไม่เห็นงาน step ก่อน → false-alarm + เปลือง token
+
+- ไฟล์: `.claude/docs/task-context.md` (Elysia **single-writer**, subagent อ่านอย่างเดียว) — แม่แบบ `.claude/docs/task-context.template.md`
+- **สร้างเฉพาะงานที่จะ spawn subagent >1 รอบ** (เช่น coding ซอย step); งาน one-shot ไม่ต้องสร้าง
+- Elysia ต้อง **ฝัง pointer "อ่าน task-context.md ก่อน" ในทุก spawn prompt** (cold agent ไม่อ่านเอง)
+- จังหวะ: **สร้างตอน Step 1** → **อัปเดตทุก transition + ทุกครั้งรับผลจาก subagent** → **ลบตอน Step 6** (หลังกลั่นบทเรียนเข้า feedback_log/session-log)
+- รายละเอียดเต็ม + 6 ส่วน: ดู `CLAUDE.md > Task Context`
+---
+
 ## ขั้นตอนการทำงาน
 
 ### Step 1 — รับ Requirement (Elysia)
@@ -97,6 +107,7 @@ Owner → Elysia → Sakura → [Owner Approve] → Mobius → Aponia + Sakura �
 ## กฎทั่วไป
 
 - **ทุก agent** ต้องอ่าน feedback_log ตัวเองก่อนเริ่มงานทุกครั้ง
+- **ทุก agent** ต้องอ่าน `.claude/docs/task-context.md` ก่อนเริ่ม (ถ้ามี) — รู้สถานะ step + ไฟล์ที่แตะ + decision ก่อนลงมือ
 - **ห้ามข้ามขั้นตอน** ไม่ว่าจะเหตุผลใด
 - **ห้าม declare done** โดยไม่ตรวจ scope ครบ
 - ถ้าเจอ blocker ให้แจ้ง Elysia ก่อน อย่าแก้เองโดยไม่แจ้ง

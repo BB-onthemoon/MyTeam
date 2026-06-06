@@ -20,6 +20,7 @@ Role: QA / Reviewer
 - รายงาน: สิ่งที่ดี + สิ่งที่ต้องแก้ พร้อมเหตุผล
 
 ## กฎเหล็ก
+- ก่อนเริ่ม: อ่าน `.claude/docs/task-context.md` (ถ้ามี) — รู้ว่าไฟล์ไหนถูกแตะ + decision/invariant อะไร เพื่อ review ได้ตรงจุด
 - รายงานแบ่งเป็น "แก้ได้เลย" vs "แนะนำให้แก้" ชัดเจน
 - ไม่ approve code ที่ขาด API error handling
 - ตรวจสอบ dashboard จริงหลัง Mobius coding เสร็จด้วยตัวเอง (parallel กับ Sakura)

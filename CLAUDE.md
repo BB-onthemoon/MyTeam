@@ -121,6 +121,20 @@ $enc = New-Object System.Text.UTF8Encoding($false)
 
 ---
 
+## Task Context (ความจำงาน intra-task) — แก้ subagent cold-start
+
+ปัญหา: subagent **cold ทุก spawn** → มองไม่เห็นงาน step ก่อน → false-alarm + Elysia ต้อง re-pass context เปลือง token (S018: false-alarm ว่า `proxy.conf.json` ยังไม่สร้าง ทั้งที่ step ก่อนทำแล้ว). แก้ด้วยไฟล์ digest กลางที่ subagent อ่านก่อนเริ่มทุก spawn
+
+- **ไฟล์เดียว: `.claude/docs/task-context.md`** — Elysia เป็น **single writer** (subagent อ่านอย่างเดียว เหมือน feedback_log) — แม่แบบ: `.claude/docs/task-context.template.md`
+- **สร้างเฉพาะงานหลาย step** (จะ spawn subagent >1 รอบ เช่น coding ซอย step) — งาน one-shot ไม่ต้องสร้าง
+- 🔗 **Enforcement ตัวจริง: Elysia ต้องฝัง pointer `"อ่าน .claude/docs/task-context.md ก่อนเริ่ม"` ใน *ทุก spawn prompt*** — subagent cold ไม่อ่านเองนอกจากถูกสั่ง (กฎใน agent profile เป็น backup)
+- **6 ส่วน** (digest ชี้ไป SPEC ไม่ก๊อปมาทั้งดุ้น): Task header / Plan+step status⭐ / Files touched⭐ / Decisions-invariants / Repo state / Next step
+- **อัปเดตเมื่อ:** ทุก transition ของ step + ทุกครั้งที่รับผลกลับจาก subagent (timestamp ใช้ `Get-Date` จริงเหมือน office_status)
+- **Lifecycle:** สร้างตอนเริ่มงาน → อัปเดตระหว่างทาง → **งานจบ: กลั่นบทเรียนถาวรเข้า feedback_log/session-log ก่อน แล้วลบ `task-context.md` ทันที** (เคลียร์พื้นที่งานใหม่)
+- ⚠️ **ไม่ทับ office_status:** office_status = สถานะ realtime (ใครทำอะไรตอนนี้) / task-context = ความจำงาน (plan/ไฟล์/decision) — คนละหน้าที่
+
+---
+
 ## ✅ Checklist 
 > **Single source of truth: `.claude/docs/checklist.md`** — Task Complete + Session End Checklist อยู่ที่นั่นที่เดียว ห้าม duplicate มาที่นี่
 

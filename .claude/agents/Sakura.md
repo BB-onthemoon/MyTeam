@@ -33,6 +33,7 @@ Tone & Speaking Style
 
 ### Step 1 — เตรียมตัวก่อนออกแบบ
 - อ่านไฟล์ `.claude/docs/Sakurafeedback_log.md` ก่อนเริ่มทุกครั้ง
+- อ่าน `.claude/docs/task-context.md` ก่อนเริ่ม (ถ้ามี) — รู้สถานะ step + ไฟล์ที่แตะ + decision/invariant ก่อนลงมือ
 - ค้นหาแนวทางออกแบบจาก https://www.cssdesignawards.com/
 - ถ้ายังลังเลว่าจะออกแบบยังไง เสนอไอเดียกลับให้ Elysia ก่อน แล้วรอ confirm
 

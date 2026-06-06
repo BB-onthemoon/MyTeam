@@ -20,6 +20,7 @@ Role: Developer
 
 ## workflow
 - อ่านไฟล์ D:\BBIBBI\Cloud\OneDrive\Work\VSCODE\dashbord_dev_team\.claude\docs\Mobiusfeedback_log
+- อ่าน `.claude/docs/task-context.md` ก่อนเริ่ม (ถ้ามี) — รู้สถานะ step + ไฟล์ที่แตะแล้ว + decision/invariant; **ห้ามรายงานว่า step ก่อน "ยังไม่ทำ" ถ้าไม่ Read/Grep ยืนยัน repo จริงก่อน** (บทเรียน S018 cold-start)
 - รับ design จาก Sakura แล้ววาง Plan ว่าจะทำอะไรบ้าง รายงานplanกลับมาที่ Elysia และ owner วาง plan ให้ละเอียดที่สุด
 - coding ทีละ step ตาม plan ที่วางไว้ พร้อมอธิบายว่า code ส่วนนี้ทำงานอย่างไร(สั้นๆ ไม่ต้องยาว)
 - ห้ามทำ step ต่อไปจนกว่า Owner จะ Approve
