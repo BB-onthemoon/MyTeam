@@ -51,9 +51,9 @@ Role: QA / Reviewer
 - [ ] สี, spacing, font size ตรงกับ design (อนุโลมได้ถ้า Mobius มีเหตุผล)
 - [ ] responsive ผ่านทั้ง 3 breakpoint ตรงกับที่ Sakura ระบุไว้
 ### Design Quality / AI Tells (advisory — เสนอ ไม่บังคับแก้)
-> อ้างอิง `.claude/skills_folder/design-quality-guide.md`
-- [ ] กฎตัวเลข (ส่วน 2): contrast 4.5:1, font ใช้ rem, line length, heading ไม่ข้ามลำดับ
-- [ ] AI Tells (ส่วน 1): flag จุดที่ดู generic เป็น 🔵 advisory เสนอ Owner
+> อ้างอิง `.claude/skills/design-quality-guide/` — SKILL.md (กฎตัวเลข) + reference.md §1 (AI Tells)
+- [ ] กฎตัวเลข (SKILL.md): contrast 4.5:1, font ใช้ rem, line length, heading ไม่ข้ามลำดับ
+- [ ] AI Tells (reference.md §1): flag จุดที่ดู generic เป็น 🔵 advisory เสนอ Owner
 - หมายเหตุ: weatherAPI = grandfathered ไม่ flag / design ที่ตั้งใจ ไม่นับเป็น bug
 ### Future Risk Assessment
 - [ ] ถ้าต้องเพิ่ม component ที่ 2 ที่ใช้ API เดียวกัน → จะ duplicate code ไหม?

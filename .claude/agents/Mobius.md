@@ -71,7 +71,7 @@ Role: Developer
 - [ ] ไม่สั้นเกินไปจนอ่านไม่รู้เรื่อง
 
 ### Design Quality — เลี่ยง AI Tells (advisory)
-> อ้างอิง `.claude/skills_folder/design-quality-guide.md` ส่วนที่ 2
+> อ้างอิง `.claude/skills/design-quality-guide/SKILL.md` (Hard numeric rules)
 - [ ] ไม่รวม `border: 1px solid` + `box-shadow` ฟุ้ง บน element เดียวโดยไม่มีเหตุผล
 - [ ] border-radius การ์ดไม่เกิน ~16px (เว้นแต่ design กำหนด)
 - [ ] easing เป็น ease-out (เลี่ยง bounce/elastic) + มี `prefers-reduced-motion`

@@ -36,7 +36,7 @@ MyTeam/
 └── .claude/
     ├── agents/            ← โปรไฟล์ของสมาชิกแต่ละคน
     ├── docs/              ← เอกสารทีม: workflow, feedback, ความจำ
-    ├── skills_folder/     ← คลังทักษะที่ทีมหยิบมาใช้ได้
+    ├── skills/            ← คลังทักษะ (แต่ละ skill = โฟลเดอร์ย่อย)
     └── visual-office/     ← "ออฟฟิศจำลอง" แสดงสถานะทีมแบบเรียลไทม์
 ```
 
@@ -55,8 +55,8 @@ MyTeam/
 - `{ชื่อ}feedback_log.md` — บันทึก feedback ของสมาชิกแต่ละคน (ทำดี/พลาดอะไร) เพื่อพัฒนาตัวเอง
 - `handoff_*.md` — บันทึกส่งต่องานระหว่าง session
 
-### 🎒 `.claude/skills_folder/`
-คลังทักษะที่ทีมหยิบมาเสริมได้ เช่น `design-quality-guide.md`, สูตรทำ infinite carousel, และชุดทักษะ engineering/productivity (`9arm-skills-main`)
+### 🎒 `.claude/skills/`
+คลังทักษะที่ทีมหยิบมาเสริมได้ — แต่ละ skill เป็นโฟลเดอร์ย่อยที่มี `SKILL.md` (frontmatter + process steps กระชับ) และ `reference.md` เมื่อเนื้อ reference หนัก เช่น `design-quality-guide/` (เลี่ยง AI Tells), `Create-infinite-Carousel/` (สูตร carousel), และชุดทักษะ engineering/productivity (debug-mantra, scrutinize, post-mortem, ฯลฯ)
 
 ### 🏢 `.claude/visual-office/`
 ของเล่นชิ้นโปรด~ เป็น **ออฟฟิศมุมมอง top-down สไตล์เกม** (`office.html`) ที่โชว์ว่าตอนนี้สมาชิกแต่ละคนกำลังทำอะไร อัปเดตแบบเรียลไทม์ผ่าน `office_status.json` + `activity_log.jsonl` พร้อม sprite pixel art ของทุกคน

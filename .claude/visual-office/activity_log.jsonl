@@ -77,3 +77,28 @@
 {"time":"2026-06-05T15:10:03+07:00","agent":"Sakura","action":"re-QA PASS - chart height 150px + badge X/2 cities ทำงานถูกทุก breakpoint"}
 {"time":"2026-06-05T15:17:33+07:00","agent":"Elysia","action":"Owner verify เจอบั๊ก tooltip โดน clip - Elysia แก้ .chart-apex-host overflow hidden-\u003evisible"}
 {"time":"2026-06-05T15:23:24+07:00","agent":"Elysia","action":"Session 016 ปิด - Chart เสร็จ, feedback log 4 agent + CLAUDE.md + memory อัปเดตครบ"}
+{"time":"2026-06-06T10:41:27+07:00","agent":"Elysia","action":"S017 เริ่ม - SPEC ระบบรับคืนเอกสารร่างเสร็จ spawn Sakura ออกแบบ Mockup Step 1"}
+{"time":"2026-06-06T10:49:17+07:00","agent":"Sakura","action":"ส่ง Mockup Step 1 (desktop+mobile) เสร็จ - navy+steel blue, IBM Plex Sans/Mono Thai, design language พร้อมต่อ step 2-3"}
+{"time":"2026-06-06T11:04:23+07:00","agent":"Elysia","action":"ส่ง feedback Owner ให้ Sakura: เพิ่ม label JobWinfeedID + ขยายฟอนต์ทั้งหน้า (ผู้ใช้สายตาสั้น)"}
+{"time":"2026-06-06T11:10:54+07:00","agent":"Sakura","action":"แก้ Mockup Step 1 เสร็จ - เพิ่ม label JOBWINFEEDID + ขยาย base font 16-\u003e18px ทั้งหน้า layout ไม่แตก"}
+{"time":"2026-06-06T11:15:53+07:00","agent":"Elysia","action":"Owner approve Mockup Step 1 -\u003e spawn Sakura ออกแบบ Step 2 + Step 3 ต่อ ยึด design language เดิม"}
+{"time":"2026-06-06T11:25:30+07:00","agent":"Sakura","action":"ส่ง Mockup Step 2 + Step 3 (สรุป+success) เสร็จ - context strip JobWinfeedID, invoice เก่า-\u003eใหม่, comparison card; Mockup ครบทั้งระบบ"}
+{"time":"2026-06-06T11:34:25+07:00","agent":"Elysia","action":"Owner: Step 3 ใบกำกับภาษี เป็น input ว่างกรอกเอง -\u003e อัปเดต SPEC data flow + ส่ง Sakura แก้"}
+{"time":"2026-06-06T11:37:25+07:00","agent":"Sakura","action":"แก้ Step 3 เสร็จ - ใบกำกับภาษีเก่า/ใหม่ เป็น input ว่าง (mono, height 48px, focus เขียว/น้ำเงินแยกฝั่ง) Mockup ครบทั้งระบบ"}
+{"time":"2026-06-06T11:41:37+07:00","agent":"Elysia","action":"Owner: เอา section ใบกำกับภาษีออกจาก Step 2 (ซ้ำกับ input Step 3) -\u003e อัปเดต SPEC + ส่ง Sakura แก้"}
+{"time":"2026-06-06T11:54:07+07:00","agent":"Elysia","action":"S017 ปิด - SPEC + Mockup 3 step approved, บันทึก feedback Sakura + memory + session-log ครบ (ค้าง: Mobius code Angular)"}
+{"time":"2026-06-06T15:49:14+07:00","agent":"Elysia","action":"เปิด S018: ประเมินโครง Angular ที่ Owner วางไว้ เตรียมแผน coding ระบบรับคืนเอกสาร"}
+{"time":"2026-06-06T15:54:42+07:00","agent":"Elysia","action":"spawn Mobius ทำ Step A (รากฐาน): provideHttpClient + proxy.conf.json + แก้ ApiResponse interface"}
+{"time":"2026-06-06T15:58:04+07:00","agent":"Mobius","action":"Step A เสร็จ: provideHttpClient + proxy.conf.json + แก้ ApiResponse เป็น data array - typecheck ผ่านสะอาด"}
+{"time":"2026-06-06T16:03:24+07:00","agent":"Elysia","action":"spawn Mobius ทำ Step B (data layer): service ครบ 3 API + signal store + subscribe logic ที่เดียว"}
+{"time":"2026-06-06T16:09:05+07:00","agent":"Mobius","action":"Step B เสร็จ: service 3 API (HTTP ล้วน) + ReturnDocStore signals/computed/actions + subscribe รวมที่เดียว - typecheck ผ่าน"}
+{"time":"2026-06-06T16:16:21+07:00","agent":"Elysia","action":"note memory: Owner อยากให้ subagent ต่อ context เดิมได้ภายหลัง + spawn Mobius Step C (wizard shell + step-indicator)"}
+{"time":"2026-06-06T16:26:42+07:00","agent":"Mobius","action":"Step C เสร็จ: step-indicator + wizard shell (สลับ step + reset) + wire app -\u003e wizard; ng build แดงเฉพาะ template step1 เก่า (รอ rebuild Step D)"}
+{"time":"2026-06-06T16:29:30+07:00","agent":"Elysia","action":"Owner เลือก wizard คุม nav / step คุม action; spawn Mobius Step D (step1 UI + job-card + nav gating)"}
+{"time":"2026-06-06T16:36:13+07:00","agent":"Mobius","action":"Step D เสร็จ: step1 UI + job-card (JobCardVM) + wizard ปุ่มถัดไป gated - ng build เขียว (warning CSS budget เล็กน้อย)"}
+{"time":"2026-06-06T16:46:34+07:00","agent":"Elysia","action":"Owner สั่งรื้อ UI เป็น Bootstrap จริง + theme Sakura; spawn Mobius refactor 4 component (Step D.5)"}
+{"time":"2026-06-06T16:53:41+07:00","agent":"Mobius","action":"Step D.5 เสร็จ: รื้อ 4 component เป็น Bootstrap จริง + theme Sakura override --bs-* - ng build เขียว warning budget หาย"}
+{"time":"2026-06-06T16:58:30+07:00","agent":"Elysia","action":"Owner verify Step D.5 ผ่าน (ใช้งานดี ไทยอ่านออก); nav bar เข้า polish backlog; spawn Mobius Step E (Step2 UI)"}
+{"time":"2026-06-06T17:03:06+07:00","agent":"Mobius","action":"Step E เสร็จ: step2-new-doc (Bootstrap, map New*) build เขียว; Elysia spawn Step F (step3 + UserName)"}
+{"time":"2026-06-06T17:11:21+07:00","agent":"Mobius","action":"Step F เสร็จ -\u003e Coding ครบทั้งระบบ (A-F + D.5): step3 บันทึกจริง + UserName edit; build เขียว รอ Owner ทดสอบ flow เต็ม"}
+{"time":"2026-06-06T17:16:48+07:00","agent":"Elysia","action":"HANDOFF S018: coding ครบ A-F+Bootstrap build เขียว ไทยอ่านออก; บันทึก memory/log/feedback; ค้าง Owner test+QA+Polish ยกไป S019"}

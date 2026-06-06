@@ -15,6 +15,11 @@
 
 ## Log
 
+### Session 017 — 2026-06-06 — ระบบรับคืนเอกสารการขาย (Mockup 3 step — โปรเจคใหม่)
+**ทำได้ดี:** วาง **design language ใหม่ทั้งระบบ** ให้สื่อ enterprise/industrial (navy header `#162032` + steel blue `#1d4ed8` + warm gray bg, IBM Plex Sans Thai/Mono, การ์ดใช้ header-bar ภายใน + Extend badge วงกลม ไม่ใช้ border-left หนา, radius 4-6px) เลี่ยง AI-tell ครบและ note rationale ทุกจุด; ใช้ pattern "ทำ Step 1 ก่อนให้ Owner approve ทิศทาง แล้วขยาย Step 2/3 ด้วย design ต่อเนื่องสม่ำเสมอ" ได้ผลดีมาก; รับ feedback หลายรอบไว+ตรง (เพิ่ม label JobWinfeedID, ขยาย base font 16→18px เพื่อ accessibility ผู้ใช้สายตาสั้น, เปลี่ยน invoice เป็น input ว่าง, เอา section invoice ออกจาก Step 2 + จัด spacing ต่อ); self-review desktop+mobile ทุกรอบ + screenshot, note ส่ง Mobius ครบ (localStorage key `sdrs_username`, loading/empty/error state, ปุ่ม disabled validation, toggle View A/B)
+**ทำพลาด:** ไม่มีข้อพลาดหลัก งานราบรื่น (จุดเล็ก: รอบ Step 2+3 รายงานว่าปุ่ม mobile "อาจ clip ต้อง scroll" แต่ตรวจ full-page จริงแล้ว stack ครบไม่ clip — ประเมิน conservative ไว้ก่อนซึ่งยอมรับได้)
+**แนวทางปรับปรุง:** เวลา mockup มี field ที่ค่า "อาจมาจาก step ก่อน" ให้เช็คกับ Elysia/SPEC ก่อนวางว่าเป็น prefill หรือ user-input เพราะกระทบ data flow (รอบนี้ invoice เปลี่ยนทิศ 2 ครั้ง: display→input→เอา section Step 2 ออก) — ถ้า clarify แต่แรกจะลดรอบแก้
+
 ### Session 016 — 2026-06-05 — WeatherAPI Chart "City Comparison" (mockup + QA UI)
 **ทำได้ดี:** mockup chart 3 state (4 เมือง/humidity/empty) คัด design token จาก `chart.css`+`display.css` ให้เข้าธีม glass พาสเทล, rationale ชัด (bar สีเดียวเพราะ metric เดียวกัน เลี่ยง false meaning ว่าคนละประเภท, leader เข้มสื่อ rank โดยไม่ต้องมี badge, footer label ยืนยัน context, dropdown ซ่อนตอน empty); เสนอ **decision point** (sort descending vs pin-order / สีเดียว vs หลายสี) ให้ Owner เลือกแทนเดาเอง; QA UI วัด boundingBox จริงทุก breakpoint, เทียบ mockup vs จริงทีละจุด, re-QA ยืนยัน height 120→150px + badge ดีขึ้นด้วยตัวเลข, screenshot ครบ 7+7 รูป
 **ทำพลาด:** QA UI ทั้ง 2 รอบไม่ครอบ **hover tooltip** เลยไม่เจอบั๊ก tooltip โดน clip — เป็นจุดบอดร่วมกับ Aponia (headless ไม่ hover แท่ง) ทำให้บั๊กหลุดไปให้ Owner เจอเครื่องจริง

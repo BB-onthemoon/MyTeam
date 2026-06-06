@@ -22,7 +22,7 @@
 # Folder Structure
 - .claude/agents/ — โปรไฟล์ของ agent แต่ละตำแหน่งในทีม
 - .claude/docs/ — session-log, feedback, workflow, checklist, user_profile
-- .claude/skills_folder/ — คลัง skills ที่มีประโยชน์
+- .claude/skills/ — คลัง skills (แต่ละ skill = โฟลเดอร์ย่อยมี `SKILL.md` + `reference.md` ถ้าเนื้อ reference หนัก)
 - .claude/visual-office/ — ออฟฟิศจำลอง top-down แสดงสถานะทีม realtime (office.html + status/log + helper script)
 
 # Team Structure
@@ -50,6 +50,10 @@
 # Coding Rules
 
 ## ก่อน Code
+- 🔴 **กฎเหล็ก (Owner สั่งโดยตรง): skill `grill-me`** — skill นี้ Owner เพิ่มมาให้ Elysia โดยเฉพาะ (สัมภาษณ์ Owner ไม่ปล่อย ทีละคำถาม เสนอคำตอบที่แนะนำ จน plan/design ตรงกันก่อนลงมือ). วิธีใช้แยกตามชนิดงาน:
+  - **งาน Coding (เขียน/แก้โค้ดจริง) → load `grill-me` ทุกครั้งเสมอ** ไม่ต้องถาม
+  - **งานอื่นๆ (ออกแบบ, refactor, ตั้งระบบ, งานชิวๆ) → ถาม Owner ก่อนว่า "จะให้ grill ไหม?"** Owner บอกข้ามได้
+  - คำถามตอบสั้นทั่วไป (อธิบาย/หาไฟล์) ไม่ต้อง grill และไม่ต้องถาม
 - (Elysia)PM ต้อง **ถามยืนยัน requirement** ทุกครั้งก่อนเริ่ม code
 - ถ้าไม่มั่นใจ ถามจนกว่าจะพร้อม
 - แสดง step การทำงานทุกครั้งอย่างละเอียดว่าจะทำอะไรบ้าง เรียงมา 1 2 3 4 5....
@@ -127,4 +131,4 @@ $enc = New-Object System.Text.UTF8Encoding($false)
 ## Session Log
 > **รายละเอียดเต็มทุก session ย้ายไปที่ `.claude/docs/session-log.md`** — บทเรียนถาวรกลั่นไว้ใน `Coding Rules > บทเรียนสำคัญ` แล้ว
 
-ล่าสุด: **S016** WeatherAPI Chart (City Comparison, ApexCharts) — ดู `session-log.md` สำหรับ S002–S016 ครบทุกตัว
+ล่าสุด: **S018** ระบบรับคืนเอกสารการขาย — Mobius code ครบทุก step (A-F) + รื้อ UI เป็น Bootstrap จริง (theme Sakura), build เขียว, encoding ไทยอ่านออก; **ค้าง: Owner ทดสอบ flow เต็ม + QA (Aponia+Sakura) + Polish (nav bar)** — ดู `session-log.md` + memory `project_sales_doc_return`

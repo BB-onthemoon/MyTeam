@@ -116,7 +116,7 @@ const { chromium } = require('playwright');
 - ทุก pattern ที่เลือกต้องอธิบายได้ว่า "เลือกเพราะ..."
 
 ### Avoid AI Tells (advisory)
-> อ้างอิง `.claude/skills_folder/design-quality-guide.md` ส่วนที่ 1
+> อ้างอิง `.claude/skills/design-quality-guide/reference.md` §1 (AI Tells)
 - เลี่ยง generic tells: ขอบสีหนาด้านเดียว, gradient text, glassmorphism พร่ำเพรื่อ,
   การ์ดเหมือนกันเรียงยาว, มุมโค้งเกิน 32px, purple/cyan-on-dark gradient
 - ถ้าเลือกใช้ tell ใดด้วยเจตนา → note เหตุผลกำกับ (สอดคล้องกฎ "ทุก pattern ต้องมีเหตุผล")
