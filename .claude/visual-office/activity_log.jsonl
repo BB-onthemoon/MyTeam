@@ -102,3 +102,11 @@
 {"time":"2026-06-06T17:03:06+07:00","agent":"Mobius","action":"Step E เสร็จ: step2-new-doc (Bootstrap, map New*) build เขียว; Elysia spawn Step F (step3 + UserName)"}
 {"time":"2026-06-06T17:11:21+07:00","agent":"Mobius","action":"Step F เสร็จ -\u003e Coding ครบทั้งระบบ (A-F + D.5): step3 บันทึกจริง + UserName edit; build เขียว รอ Owner ทดสอบ flow เต็ม"}
 {"time":"2026-06-06T17:16:48+07:00","agent":"Elysia","action":"HANDOFF S018: coding ครบ A-F+Bootstrap build เขียว ไทยอ่านออก; บันทึก memory/log/feedback; ค้าง Owner test+QA+Polish ยกไป S019"}
+{"time":"2026-06-06T22:01:49+07:00","agent":"Elysia","action":"S019 SalesDoc QA+Polish: grill+plan done, task-context created. spawning Aponia+Sakura QA parallel"}
+{"time":"2026-06-06T22:11:15+07:00","agent":"Aponia","action":"QA SalesDoc done (fix-then-ship): no blocker; should-fix Status!=SUCCESS SPEC6.4 + extend type + nits"}
+{"time":"2026-06-06T22:11:15+07:00","agent":"Sakura","action":"QA UI done: 3 must-fix (header d-flex, content not centered, --surface-new/--border-new missing) + responsive/css"}
+{"time":"2026-06-06T22:11:16+07:00","agent":"Elysia","action":"merged QA findings -\u003e 2 new bugs found. asking Owner on advisory before spawning Mobius"}
+{"time":"2026-06-06T22:16:24+07:00","agent":"Elysia","action":"Owner cleared advisory -\u003e spawning Mobius for one-shot Polish (14 fixes in task-context)"}
+{"time":"2026-06-06T22:36:05+07:00","agent":"Mobius","action":"Polish done: fixed all 14 items, ng build green, step3-confirm.css under 4kB budget"}
+{"time":"2026-06-06T22:36:06+07:00","agent":"Elysia","action":"re-verify: independent ng build green + A1/A2 logic confirmed. handing to Owner for real-machine test"}
+{"time":"2026-06-06T22:45:17+07:00","agent":"Elysia","action":"S019 closed: Owner real-machine test passed. distilled lessons to logs, deleted task-context. committing .claude"}

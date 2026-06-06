@@ -15,6 +15,11 @@
 
 ## Log
 
+### Session 019 — 2026-06-06 — SalesDoc QA (source review)
+**ทำได้ดี:** จับ should-fix สำคัญ — **ไม่เช็ค record `Status != "SUCCESS"` (SPEC 6.4)** = silent success-on-fail ที่ build/static ทั่วไปมองไม่เห็น, ชี้ชัดว่าอย่างน้อย step3 (บันทึกถาวร) ต้อง gate ก่อนโชว์ success; respect invariant ที่ตั้งใจครบ (ไม่ flag invoice user-input/field สะกดเพี้ยน/Bootstrap override ผิด); ทำ simpler-alternative pass + verify no XSS/no leak/strict no-`any` ด้วยการ **grep จริง**; verdict fix-then-ship พร้อมเหตุผลข้อใหญ่; ซื่อสัตย์ว่าเป็น source review ยังไม่ verify runtime (ไม่ false confidence); nit มีประโยชน์ (extend type lies number-as-string, dead AppRoutingModule, a11y space key)
+**ทำพลาด:** ไม่มีข้อพลาดหลัก
+**แนวทางปรับปรุง:** รักษา pattern **อ้างเลขข้อ SPEC เป็นหลักฐาน** (6.4) ตอน flag — ทำให้ should-fix หนักแน่น แยกจากความเห็นส่วนตัว; ของ runtime (encoding/hover/responsive) ยังต้องพึ่ง Owner test ต่อ
+
 ### Session 016 — 2026-06-05 — WeatherAPI Chart QA (runtime, 2 rounds)
 **ทำได้ดี:** **จับ critical dropdown desync ด้วย runtime จริง** ที่ build ผ่าน + static review มองไม่เห็น — reproduce flow pin→Humidity→unpin→pin วัด `dropdown.value` vs footer vs bars เห็น control โกหก state (เขียน Temperature แต่กราฟ Humidity), อธิบาย root cause ชัด (`[value]` ยึด DOM ตอน `@if` re-create select) + เสนอ fix (ngModel) ตรงจุด ไม่คลุมเครือ; re-QA เข้าถึง `pinnedCities` ผ่าน `window.ng` set data deterministic (ไม่พึ่ง network/API key) — เสถียร+ทำซ้ำได้, verify triple-consistency dropdown==footer==chart 25/25, regression ครบ (memory/orphan canvas/XSS `<img onerror>`/a11y/NG0203=0), จับ stale comment; ประเมิน budget 2MB ว่ากว้างไปตามจริง (เสนอ 1.5MB)
 **ทำพลาด:** QA headless ทั้ง 2 รอบไม่ครอบ **hover** → tooltip clip bug (จาก `overflow:hidden`) หลุดไปให้ Owner เจอเครื่องจริง — คล้าย S011 false confidence แต่คนละ vector (รอบนี้คือ interactive hover ไม่ใช่ data env)

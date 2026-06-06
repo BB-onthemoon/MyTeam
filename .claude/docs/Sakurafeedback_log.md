@@ -15,6 +15,11 @@
 
 ## Log
 
+### Session 019 — 2026-06-06 — SalesDoc UI/UX QA (source review)
+**ทำได้ดี:** จับ bug สำคัญ 2 ตัวที่ source review ทั่วไปมองข้าม โดย **เทียบกับภาพ reference จริง** (`ref/UI-report1.png`) — (1) content ไม่ centered (max-width แต่ไม่ margin auto), (2) CSS var `--surface-new`/`--border-new` undefined → green tint หาย; verdict ชัด (ไม่ผ่าน 3 must-fix) พร้อม `file:line` + แนวทางแก้ทุกข้อ; แยกระดับ must/should/advisory ดี; ไม่ rubber-stamp (บอกสิ่งที่ตรวจผ่านด้วย — design token/a11y/state)
+**ทำพลาด:** ไม่มีข้อพลาดหลัก (จุดดี: RD-6 connector clip ที่ 375px ระบุเองว่า "ยืนยันไม่ได้ถ้าไม่รัน browser" → flag เป็น runtime-check ไม่ฟันธง ถูกต้อง)
+**แนวทางปรับปรุง:** รักษาจุดแข็ง **"เทียบภาพ reference จริง"** — ช่วยจับ layout bug (centering) ที่อ่าน CSS เฉยๆ ไม่เห็น; ของที่ต้อง runtime (responsive ขอบเขต/clip) flag ให้ Owner verify ต่อ ไม่ false confidence
+
 ### Session 017 — 2026-06-06 — ระบบรับคืนเอกสารการขาย (Mockup 3 step — โปรเจคใหม่)
 **ทำได้ดี:** วาง **design language ใหม่ทั้งระบบ** ให้สื่อ enterprise/industrial (navy header `#162032` + steel blue `#1d4ed8` + warm gray bg, IBM Plex Sans Thai/Mono, การ์ดใช้ header-bar ภายใน + Extend badge วงกลม ไม่ใช้ border-left หนา, radius 4-6px) เลี่ยง AI-tell ครบและ note rationale ทุกจุด; ใช้ pattern "ทำ Step 1 ก่อนให้ Owner approve ทิศทาง แล้วขยาย Step 2/3 ด้วย design ต่อเนื่องสม่ำเสมอ" ได้ผลดีมาก; รับ feedback หลายรอบไว+ตรง (เพิ่ม label JobWinfeedID, ขยาย base font 16→18px เพื่อ accessibility ผู้ใช้สายตาสั้น, เปลี่ยน invoice เป็น input ว่าง, เอา section invoice ออกจาก Step 2 + จัด spacing ต่อ); self-review desktop+mobile ทุกรอบ + screenshot, note ส่ง Mobius ครบ (localStorage key `sdrs_username`, loading/empty/error state, ปุ่ม disabled validation, toggle View A/B)
 **ทำพลาด:** ไม่มีข้อพลาดหลัก งานราบรื่น (จุดเล็ก: รอบ Step 2+3 รายงานว่าปุ่ม mobile "อาจ clip ต้อง scroll" แต่ตรวจ full-page จริงแล้ว stack ครบไม่ clip — ประเมิน conservative ไว้ก่อนซึ่งยอมรับได้)
