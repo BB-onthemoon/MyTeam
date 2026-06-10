@@ -110,3 +110,53 @@
 {"time":"2026-06-06T22:36:05+07:00","agent":"Mobius","action":"Polish done: fixed all 14 items, ng build green, step3-confirm.css under 4kB budget"}
 {"time":"2026-06-06T22:36:06+07:00","agent":"Elysia","action":"re-verify: independent ng build green + A1/A2 logic confirmed. handing to Owner for real-machine test"}
 {"time":"2026-06-06T22:45:17+07:00","agent":"Elysia","action":"S019 closed: Owner real-machine test passed. distilled lessons to logs, deleted task-context. committing .claude"}
+{"time":"2026-06-07T15:23:47+07:00","agent":"Elysia","action":"Start learn.html Section 0 - shell + theme + engines"}
+{"time":"2026-06-07T15:26:59+07:00","agent":"Elysia","action":"Section 0 done - learn.html shell + theme + 5 engines (highlight/tab/collapse/quiz/scrollspy)"}
+{"time":"2026-06-07T15:32:01+07:00","agent":"Elysia","action":"Section 1 done - overview 3-layer + data-flow diagram + wizard flow table + quiz"}
+{"time":"2026-06-07T15:34:25+07:00","agent":"Elysia","action":"Section 2 done - API contract 3 endpoints (req/res tabs) + gotchas table + 3-gate success + bug callout"}
+{"time":"2026-06-07T15:37:29+07:00","agent":"Elysia","action":"Section 3 done - Service: @Injectable/DI, method returns Observable (lazy, no subscribe), proxy.conf.json explained"}
+{"time":"2026-06-07T15:41:23+07:00","agent":"Elysia","action":"Section 4 done - Store: signal/computed/3 actions/subscribe+3gate/localStorage try-catch/reset"}
+{"time":"2026-06-07T15:43:17+07:00","agent":"Elysia","action":"Section 5 done - Shared: step-indicator (@for/track, [class], [attr], a11y) + job-card (VM pattern, @Input required, |number pipe)"}
+{"time":"2026-06-07T15:47:47+07:00","agent":"Elysia","action":"Section 6 done - 3 steps: shared pattern (local input/ngModel/sync-on-submit/4-state), step2 New* diff, step3 dual-input+2-view, diff table"}
+{"time":"2026-06-07T15:50:32+07:00","agent":"Elysia","action":"Section 7 done - Wizard: @switch step, canGoNext gating, ngOnInit reset, UserName draft pattern + @ViewChild focus"}
+{"time":"2026-06-07T15:55:09+07:00","agent":"Elysia","action":"Section 8 done - learn.html ครบ 9 section (capstone build-checklist + glossary + 2 quiz). สื่อสอน SalesDoc เสร็จทั้งไฟล์ 1849 บรรทัด"}
+{"time":"2026-06-07T15:58:46+07:00","agent":"Elysia","action":"S020 closed - learn.html done, session-log + memory updated, no QA (Owner choice)"}
+{"time":"2026-06-07T16:08:35+07:00","agent":"Elysia","action":"Start skill learn-html-builder - write SKILL.md (grill done, name confirmed)"}
+{"time":"2026-06-07T16:12:48+07:00","agent":"Elysia","action":"Skill learn-html-builder done - SKILL.md + reference.md (8 grill Qs, section template, engine catalogue)"}
+{"time":"2026-06-09T11:09:22+07:00","agent":"Elysia","action":"S021 start: User Preferences font-size (StoreSalesReturnDoc) - grill 9 ok, Owner approve plan, code-first"}
+{"time":"2026-06-09T11:13:56+07:00","agent":"Mobius","action":"Step A done: user-preferences.store.ts (UserPreferences) - signal+persist+effect apply to html, ng build green"}
+{"time":"2026-06-09T11:16:30+07:00","agent":"Elysia","action":"Owner approve Step A - spawn Mobius Step B: segmented font buttons in header"}
+{"time":"2026-06-09T11:21:41+07:00","agent":"Mobius","action":"Step B done: segmented font buttons in header (HTML+TS+CSS), aria-pressed, flex-wrap, ng build green. Elysia review pass"}
+{"time":"2026-06-09T11:23:33+07:00","agent":"Elysia","action":"Owner tested Step B ok - spawn Mobius Step C: rem conversion group 1+2"}
+{"time":"2026-06-09T11:30:29+07:00","agent":"Mobius","action":"Step C done: px-\u003erem group 1+2 (6 files, 19 spots), connector scales right, font-scale-btn untouched, ng build green. Coding A/B/C complete"}
+{"time":"2026-06-09T11:32:36+07:00","agent":"Elysia","action":"spawn Aponia + Sakura QA parallel - font-size preference feature (StoreSalesReturnDoc)"}
+{"time":"2026-06-09T11:37:05+07:00","agent":"Aponia","action":"QA done: fix-then-ship - no must-fix, dead import viewChild + active-border contrast 2.44 advisory, store/security/rem/a11y clean, ng build green self-verified"}
+{"time":"2026-06-09T11:37:05+07:00","agent":"Sakura","action":"QA done: fix-then-ship - F1 ko-button 11px under 12px min (must), user-label/job-id-label rem shrink under 12px at sm (should), connector/flex-wrap need browser verify"}
+{"time":"2026-06-09T11:40:37+07:00","agent":"Elysia","action":"Owner chose FIX1-4 + all advisory - spawn Mobius polish round (Step E)"}
+{"time":"2026-06-09T11:45:03+07:00","agent":"Mobius","action":"Polish done: FIX1-4 + advisory 4 (ko 12-20, label floor 0.75rem incl user-edit-label, dead import removed, active ring, subtitle 0.65, touch 32px, title) ng build green"}
+{"time":"2026-06-09T11:53:41+07:00","agent":"Elysia","action":"S021 closed: Owner tested ok - distilled lessons (session-log/CLAUDE.md ironic-a11y/memory/feedback x3), deleted task-context.md. Next session: UX/UI refinement"}
+{"time":"2026-06-09T14:51:32+07:00","agent":"Elysia","action":"S022 เริ่มงานปรับ UX/UI 4 จุด (StoreSalesReturnDoc) — สร้าง task-context, เริ่ม Step A searchbox มือถือ"}
+{"time":"2026-06-09T14:55:40+07:00","agent":"Mobius","action":"S022 Step A เสร็จ — searchbox มือถือยืดเต็มจอ (width:100% !important ชนะ Bootstrap width:1%)"}
+{"time":"2026-06-09T15:01:07+07:00","agent":"Mobius","action":"S022 Step B เสร็จ — header: gap ผู้ใช้งาน↔DTC + ปุ่ม font ห่อ glass container เข้าคู่ username pill"}
+{"time":"2026-06-09T15:13:59+07:00","agent":"Mobius","action":"S022 Step C เสร็จ — chips JobWinfeedID ในหน้าสรุป View A (แสดงรหัสงานที่จะบันทึกครบทุกตัว)"}
+{"time":"2026-06-09T15:19:56+07:00","agent":"Mobius","action":"S022 Step D เสร็จ — แทน ReturnID ด้วยวันที่/เวลาที่กดบันทึก (dd/MM/yyyy HH:mm:ss พ.ศ.). coding ครบ 4 จุด รอ QA"}
+{"time":"2026-06-09T16:07:46+07:00","agent":"Elysia","action":"S022 QA ผ่าน (Aponia APPROVE + Sakura PASS, tsc สะอาด). จัด label \u0027ขนาดตัวอักษร\u0027 ที่ Owner เพิ่มเองให้เข้าที่ใน glass group"}
+{"time":"2026-06-09T16:10:50+07:00","agent":"Elysia","action":"S022 แก้ step1 searchbox มือถือเพิ่ม (consistency กับ step2 ตาม Sakura flag). งานครบ รอ Owner เทสเครื่องจริง"}
+{"time":"2026-06-09T16:27:44+07:00","agent":"Elysia","action":"S022 ปิดงาน — UX/UI 4 จุดเสร็จ Owner เทสผ่าน, กลั่นบทเรียนเข้า log ครบ, ลบ task-context. ค้าง Session หน้า: SweetAlert2"}
+{"time":"2026-06-09T19:50:02+07:00","agent":"Elysia","action":"S023 grill SweetAlert2 เสร็จ — spawn Mobius Step A confirm dialog"}
+{"time":"2026-06-09T19:56:04+07:00","agent":"Mobius","action":"Step A เสร็จ — confirm dialog SweetAlert2 ใน onSave async + escapeHtml, build เขียว"}
+{"time":"2026-06-09T19:58:57+07:00","agent":"Elysia","action":"Owner approve Step A — spawn Mobius Step B success popup effect"}
+{"time":"2026-06-09T20:12:00+07:00","agent":"Mobius","action":"Step B เสร็จ — effect success popup watch step3Result, build เขียว"}
+{"time":"2026-06-09T20:19:23+07:00","agent":"Elysia","action":"Owner เลือกคง default icon — spawn Mobius Step C error popup"}
+{"time":"2026-06-09T20:23:31+07:00","agent":"Mobius","action":"Step C เสร็จ — coding ครบ A/B/C (confirm+success+error popup), build เขียว เข้า QA"}
+{"time":"2026-06-09T20:27:59+07:00","agent":"Aponia","action":"QA APPROVE — guard race-immune ทุก path, XSS สะอาด, build เขียว"}
+{"time":"2026-06-09T20:27:59+07:00","agent":"Sakura","action":"QA PASS — เนื้อหา/flow/สีแบรนด์/a11y ผ่าน, เสนอ footer fallback (nice-to-have)"}
+{"time":"2026-06-09T20:32:46+07:00","agent":"Elysia","action":"apply polish #1 cancelColor token + build เขียว — ส่ง Owner เทสเครื่องจริง"}
+{"time":"2026-06-09T20:43:55+07:00","agent":"Elysia","action":"S023 ปิดงาน SweetAlert2 — Owner เทสเครื่องจริงผ่าน, กลั่นบทเรียนครบ, ลบ task-context"}
+{"time":"2026-06-10T14:21:57+07:00","agent":"Elysia","action":"เริ่มงานตรวจสอบโครงสร้างระบบทีม (.claude audit)"}
+{"time":"2026-06-10T14:41:34+07:00","agent":"Elysia","action":"S024 เสร็จ: แก้ drift 4 กลุ่ม - Fast Path, retire handoff/retro, dedupe user_profile, backfill Elysia log, แก้ profile x3, เรียง session-log, เก็บกวาดของผิดที่"}
+{"time":"2026-06-10T14:58:52+07:00","agent":"Elysia","action":"แก้มติ S024: handoff ไม่ retire - ปรับเป็นไฟล์เดียว handoff.md (ข้าม session) คู่กับ task-context (ใน task)"}
+{"time":"2026-06-10T15:02:30+07:00","agent":"Elysia","action":"ฟื้นระบบ handoff เสร็จ: template ใหม่ + Session Start Checklist + อัปเดต workflow/CLAUDE.md/session-log ครบ"}
+{"time":"2026-06-10T15:21:25+07:00","agent":"Elysia","action":"context diet เสร็จ: feedback log x4 เป็น 2 ชั้น (กฎกลั่น + 3 sessions) + compact CLAUDE.md"}
+{"time":"2026-06-10T15:29:26+07:00","agent":"Elysia","action":"อ่าน docs sub-agents ทางการ + ตรวจ Sakura/Mobius/Aponia เทียบ spec"}
+{"time":"2026-06-10T15:35:55+07:00","agent":"Elysia","action":"ปรับ agent x3 ตาม docs: ตัด post-mortem preload, เพิ่ม Skill tool, model alias sonnet/opus"}

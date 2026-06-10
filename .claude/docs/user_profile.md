@@ -17,11 +17,11 @@
 ## ระดับความรู้ด้านเทคนิค
 
 - **พื้นหลัง:** ไม่ได้เรียนสาย Tech มา — ต้องมาทำงานนี้กะทันหัน
-- **HTML/CSS/JS:** เริ่มต้น — ยังอยู่ในช่วงเรียนรู้ แต่ **ลงมือ debug/refactor เองได้แล้ว** (S012: แยก inline `<script>`/`<style>` ใน office.html ออกเป็น `office.js`/`office.css` เอง → แก้บั๊ก data ที่ทีมยัง debug ไม่จบใน S011 ได้สำเร็จ)
-- **Angular:** กำลังเรียนอยู่ — สามารถ setup โครงสร้าง component เองได้แล้ว (ขึ้น skeleton ของ landing-page-pj เองทุก component ก่อน session)
-- **API / Fetch:** — (ยังไม่ทราบ)
-- **Dashboard / Data Viz:** — (ยังไม่ทราบ)
-- **Git / Version Control:** — (ยังไม่ทราบ)
+- **HTML/CSS/JS:** เริ่มต้น — ยังอยู่ในช่วงเรียนรู้ แต่ **ลงมือ debug/refactor เองได้แล้ว** (S012: แยก inline `<script>`/`<style>` ใน office.html ออกเป็น `office.js`/`office.css` เอง → แก้บั๊ก data ที่ทีมยัง debug ไม่จบใน S011 ได้สำเร็จ) และ**แก้ working tree เองระหว่าง session ได้** (S022: เพิ่ม element/refactor `.label` เอง)
+- **Angular:** กำลังเรียนอยู่ — setup โครงสร้าง component เองได้ (ขึ้น skeleton landing-page-pj + วางโครง SalesDoc เองบางส่วน S018) และมีสื่อการสอน `learn.html` ไว้ทบทวนโค้ดที่ทีมเขียน (S013, S020)
+- **API / Fetch:** ใช้งานระดับ flow ได้ — เข้าใจ 3-API wizard ของ SalesDoc (S017-019), ประสาน CORS prod กับรุ่นพี่เองได้
+- **Dashboard / Data Viz:** — (ยังไม่ทราบเชิงลึก — ผ่านงาน ApexCharts S016 ในฐานะผู้ review)
+- **Git / Version Control:** ใช้พื้นฐานได้ — commit/push ผ่านทีม, แยก repo `StoreSalesReturnDoc` ออกจาก SalesDoc เอง (S021)
 
 > ทีมควรอธิบายการตัดสินใจ technical ให้ชัดเจน อย่าสมมติว่า Owner รู้ context อยู่แล้ว
 
@@ -43,7 +43,11 @@
 - **ตัดสินใจเชิงสถาปัตยกรรมได้ไว + มี sense** (Session 010) — เมื่อ isometric ไม่เวิร์ค Owner เสนอ pivot ไป top-down (Stardew) เองทันที; รับฟังเหตุผลทางเทคนิคแล้วเลือกได้เด็ดขาด
 - **สังเกตรายละเอียดเก่ง** (Session 010) — จับได้ว่าเวลาใน activity feed ไม่ตรงเวลาจริง ทั้งที่งานส่วนใหญ่ผ่าน
 - **เปิดรับสไตล์ playful/cozy retro game สำหรับเครื่องมือภายใน** (Session 010 Visual Office) — ไม่ขัดกับที่ชอบ minimal ใน data dashboard; เลือกสไตล์ตามบริบทของงาน
-- **ลงมือแก้โค้ดเองระหว่าง session ได้** (Session 012) — ไม่รอทีมอย่างเดียว: แยกไฟล์ html/css/js เองจนแก้บั๊ก data ที่ค้างได้ แล้วค่อยกลับมาให้ทีมปรับ UI ต่อ. ชอบ **แยกไฟล์เพื่อ maintenance** (สอดคล้องกับชอบ component แยกชัด). ทีมควรมองว่า Owner เป็น collaborator ที่ลงมือได้ ไม่ใช่แค่ผู้รับงาน
+- **ลงมือแก้โค้ดเองระหว่าง session ได้** (Session 012, 022) — ไม่รอทีมอย่างเดียว: แยกไฟล์ html/css/js เองจนแก้บั๊ก data ที่ค้างได้ แล้วค่อยกลับมาให้ทีมปรับ UI ต่อ. ชอบ **แยกไฟล์เพื่อ maintenance** (สอดคล้องกับชอบ component แยกชัด). ทีมควรมองว่า Owner เป็น collaborator ที่ลงมือได้ ไม่ใช่แค่ผู้รับงาน — **และเจอ diff แปลกใน working tree ต้องถามก่อนสรุปว่าใครแก้** (บทเรียน S022)
+- **ชอบให้ grill ก่อนลงมือ** (S019+) — Owner เพิ่ม skill `grill-me` ให้ Elysia เอง: งาน coding ต้อง grill ทุกครั้ง, งานอื่นถามก่อนว่าจะ grill ไหม — สะท้อนว่า Owner ให้ค่ากับ shared understanding มากกว่าความเร็ว
+- **ตาไวเรื่อง AI-tell ในงาน design/doc** (S020) — จับได้แม้ในสื่อที่เก็บอ่านเอง; ทีมควร "มือเบา" ตั้งแต่แรก ไม่ใช่รอ Owner ทัก
+- **เลือกตัด nice-to-have เพื่อรักษา invariant ได้เด็ดขาด** (S023) — เช่น ข้าม store-comment เพราะรักษากฎ "ไม่แตะ store" สำคัญกว่าความสวยเล็กน้อย
+- **ใช้ fast path บ่อยกับงานปรับ UI บนของเดิม** (S021-S023) — สั่ง "Mobius code เลย" ข้าม mockup เมื่อมี ref ชัด; ดู `workflow.md > Fast Path`
 
 ---
 
@@ -63,25 +67,12 @@
 
 ## Session Log
 
-| Session | วันที่ | งานที่ทำ | สถานะ |
-|---|---|---|---|
-| 001 | 2026-05-26 | Setup ทีม — สร้าง agent profiles, feedback logs, workflow, user_profile, handoff_template, cross-check และแก้ไขทุกจุดที่ขัดแย้ง | ✅ เสร็จ |
-| 002 | 2026-05-26 | Plant Status Rework — rework dashboard ใหม่จาก 0, ทดสอบระบบทีมครบ workflow (Elysia→Sakura→Mobius→Aponia+Sakura parallel), แก้ bug 3 จุด, บันทึก feedback ทุก agent | ✅ เสร็จ |
-| 003 | 2026-05-27 | Tech Stack Migration — อัปเดต tech stack ทั้งโปรเจคจาก HTML/CSS/JS เป็น Angular 21 + TypeScript, cross-check และแก้ไขทุกไฟล์ใน .claude/ ให้สอดคล้อง | ✅ เสร็จ |
-| 004 | 2026-05-27 | Team Dashboard — สร้าง our_team dashboard แบบ Bento Grid Asymmetric, Cute & Colorful, ผ่าน QA Aponia + Sakura, แก้ bug ครบ, build ผ่าน | ✅ เสร็จ (pending refactor) |
-| 005 | 2026-05-29 | Landing Page Review Component — ออกแบบและ code Review section ใหม่ (minimal white-black-yellow, star rating, form submit, dynamic cards), ผ่าน QA ครบ | ✅ เสร็จ |
-| 006 | 2026-05-30 | WeatherAPI Card — ยกเลิกงานค้าง focus weatherAPI, design pastel lofi card (7 weather states), Bootstrap 5 integration, fix bugs + QA 2 rounds, all blockers resolved | ✅ เสร็จ |
-| 007 | 2026-05-30 | WeatherAPI Search + Pin + Display — SearchBox component, WeatherService (Angular Signals), Display pinned grid, QA+UI Review APPROVED | ✅ เสร็จ |
-| 008 | 2026-05-30 | Carousel + Chart Placeholder — refactor utils, แก้ .gitignore, Bootstrap Carousel infinite loop (clone technique), Chart placeholder, layout 2-column, เปิดระบบ session-comments, สร้าง skill Create-infinite-Carousel | ✅ เสร็จ |
-| 009 | 2026-06-01 | Team Upgrade — ศึกษา Impeccable, สร้าง `design-quality-guide.md` + ฝัง snippet เข้า 3 agent, review โครงสร้างทีมทั้งหมด, แก้ 🔴 3 ข้อ (Aponia model ID, Bootstrap checklist institutionalize, รวม checklist เป็นที่เดียว) | ✅ เสร็จ |
-| 010 | 2026-06-03 | Visual Office — สร้าง Visual Office (top-down Stardew) แสดงสถานะทีม realtime: data layer single-writer (Phase 1) + `office.html` wired (Phase 2), แปลง sprite pixel 8-bit (pixelate.py), pivot iso→top-down, ผ่าน QA Puppeteer (2 critical fixed) | ✅ เสร็จ (ค้าง: เวลาใน feed + ขยาย dashboard) |
-| 011 | 2026-06-03 | แก้บั๊กเวลา feed (`log-activity.ps1` เวลาจริง) + ขยาย Dashboard sidebar ซ้าย, QA ผ่าน — แต่ Owner เปิดจริงเจอ data หาย → defer S012 | ✅ เสร็จ (ค้าง: บั๊ก data) |
-| 012 | 2026-06-03 | ทดสอบ visual office (data/feed + live update ผ่าน) + ปรับ UI: sidebar 30%, feed 5 รายการ + drawer slide-in 10 รายการ. **บั๊ก data S011 หาย — Owner แยกไฟล์ html/css/js เอง**. Elysia ทำ 3 step (HTML→CSS→JS) ไม่ spawn agent | ✅ เสร็จ |
+> 🗄️ **ย้ายไป `.claude/docs/session-log.md` ที่เดียว (single source of truth) ตั้งแต่ S024** — ไฟล์นี้เก็บเฉพาะ "สิ่งที่รู้เกี่ยวกับ Owner" ไม่ duplicate ประวัติ session อีก (table เดิมเคยค้างที่ S012 เพราะซ้ำ 2 ที่)
 
 ---
 
 ## สิ่งที่ยังไม่รู้ / ต้องหาโอกาสถาม
 
-- ระดับความรู้ด้าน API, Git ของ Owner
-- Landing page ที่กำลังสร้างนี้ใช้งานจริงหรือเป็น practice project?
-- components ที่จะวางโครงต่อใน session หน้า (hero / features / footer)
+- ระดับความรู้ด้าน Dashboard / Data Viz เชิงลึกของ Owner
+- Landing page (Coffee Shop) ยังจะกลับมาทำต่อไหม หรือ focus งาน SalesDoc/StoreSalesReturnDoc แล้ว?
+- WeatherAPI งานค้าง (persist pinnedCities + header/side-nav) จะหยิบกลับมาเมื่อไร?

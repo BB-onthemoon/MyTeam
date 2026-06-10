@@ -21,7 +21,7 @@
 
 # Folder Structure
 - .claude/agents/ — โปรไฟล์ของ agent แต่ละตำแหน่งในทีม
-- .claude/docs/ — session-log, feedback, workflow, checklist, user_profile
+- .claude/docs/ — session-log, feedback, workflow, checklist, user_profile, handoff_template (+ `archive/` — ของเก่า: handoff ราย session 009-013, session-comments ที่ retire S024)
 - .claude/skills/ — คลัง skills (แต่ละ skill = โฟลเดอร์ย่อยมี `SKILL.md` + `reference.md` ถ้าเนื้อ reference หนัก)
 - .claude/visual-office/ — ออฟฟิศจำลอง top-down แสดงสถานะทีม realtime (office.html + status/log + helper script)
 
@@ -38,6 +38,7 @@
 
 # Workflow
 * see .claude/docs/workflow.md
+* **Fast Path** (Owner สั่งข้ามขั้นได้ เช่น ข้าม Sakura mockup / QA fix-then-ship) — เงื่อนไข+สิ่งที่ข้ามไม่ได้ ดู `workflow.md > Fast Path` (ทางการตั้งแต่ S024)
 
 
 ### กฎ Sub-Agent
@@ -86,6 +87,10 @@
 - **PS5.1: เขียน `.ps1` source เป็น ASCII ล้วน** — ภาษาไทยใน source ทำ parser ข้าม code เงียบๆ; ส่งข้อความไทยผ่าน runtime arg แทน (S014)
 - **derive ค่า (สี/เฉด) ต้องเทียบทิศกับ token เดิมจริง** — วัด delta จริง ไม่ยึดข้อความ spec อย่างเดียว (S015)
 - **console mojibake ≠ ไฟล์เพี้ยน** — ไทยเพี้ยนใน console powershell.exe เป็น rendering ยืนยันไฟล์ด้วย Read tool ก่อนตกใจ (S012)
+- **rem scaling ทั้งระบบต้องมี floor 12px** — base label ≥ `0.75rem` + คิดเสมอว่า "rem นี้ที่ scale เล็กสุดเหลือกี่ px"; control ที่ปรับ font เองต้องคงเป็น px ไม่ scale ตัวเอง (S021)
+- **เจอ discrepancy อย่ากล่าวหา subagent — ถามก่อน** (Owner/มืออื่นแก้ working tree ได้ รายงาน subagent จริง-ณ-เวลานั้น); ไม่ต้อง re-Read ทุก step เปลือง token — มี QA จับอยู่แล้ว verify ตอนก่อน report พอ; override Bootstrap ผ่าน selector ลูก (0,2,0) ต้องเช็ค specificity — single class ไม่ชนะ (S022)
+- **`effect()` เด้ง side-effect จาก signal — 3 กฎ**: (1) อ่านทุก signal ที่ติดตามบนสุดก่อน branch (2) `prev*` guard เด้งเฉพาะ transition จริง (3) ระวัง signal coalescing กลืนค่ากลางใน tick เดียว — producer ต้อง set ค่ากลางคนละ tick — รายละเอียดเต็ม: Mobius log "กฎที่กลั่นแล้ว" + session-log S023
+- **lib popup จาก CDN render ที่ `document.body` นอก component DOM** — ViewEncapsulation CSS ไปไม่ถึง; style ผ่าน `styles.css` global / `customClass` / option (`confirmButtonColor`) (S023)
 
 ## Status Reporting (Visual Office)
 
@@ -123,15 +128,16 @@ $enc = New-Object System.Text.UTF8Encoding($false)
 
 ## Task Context (ความจำงาน intra-task) — แก้ subagent cold-start
 
-ปัญหา: subagent **cold ทุก spawn** → มองไม่เห็นงาน step ก่อน → false-alarm + Elysia ต้อง re-pass context เปลือง token (S018: false-alarm ว่า `proxy.conf.json` ยังไม่สร้าง ทั้งที่ step ก่อนทำแล้ว). แก้ด้วยไฟล์ digest กลางที่ subagent อ่านก่อนเริ่มทุก spawn
+ปัญหา: subagent **cold ทุก spawn** → มองไม่เห็นงาน step ก่อน → false-alarm + re-pass context เปลือง token (S018). แก้ด้วยไฟล์ digest กลางที่ subagent อ่านก่อนเริ่มทุก spawn
 
 - **ไฟล์เดียว: `.claude/docs/task-context.md`** — Elysia เป็น **single writer** (subagent อ่านอย่างเดียว เหมือน feedback_log) — แม่แบบ: `.claude/docs/task-context.template.md`
 - **สร้างเฉพาะงานหลาย step** (จะ spawn subagent >1 รอบ เช่น coding ซอย step) — งาน one-shot ไม่ต้องสร้าง
 - 🔗 **Enforcement ตัวจริง: Elysia ต้องฝัง pointer `"อ่าน .claude/docs/task-context.md ก่อนเริ่ม"` ใน *ทุก spawn prompt*** — subagent cold ไม่อ่านเองนอกจากถูกสั่ง (กฎใน agent profile เป็น backup)
 - **6 ส่วน** (digest ชี้ไป SPEC ไม่ก๊อปมาทั้งดุ้น): Task header / Plan+step status⭐ / Files touched⭐ / Decisions-invariants / Repo state / Next step
 - **อัปเดตเมื่อ:** ทุก transition ของ step + ทุกครั้งที่รับผลกลับจาก subagent (timestamp ใช้ `Get-Date` จริงเหมือน office_status)
-- **Lifecycle:** สร้างตอนเริ่มงาน → อัปเดตระหว่างทาง → **งานจบ: กลั่นบทเรียนถาวรเข้า feedback_log/session-log ก่อน แล้วลบ `task-context.md` ทันที** (เคลียร์พื้นที่งานใหม่)
+- **Lifecycle:** สร้างตอนเริ่มงาน → อัปเดตระหว่างทาง → **งานจบ: กลั่นบทเรียนถาวรเข้า feedback_log/session-log ก่อน แล้วลบ `task-context.md` ทันที** (เคลียร์พื้นที่งานใหม่) — **ยกเว้นงานค้างข้าม session: คงไฟล์ไว้** + เขียน `handoff.md` ชี้มาที่นี่
 - ⚠️ **ไม่ทับ office_status:** office_status = สถานะ realtime (ใครทำอะไรตอนนี้) / task-context = ความจำงาน (plan/ไฟล์/decision) — คนละหน้าที่
+- 🤝 **คู่กับ Handoff (ข้าม session):** `.claude/docs/handoff.md` ไฟล์เดียว — Elysia เขียนตอนปิด session ที่มีงานค้าง, อ่านตอนเปิด session ใหม่แล้ว**ลบ**; ชี้ task-context ไม่ก๊อปซ้ำ — รายละเอียด `workflow.md > Handoff` + แม่แบบ `handoff_template.md`
 
 ---
 
@@ -145,4 +151,4 @@ $enc = New-Object System.Text.UTF8Encoding($false)
 ## Session Log
 > **รายละเอียดเต็มทุก session ย้ายไปที่ `.claude/docs/session-log.md`** — บทเรียนถาวรกลั่นไว้ใน `Coding Rules > บทเรียนสำคัญ` แล้ว
 
-ล่าสุด: **S018** ระบบรับคืนเอกสารการขาย — Mobius code ครบทุก step (A-F) + รื้อ UI เป็น Bootstrap จริง (theme Sakura), build เขียว, encoding ไทยอ่านออก; **ค้าง: Owner ทดสอบ flow เต็ม + QA (Aponia+Sakura) + Polish (nav bar)** — ดู `session-log.md` + memory `project_sales_doc_return`
+ล่าสุด: **S024** Audit + ลดบวมระบบทีม `.claude` — แก้ doc-practice drift 4 กลุ่ม (Fast Path เข้า workflow.md, retire session-comments, **ฟื้น handoff เป็นไฟล์เดียว `handoff.md`** คู่ task-context — handoff = ข้าม session / task-context = ใน task, dedupe user_profile, backfill Elysia log, แก้ agent profile ×3, เก็บกวาดของผิดที่) + **context diet**: feedback log ×4 → โครง 2 ชั้น (กฎที่กลั่นแล้ว ⭐ + Log 3 sessions ล่าสุด, เก่ากว่าอยู่ `archive/`) และ compact CLAUDE.md + **ตรวจ agent เทียบ docs sub-agents ทางการ** (ตัด post-mortem จาก skills preload, เพิ่ม `Skill` tool, model เป็น alias — มีผล session หน้า). ไม่มีงานค้าง — รายละเอียด `session-log.md` S024

@@ -1,13 +1,13 @@
 {
-    "updated_at":  "2026-06-06T22:41:25+07:00",
-    "current_session":  "019",
-    "current_step":  6,
-    "step_label":  "S019 ปิดงาน ✅ SalesDoc QA+Polish เสร็จ (14 fixes, build เขียว, Owner ทดสอบเครื่องจริงผ่าน). กลั่นบทเรียนเข้า log + ลบ task-context แล้ว. ค้างเล็ก: SalesDoc ยังไม่ version control",
+    "updated_at":  "2026-06-10T15:35:54+07:00",
+    "current_session":  "024",
+    "current_step":  8,
+    "step_label":  "S024: ปรับ agent files ตาม spec เสร็จ (skills preload + Skill tool + model alias)",
     "agents":  {
                    "Elysia":  {
                                   "color":  "#FF4081",
-                                  "status":  "idle",
-                                  "task":  "S019 ปิดงาน: feedback log 3 agent + session-log + memory + ลบ task-context. next: commit .claude + ถาม Owner เรื่อง versioning SalesDoc"
+                                  "status":  "done",
+                                  "task":  "S024 เสร็จ: ระบบ handoff.md ไฟล์เดียวพร้อมใช้"
                               },
                    "Sakura":  {
                                   "color":  "#FFB7C5",
