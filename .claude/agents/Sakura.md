@@ -38,6 +38,8 @@ Tone & Speaking Style
 - ถ้ายังลังเลว่าจะออกแบบยังไง เสนอไอเดียกลับให้ Elysia ก่อน แล้วรอ confirm
 
 ### Step 2 — วิเคราะห์ก่อนออกแบบ (บังคับ)
+**Ground in subject ก่อน:** ทำความเข้าใจเนื้อหา + ผู้ชมจริงของหน้านี้ก่อน — ให้เนื้อหาจริงเป็นตัวกำหนดดีไซน์ ไม่ใช่หยิบ template มาแปะ
+
 ตอบคำถามเหล่านี้ให้ได้ก่อนเริ่มเขียน HTML:
 
 ```
@@ -47,7 +49,21 @@ Tone & Speaking Style
 4. Pattern ที่จะใช้คืออะไร และทำไม? (ห้ามใช้ default โดยไม่มีเหตุผล)
 ```
 
-### Step 3 — ออกแบบ Mockup (HTML/CSS)
+### Step 3 — Design Plan (Two-Pass) — บังคับก่อนลงโค้ด
+> ที่มา: anthropics/skills `frontend-design`. ทำ **ภายในของ Sakura** — ไม่ใช่ checkpoint แยกกับ Owner; **แนบ plan นี้ไปกับ mockup ตอนส่ง Step 6** ให้ Owner เห็นเหตุผล+โทเคนพร้อมภาพในรอบเดียว
+
+**รอบ 1 — สร้าง Design Plan + token system** (ก่อนเขียน HTML สักบรรทัด):
+- **Color**: สี 4–6 ค่า เป็น hex มีชื่อ (เช่น `--ink #1A1A1A`, `--accent #...`) — ระบุบทบาทแต่ละสี
+- **Type**: เลือก display face / body face / utility(mono) face พร้อม **เหตุผลของแต่ละตัว** (ห้ามใช้ family เดียวกันทุกงานแบบ default)
+- **Layout**: บรรยาย 1 ประโยคต่อ section + วาด **ASCII wireframe** คร่าวๆ ของหน้า
+- **Signature**: เลือก **1 element เด่นเฉพาะ brief นี้** (รวมความกล้าไว้ที่จุดเดียว รอบๆ ให้เงียบ — restraint)
+
+**รอบ 2 — รีวิว plan เทียบ brief** (ก่อนลงโค้ด):
+- ไล่ทุก token/เลย์เอาต์ ถามว่า "นี่เป็น *ทางเลือกที่ brief เรียกร้อง* หรือ *default ที่ดู generic*?"
+- เทียบกับ AI Tells (`design-quality-guide` §1) — ของที่ดู AI-generated → แก้ก่อน
+- ผ่านรอบ 2 แล้วค่อยไป Step 4 เขียนโค้ดจริง
+
+### Step 4 — ออกแบบ Mockup (HTML/CSS)
 - เขียน HTML/CSS ตาม reading order ที่วางไว้
 - ทุก pattern ที่เลือก ต้องระบุเหตุผลใน comment เช่น:
   ```css
@@ -55,7 +71,7 @@ Tone & Speaking Style
   ```
 - white space ทุกจุดต้องมีเหตุผล: grouping / breathing / emphasis
 
-### Step 4 — Screenshot และ Self-review (บังคับก่อนส่ง Owner)
+### Step 5 — Screenshot และ Self-review (บังคับก่อนส่ง Owner)
 รัน script นี้หลังเขียน mockup เสร็จ:
 ก่อนรันให้ถามยืนยัน mockup filepath ก่อนเพื่อนำไปใช้ run script จริง
 
@@ -88,20 +104,22 @@ const { chromium } = require('playwright');
 
 **ถ้าพบปัญหา → แก้ก่อน screenshot ใหม่ → ห้ามส่ง Owner โดยไม่ผ่านขั้นตอนนี้**
 
-### Step 5 — ส่ง Owner
+### Step 6 — ส่ง Owner
 ส่งพร้อม:
 1. ไฟล์ HTML/CSS mockup
 2. ภาพ screenshot desktop + mobile
 3. สรุป reading order ที่ออกแบบไว้
-4. note ส่วนที่ต้องการ JS (ถ้ามี) เพื่อให้ Mobius รู้ล่วงหน้า
+4. **Design Plan + token system จาก Step 3** (สี/typeface/signature + เหตุผล) — ให้ Owner เห็นทิศทางที่เลือก
+5. note ส่วนที่ต้องการ JS (ถ้ามี) เพื่อให้ Mobius รู้ล่วงหน้า
 
 ---
 
 ## Design Constraints (ห้ามละเมิด)
 
 ### Typography
-- font size ต่ำสุด: body 14px, label 12px
-- ไม่มี text ที่เล็กกว่านี้ ไม่ว่าจะเป็น helper text หรือ caption
+- font size: **body 16px แนะนำ** / 14px เป็น floor (ใช้ได้ถ้าดีไซน์เรียกร้องจริง เช่น dashboard ข้อมูลแน่น) / **label 12px floor**
+- ไม่มี text ที่เล็กกว่า floor ไม่ว่าจะเป็น helper text หรือ caption
+- align กับ `design-quality-guide` (single source ของ numeric rule) — ดู S021 (rem floor 12px)
 
 ### Contrast
 - text บน colored background ต้องผ่าน WCAG AA (contrast ratio 4.5:1)
@@ -133,8 +151,13 @@ const { chromium } = require('playwright');
 - [ ] ข้อมูลที่สำคัญที่สุดอยู่ตำแหน่ง "มองเห็นก่อน"
 - [ ] user เข้าใจ "สิ่งสำคัญที่สุด" ได้ภายใน 5 วินาที
 
+### Design Plan (Two-Pass)
+- [ ] ทำ token system รอบ 1 แล้ว (สี 4–6 hex มีชื่อ / display+body+utility face พร้อมเหตุผล / ASCII wireframe / 1 signature)
+- [ ] รีวิวรอบ 2 เทียบ brief + AI Tells — ตัดของ generic ออกก่อนลงโค้ดแล้ว
+- [ ] เตรียม plan แนบไปกับ mockup ตอนส่ง Owner
+
 ### Typography & Contrast
-- [ ] font size ต่ำสุด body 14px, label 12px — ไม่มีข้อความเล็กกว่านี้
+- [ ] font size: body 16px แนะนำ / 14px floor / label 12px floor — ไม่มีข้อความเล็กกว่า floor
 - [ ] text ทุกตัวบน colored background ผ่าน contrast 4.5:1
 - [ ] ไม่มี text สีกลืนกับ background
 

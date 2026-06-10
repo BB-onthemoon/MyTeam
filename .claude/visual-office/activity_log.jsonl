@@ -160,3 +160,6 @@
 {"time":"2026-06-10T15:21:25+07:00","agent":"Elysia","action":"context diet เสร็จ: feedback log x4 เป็น 2 ชั้น (กฎกลั่น + 3 sessions) + compact CLAUDE.md"}
 {"time":"2026-06-10T15:29:26+07:00","agent":"Elysia","action":"อ่าน docs sub-agents ทางการ + ตรวจ Sakura/Mobius/Aponia เทียบ spec"}
 {"time":"2026-06-10T15:35:55+07:00","agent":"Elysia","action":"ปรับ agent x3 ตาม docs: ตัด post-mortem preload, เพิ่ม Skill tool, model alias sonnet/opus"}
+{"time":"2026-06-10T15:47:51+07:00","agent":"Elysia","action":"commit 40b8fed: งาน S024 ทั้งหมด (29 ไฟล์ +650/-322)"}
+{"time":"2026-06-10T19:27:54+07:00","agent":"Elysia","action":"เริ่ม Upgrade Sakura: Two-Pass+token, Decision Trees, Key Numbers (Hybrid)"}
+{"time":"2026-06-10T19:32:36+07:00","agent":"Elysia","action":"Upgrade Sakura เสร็จ: Sakura.md (5 จุด) + design-quality-guide (3 จุด) รอ Owner review"}

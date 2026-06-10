@@ -20,3 +20,38 @@ weatherAPI = an intentional, approved design (grandfathered) — do not change i
 | purple/violet gradient, cyan-on-dark | the AI palette | our minimal style already avoids it |
 | Tiny uppercase eyebrow above every section ("ABOUT") | AI scaffold | use only when needed |
 | Numbered section markers (01/02/03) for decoration | AI scaffold | use only when they carry real meaning |
+| Warm cream `#F4F1EA` + serif display + terracotta accent | a default AI "editorial" palette | fine only if the brief asks for it |
+| Near-black bg + acid-green / vermilion highlight | a default AI "techy dark" palette | fine only if the brief asks for it |
+
+## §2 — Decision Trees (pick the right container / feedback)
+
+> Source: szilu/ux-designer-skill. Advisory aids for choosing a pattern with a reason — supports the "every pattern must justify itself" rule. Trimmed to our stack (Angular 21 + Bootstrap 5 + SweetAlert2); collaborative/canvas branches removed.
+
+### Modal vs. Side Panel vs. Full Page
+
+```
+What is the user doing?
+├── Quick confirmation or simple input (1–3 fields)?
+│   └── → Modal dialog (or SweetAlert2 for confirm/alert)
+├── Viewing/editing detail while keeping main context visible?
+│   ├── Content is narrow (form, properties)?  → Side panel
+│   └── Content needs significant width?       → Full-page overlay (with back nav)
+├── Multi-step workflow / complex form?
+│   ├── Steps short (2–3 fields each)?         → Modal with stepper
+│   └── Steps long / need reference content?   → Full page with stepper (e.g. SalesDoc wizard)
+└── Creating a new complex entity (document)?  → Full page (dedicated flow)
+```
+
+### Notification type
+
+```
+What needs the user's attention?
+├── Immediate action required?
+│   ├── Blocking (must resolve first)?  → Modal dialog (confirm / error recovery — SweetAlert2)
+│   └── Urgent but non-blocking?        → Banner (top of page, persists until dismissed)
+├── Feedback on a completed action?
+│   ├── Success / low-importance info?  → Toast, auto-dismiss 4–8s
+│   └── Warning / error?                → Toast with action button (manual dismiss)
+└── System status (connectivity, maintenance)?  → Persistent banner
+```
+

@@ -19,6 +19,16 @@ Advisory, not a gate. Flag → propose to Owner with a reason → Owner decides.
 - **Heading order:** don't skip levels (h1 → h3) — screen readers.
 - **Padding in bordered/colored containers:** ≥ 8px, ideally 12–16px.
 
+## Interaction & timing (add 2026)
+
+> Source: szilu/ux-designer-skill (Key Numbers). Use the same advisory way as above.
+
+- **Touch target:** ≥ 44–48px tappable area (tablet/mobile — relevant for our responsive layouts).
+- **Animation duration:** 300–500ms feels natural (pair with the ease-out rule above).
+- **Interaction feedback:** < 100ms to feel instant (hover/click should respond immediately).
+- **Toast / auto-dismiss popup:** 4–8s (e.g. SweetAlert2 success toast — see S023); errors/warnings → manual dismiss.
+- **Line height:** 1.2–1.45 for body text (readability).
+
 ## How to apply
 
 1. Use as a **thinking checklist**, not a blocking gate.
@@ -34,4 +44,5 @@ Advisory, not a gate. Flag → propose to Owner with a reason → Owner decides.
 | **Mobius** | writing CSS | numeric rules above |
 | **Aponia** | QA | both, advisory — flag to Owner |
 
-→ Full "AI Tells" catalogue (what to avoid + why): see [reference.md](reference.md)
+→ Full "AI Tells" catalogue (what to avoid + why): see [reference.md](reference.md) §1
+→ Decision Trees (Modal vs Side Panel vs Full Page / Notification type): see [reference.md](reference.md) §2
