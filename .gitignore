@@ -6,17 +6,17 @@
 # --- Dependencies ---
 node_modules/
 
-# --- งาน Dashboard จริง (ไม่ใช่ระบบ Team) ---
-/app/
-/landing-page-pj/
-/plant_status/
-/plant_status_rework/
-/product-stock/
-/weatherAPI/
-/our_team/
+# --- งาน Dashboard (โค้ดจริง ไม่ใช่ระบบ Team) — จัดเป็น 3 หมวดตั้งแต่ S026 ---
+# examples = ตัวอย่างงาน senior ไว้ศึกษา / practice = โปรเจคฝึก-ทดลอง / real_work = งานจริงของ Owner
+/examples/
+/practice/
+/real_work/
 
 # --- ไฟล์เฉพาะเครื่อง / ความเป็นส่วนตัว ---
 .claude/settings.local.json
+
+# --- กระดานสนทนา Elysia <-> Bronya (CLI bridge) ชั่วคราว ไม่ commit (S030) ---
+/_agy_bridge/
 
 # --- Artifact / screenshot ชั่วคราวที่ root ---
 /test-step1-2cards.png
