@@ -149,4 +149,19 @@
   3. **จุดไม่มั่นใจ** — อยากให้ Aponia/Sakura ตรวจเป็นพิเศษตรงไหน
   4. **State & Cleanup Verification** — ยืนยันว่าจัดการครบ: 3 states (loading/error/empty) + subscription cleanup + chart destroy/reflow
 
-> เสร็จแล้ว → Elysia อ่าน `git diff` + `_bronya_report.md` → ส่งทีม Claude (Aponia + Sakura) QA ต่อ
+**ปิดท้าย `_bronya_report.md` ด้วย JSON status block** (ให้ Elysia parse อัตโนมัติ) — schema:
+```json
+{ "status": "DONE | NEED_FIX | BLOCKED",
+  "files_changed": ["relative/path.ts"],
+  "decisions": ["สรุป logic/UI ที่ตัดสินใจเอง"],
+  "needs_review": ["จุดให้ Aponia/Sakura ดูพิเศษ", "None"],
+  "blockers": [],
+  "verification": { "states_handled": true, "subscriptions_cleaned": true } }
+```
+(`blockers` = `[]`/`null` ถ้า status ไม่ใช่ BLOCKED)
+
+**เมื่องานเสร็จไม่มีอะไรต่อ → ลงท้ายบรรทัดสุดท้ายด้วย `[BRONYA_DONE]`** (ให้ Elysia ตัดจบรอบ กันคุยวนเปลืองโควตา)
+
+**ห้ามรัน git เอง** (`git add`/`commit`/ฯลฯ) — เธอแค่เขียน/แก้ไฟล์; การจัดการ git เป็นของ Elysia ทั้งหมด (กัน `.git/index.lock` ชนกัน)
+
+> เสร็จแล้ว → Elysia อ่าน `git diff` + `_bronya_report.md` (+ JSON) → ส่งทีม Claude (Aponia + Sakura) QA ต่อ

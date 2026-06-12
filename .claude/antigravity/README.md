@@ -67,6 +67,12 @@ agy --dangerously-skip-permissions -p "<brief + context>" </dev/null
 
 **เมื่อ spec กำกวม:** logic/data/state → **หยุดถาม Captain** · UI เล็กน้อย → default design system + โน้ตใน report
 
+**ส่วนเสริมจาก external review (Gemini web, S030) — ฝังใน `GEMINI.md §11` แล้ว:**
+- **JSON status block** ปิดท้าย `_bronya_report.md` (`status`/`files_changed`/`decisions`/`needs_review`/`blockers`/`verification`) → Elysia parse อัตโนมัติ แตกงานต่อแม่นขึ้น
+- **`[BRONYA_DONE]`** ลงท้ายเมื่อจบงาน → กัน conversational loop เปลืองโควตา (สำคัญถ้าวันหลังทำ auto-loop ต้องมี exit condition)
+- **Bronya ไม่รัน git เอง** → Elysia จัดการ git ทั้งหมด กัน `.git/index.lock` ชนกัน (อย่ารัน git พร้อม `agy`)
+- **เลือก model ตามงาน** (ฝั่ง Elysia ผ่าน `--model`): Flash = boilerplate/งานเร็ว · Pro = logic ซับซ้อน (อย่าฝาก logic หนักไว้กับ Flash อย่างเดียว)
+
 ---
 
 ## 🚀 วิธีติดตั้ง rules — **Global (ทำครั้งเดียวจบ)**
