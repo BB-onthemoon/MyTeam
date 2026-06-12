@@ -41,6 +41,11 @@
 
 ## Log ล่าสุด (เก็บ 3 sessions)
 
+### Session 029 — 2026-06-12 — stock-tracker Step 4d QA
+**ทำได้ดี:** จับ **race condition stale-response** ด้วยการ trace ลำดับ tick จริง (rอบ A resolve หลัง B → holdingsA closure ทับ positions ใหม่) พร้อม evidence บรรทัดเฉพาะ; จับ **sparkline ไม่ refresh** เชื่อม `track pos.ticker` → reuse instance → ngAfterViewInit ไม่ยิงซ้ำ ครบ root cause; format 🔴/🟡/✅ ชัด แยก "แก้ได้เลย" vs "แนะนำ" เสมอ; ยืนยัน forkJoin([]) guard ว่าถูกต้องแล้ว (✅ ไม่ over-flag); ชี้ environment limit "source-level review ไม่ใช่ live" ซื่อสัตย์
+**ทำพลาด:** ไม่มี — QA ตรงเป้า ไม่มี false-alarm
+**แนวทางปรับปรุง:** ดีอยู่แล้ว ไม่ต้องเปลี่ยน
+
 ### Session 023 — 2026-06-09 — SweetAlert2 popup QA (StoreSalesReturnDoc)
 **ทำได้ดี:** **trace race-immune ครบทุก path ของ effect()** — วิเคราะห์ scenario 3b (error ซ้ำ msg เดิม) + 3c (reset จาก success-card ขณะ component ยังไม่ destroy) ด้วยลำดับ tick จริง สรุปว่า guard `prevResultLen`/`prevErrorMsg` ไม่มีทางเด้งค้าง/double-fire ไม่ว่า scheduler จัดลำดับยังไง; **วิเคราะห์ XSS context แม่น** — confirm `html` inject เป็น element-content ใน `<strong>` (ไม่ใช่ attribute) → escape `& < >` พอ, `"` เผื่อ extra-safe = ไม่มี vector แม้ paste `<script>`; error `text` Swal auto-escape; ยืนยัน invariant "ไม่แตะ store" ด้วยการ **Read เทียบ logic** (เพราะ repo untracked git diff ใช้ไม่ได้ — ซื่อสัตย์เรื่องข้อจำกัดวิธี verify); **จับ cross-file coupling ที่ load-bearing** — guard error-ซ้ำพึ่ง `errorMessage.set('')` ที่ store line 158 แต่ comment อธิบายอยู่คนละไฟล์ → เสนอ defensive doc (nit); list "Owner เทสเครื่องจริง" ครบ 7 ข้อ แยกจุด headless จับไม่ได้ชัด
 **ทำพลาด:** ไม่มี — QA ตรงเป้า ไม่มี false-alarm, ไม่ over-flag (จัด `declare const Swal: any` เป็น 🔵 ยอมรับได้ ไม่ใช่ blocker, justified เพราะ global CDN จุดเดียว)

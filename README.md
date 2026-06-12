@@ -33,11 +33,16 @@
 MyTeam/
 ├── CLAUDE.md              ← กฎหลัก + ตัวตนทีม (ไฟล์สำคัญที่สุด อ่านก่อนเลย)
 ├── package.json           ← เครื่องมือ QA (Playwright / Puppeteer)
-└── .claude/
-    ├── agents/            ← โปรไฟล์ของสมาชิกแต่ละคน
-    ├── docs/              ← เอกสารทีม: workflow, feedback, ความจำ
-    ├── skills/            ← คลังทักษะ (แต่ละ skill = โฟลเดอร์ย่อย)
-    └── visual-office/     ← "ออฟฟิศจำลอง" แสดงสถานะทีมแบบเรียลไทม์
+├── .claude/
+│   ├── agents/            ← โปรไฟล์ของสมาชิกแต่ละคน
+│   ├── docs/              ← เอกสารทีม: workflow, feedback, ความจำ
+│   ├── skills/            ← คลังทักษะ (แต่ละ skill = โฟลเดอร์ย่อย)
+│   └── visual-office/     ← "ออฟฟิศจำลอง" แสดงสถานะทีมแบบเรียลไทม์
+│
+└── (git-ignored — โค้ดงานจริง อยู่ในเครื่องแต่ไม่ commit เข้า repo ระบบทีม)
+    ├── examples/          ← ตัวอย่างงาน senior ไว้ศึกษา (อ่านอย่างเดียว)
+    ├── practice/          ← โปรเจคฝึก / ทดลองการทำงานของทีม
+    └── real_work/         ← งานจริงที่ Owner ทำส่ง
 ```
 
 ### 📄 `CLAUDE.md` — หัวใจของทีม
@@ -69,7 +74,7 @@ Angular 21 · TypeScript · Bootstrap · ApexCharts — ดึงข้อมู
 ---
 
 ## 💡 หมายเหตุ
-- repo นี้เก็บ **ระบบทีม** เท่านั้น — โค้ด Dashboard จริง (weatherAPI, landing page ฯลฯ) แยกเก็บที่อื่น
+- repo นี้ **commit เฉพาะระบบทีม** (`.claude/` + `CLAUDE.md` + tooling) — โค้ด Dashboard จริงวางในเครื่องเดียวกันแต่ถูก git-ignore แบ่งเป็น 3 หมวด: `examples/` (ตัวอย่าง senior ไว้ศึกษา) · `practice/` (โปรเจคฝึก) · `real_work/` (งานจริง)
 - เป็นโปรเจคเรียนรู้ที่ทั้ง "ทีม AI" และเจ้าของงานค่อยๆ เก่งขึ้นไปด้วยกัน 🌱
 
 *สร้างด้วย 💕 โดยทีม Dashboard Dev Team*

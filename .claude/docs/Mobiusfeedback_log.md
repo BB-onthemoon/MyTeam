@@ -40,6 +40,8 @@
 - class เก่า/ใหม่ต้อง migrate จบรอบเดียว ไม่ทิ้ง dead CSS (S011)
 - rem ในระบบ scale ได้: คิดเสมอ "ที่ scale เล็กสุดเหลือกี่ px" — label ≥12px (floor `0.75rem`); control ปรับ font เองคงเป็น px (S021)
 - รื้อ framework ทับ design token เดิม: map token → `--bs-*` ไม่ override รายจุด (S018)
+- 🅱️ **เริ่ม layout ใหม่: เช็คก่อนว่า tech stack กำหนด CSS framework อะไร + ลงในโปรเจคนี้รึยัง** (`package.json`/`angular.json` styles) — ถ้ากำหนด Bootstrap **ต้องใช้ Bootstrap grid/utilities/card อย่าเขียน custom CSS layout ล้วน** (Owner จับได้ S027 ต้องรื้อทั้งช่วง). mockup ใช้ CDN ไม่ได้แปลว่าโปรเจค Angular ลงแล้ว — ตรวจจริง
+- 🐞 **build exit0 ≠ layout ถูกตา** — Bootstrap `row`/`col` HTML ถูกแต่ cards เรียงแนวตั้งได้ ถ้า custom CSS ทับ flex หรือ main width ต่ำกว่า breakpoint; verify ด้วยตา (ng serve) ก่อน declare ไม่ใช่แค่ build ผ่าน (S027)
 
 ### Data / Security
 - derive ค่าจาก spec ที่มี token เดิม: เทียบ**ทิศ**กับ token จริง + verify default ตรงของเดิม (S015)

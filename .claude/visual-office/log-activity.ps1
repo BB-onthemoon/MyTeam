@@ -9,7 +9,7 @@
   จะใส่ BOM ทำให้ JSON พัง — จึงใช้ .NET AppendAllText).
 
 .PARAMETER Agent
-  ชื่อ agent: Elysia | Sakura | Mobius | Aponia
+  ชื่อ agent: Elysia | Sakura | Mobius | Aponia | Bronya
 
 .PARAMETER Action
   ข้อความสั้น ๆ ว่าทำอะไร (ไทย/อังกฤษได้)
@@ -20,7 +20,7 @@
 [CmdletBinding()]
 param(
   [Parameter(Mandatory = $true)]
-  [ValidateSet('Elysia', 'Sakura', 'Mobius', 'Aponia')]
+  [ValidateSet('Elysia', 'Sakura', 'Mobius', 'Aponia', 'Bronya')]
   [string]$Agent,
 
   [Parameter(Mandatory = $true)]

@@ -160,6 +160,6 @@ $enc = New-Object System.Text.UTF8Encoding($false)
 ## Session Log
 > **รายละเอียดเต็มทุก session ย้ายไปที่ `.claude/docs/session-log.md`** — บทเรียนถาวรกลั่นไว้ใน `Coding Rules > บทเรียนสำคัญ` แล้ว
 
-ล่าสุด: **S029** stock-tracker (practice) **Step 4 ครบทุก step** — Owner เขียน logic 4c เองทั้งหมด (forkJoin+catchError/request-id guard/ApexCharts/ngOnChanges) Elysia=guide. QA Aponia+Sakura parallel fix-then-ship: CSS/HTML 11 ข้อ + logic 4 ข้อ (null check/race/sparkline/error card stub). Owner ทดสอบ ng serve จริงผ่าน. ไม่มีงานค้าง. รายละเอียด `session-log.md` S027-029
+ล่าสุด: **S032** ปรับปรุงระบบลูกผสม + git-visualizer Pass 4 (โหมด 2 เต็มไปป์ไลน์). **Phase1 Build-Gate** 2 ชั้น (Bronya self-verify `ng build --configuration development` ก่อน DONE + Elysia `build-gate.ps1` ก่อน QA, bounce max2). **Phase2 Meeting Mode** (`live_chat.md` ไวท์บอร์ด 2-terminal). **Bronya Efficiency Upgrade** (Type-First + Negative Constraints + Data Shape; keep GEMINI.md lean — ไม่ทำ Pattern Cookbook). **Design-First เข้า workflow** (งาน UI: Sakura วาง direction ก่อน Bronya). dogfood Meeting Mode 2 รอบ + Lessons-loop ทำงานจริง (Sakura จับ AI-tell accent-bar→กลั่นเข้า GEMINI.md §9). git-visualizer ปิดงาน. รายละเอียด `session-log.md` S032 · ระบบลูกผสม `.claude/antigravity/`
 
-ก่อนหน้า: **S026** (A) จัดโฟลเดอร์ repo 3 หมวด **examples/practice/real_work** + แก้ `.gitignore`. (B) **stock-tracker** เริ่มโปรเจค Owner เขียน logic เองฝึก เสร็จ Step 0-3. รายละเอียด `session-log.md` S026
+ก่อนหน้า: **S031** git-visualizer test ระบบลูกผสมครั้งแรก (Bronya เขียน/Claude QA 4 pass) · **S029** stock-tracker Step 4 ครบ. รายละเอียด `session-log.md`

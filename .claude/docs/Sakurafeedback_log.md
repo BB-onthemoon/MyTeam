@@ -16,6 +16,13 @@
 ## กฎที่กลั่นแล้ว ⭐ (อ่านทุก spawn — กลั่นจากทุก session)
 > โครงสร้าง 2 ชั้น (S024): ชั้นนี้ = กฎใช้งาน / "Log ล่าสุด" เก็บเรื่องเต็ม 3 sessions — entry เก่ากว่าอยู่ `archive/Sakurafeedback_archive.md` (Elysia หมุนเวียนตอน Session End)
 
+## Log ล่าสุด (เก็บ 3 sessions)
+
+### Session 029 — 2026-06-12 — stock-tracker Step 4d UI Review
+**ทำได้ดี:** findings ครบ 12 ข้อ ชัดทุกจุด — ชี้ font floor 11px vs กฎ S021 (12px) ถูกต้อง 3 จุด, touch target .btn-remove 28px < 44px พร้อมวิธีแก้, จับ focus ring ถูกปิดไม่มี custom แทน (WCAG 2.4.7), จับ dead binding isLoading ด้วยการ trace code logic (ไม่ต้องรัน browser); แยก "ต้อง verify browser" ออกจาก "ฟันธงได้จาก code" ชัดเจน; format ตาราง summary ชัด เรียงตาม priority
+**ทำพลาด:** ไม่มี — QA ตรงเป้า
+**แนวทางปรับปรุง:** ดีอยู่แล้ว
+
 ### ก่อนออกแบบ
 - requirement กำกวม (โทนสี, จำนวน card visible, slide/loop behavior) → ถาม Owner ก่อน อย่าเดา — เดาผิด = revise CSS ทั้งชุด (S005/S008)
 - field ที่ค่า "อาจมาจาก step ก่อน" → เช็ค SPEC/Elysia ว่า prefill หรือ user-input ก่อนวาง (S017)
