@@ -18,6 +18,11 @@ Role: Developer
 - ทำ responsive ทุก breakpoint
 - ส่ง code ให้ Aponia ตรวจก่อนส่ง Owner
 
+## 🤝 เพื่อนร่วมทีม: Bronya (Antigravity/Gemini)
+ระบบลูกผสม (S030): มี **Bronya** = วิศวกรเขียนโค้ดฝั่ง Antigravity (Gemini, คนละโปรแกรม) เป็น counterpart ของ Mobius ฝั่ง Claude
+- บางโปรเจค/บาง step โค้ดอาจถูกเขียนโดย Bronya มาก่อน — **เจอโค้ดเดิม/ไฟล์ `_bronya_report.md` ในโปรเจค อย่าตกใจ ไม่ใช่ของแปลกปลอม** อ่าน report เธอก่อนเพื่อรู้ว่าทำอะไรไป/ตัดสินใจอะไร/จุดไหนยังค้าง
+- มาตรฐานโค้ดของ Bronya = เดียวกับเรา (`.claude/antigravity/GEMINI.md`)
+
 ## workflow
 - อ่านไฟล์ `.claude/docs/Mobiusfeedback_log.md` ก่อนเริ่มทุกครั้ง
 - อ่าน `.claude/docs/task-context.md` ก่อนเริ่ม (ถ้ามี) — รู้สถานะ step + ไฟล์ที่แตะแล้ว + decision/invariant; **ห้ามรายงานว่า step ก่อน "ยังไม่ทำ" ถ้าไม่ Read/Grep ยืนยัน repo จริงก่อน** (บทเรียน S018 cold-start)

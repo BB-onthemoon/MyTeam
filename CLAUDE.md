@@ -25,6 +25,12 @@
 - .claude/skills/ — คลัง skills (แต่ละ skill = โฟลเดอร์ย่อยมี `SKILL.md` + `reference.md` ถ้าเนื้อ reference หนัก)
 - .claude/visual-office/ — ออฟฟิศจำลอง top-down แสดงสถานะทีม realtime (office.html + status/log + helper script)
 
+## โฟลเดอร์งานโค้ด (git-ignored ทั้งหมด — repo เก็บแค่ระบบทีม) — แบ่ง 3 หมวดตั้งแต่ S026
+- **examples/** — ตัวอย่างงานของ senior ที่บริษัท Owner ไว้ "ศึกษา" เท่านั้น (อ่าน/อ้างอิง ไม่แก้) เช่น `SmaetFarmSFCC`, `StoreSalesReturnDoc` (ของ senior มี `.git` ของตัวเอง)
+- **practice/** — โปรเจคที่ Owner ใช้ฝึก/ทดลองการทำงานของทีม: `app`, `landing-page-pj`, `our_team`, `plant_status_rework`, `product-stock`, `weatherAPI`
+- **real_work/** — งานจริงที่ Owner ทำส่ง: `StoreSalesReturnDoc` (คนละตัวกับใน examples/ — ตัวนี้คืองาน upgrade จริงของ Owner)
+> ⚠️ ก่อนแตะโค้ด ให้ดูก่อนว่าโปรเจคอยู่หมวดไหน — `real_work/` = ระวังสูงสุด, `examples/` = อ่านอย่างเดียวห้ามแก้, `practice/` = ทดลองได้
+
 # Team Structure
 
 | # | ตำแหน่ง | Agent | หน้าที่หลัก |
@@ -33,6 +39,9 @@
 | 2 | **UX/UI Designer** | Sakura | ออกแบบ dashboard mockup (HTML) ให้ Owner approve ก่อน, ตรวจสอบ dashboard จริงหลัง coding เสร็จ |
 | 3 | **Developer** | Mobius | เขียน Angular component (HTML / CSS / TS) ตามที่ออกแบบไว้ |
 | 4 | **QA / Reviewer** | Aponia | ตรวจ bug, code quality, security, accessibility รวมถึง, ตรวจสอบ dashbord จริงหลัง coding เสร็จ |
+| 5 | **Engineer (Antigravity)** 🔧 | **Bronya** (Gemini) | วิศวกรเขียนโค้ดฝั่ง **Antigravity/Gemini** ในระบบลูกผสม — คนละโปรแกรมกับทีม Claude |
+
+> 🤝 **ระบบลูกผสม Claude + Gemini (ตั้งแต่ S030):** **Bronya** = Gemini agent บน Google Antigravity (โควต้า Google AI Pro) ทำหน้าที่ "คนเขียนโค้ดปริมาณเยอะ" เพื่อ**ประหยัด Claude token** — ฝั่ง Claude (Elysia/Aponia/Sakura) โฟกัส "คิด spec + ตรวจ QA". เชื่อมกันผ่าน **filesystem** (ไม่ sync ความจำ — แชร์ผ่านไฟล์ในเครื่อง). Elysia สั่ง Bronya ได้ตรงผ่าน CLI `agy -p` (headless). Bronya ส่งงานกลับเป็นไฟล์โค้ด + `_bronya_report.md` → Claude QA ต่อ. **รายละเอียด + Handoff Protocol: `.claude/antigravity/`** (`GEMINI.md` = ตัวตน+กฎของ Bronya / `README.md` = workflow + สูตร CLI)
 
 ---
 
@@ -151,4 +160,6 @@ $enc = New-Object System.Text.UTF8Encoding($false)
 ## Session Log
 > **รายละเอียดเต็มทุก session ย้ายไปที่ `.claude/docs/session-log.md`** — บทเรียนถาวรกลั่นไว้ใน `Coding Rules > บทเรียนสำคัญ` แล้ว
 
-ล่าสุด: **S024** Audit + ลดบวมระบบทีม `.claude` — แก้ doc-practice drift 4 กลุ่ม (Fast Path เข้า workflow.md, retire session-comments, **ฟื้น handoff เป็นไฟล์เดียว `handoff.md`** คู่ task-context — handoff = ข้าม session / task-context = ใน task, dedupe user_profile, backfill Elysia log, แก้ agent profile ×3, เก็บกวาดของผิดที่) + **context diet**: feedback log ×4 → โครง 2 ชั้น (กฎที่กลั่นแล้ว ⭐ + Log 3 sessions ล่าสุด, เก่ากว่าอยู่ `archive/`) และ compact CLAUDE.md + **ตรวจ agent เทียบ docs sub-agents ทางการ** (ตัด post-mortem จาก skills preload, เพิ่ม `Skill` tool, model เป็น alias — มีผล session หน้า). ไม่มีงานค้าง — รายละเอียด `session-log.md` S024
+ล่าสุด: **S029** stock-tracker (practice) **Step 4 ครบทุก step** — Owner เขียน logic 4c เองทั้งหมด (forkJoin+catchError/request-id guard/ApexCharts/ngOnChanges) Elysia=guide. QA Aponia+Sakura parallel fix-then-ship: CSS/HTML 11 ข้อ + logic 4 ข้อ (null check/race/sparkline/error card stub). Owner ทดสอบ ng serve จริงผ่าน. ไม่มีงานค้าง. รายละเอียด `session-log.md` S027-029
+
+ก่อนหน้า: **S026** (A) จัดโฟลเดอร์ repo 3 หมวด **examples/practice/real_work** + แก้ `.gitignore`. (B) **stock-tracker** เริ่มโปรเจค Owner เขียน logic เองฝึก เสร็จ Step 0-3. รายละเอียด `session-log.md` S026

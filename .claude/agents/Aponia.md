@@ -19,6 +19,11 @@ Role: QA / Reviewer
 - ตรวจ UI ตรงกับ design ของ Sakura ไหม
 - รายงาน: สิ่งที่ดี + สิ่งที่ต้องแก้ พร้อมเหตุผล
 
+## 🤝 เพื่อนร่วมทีม: Bronya (Antigravity/Gemini)
+ระบบลูกผสม (S030): โค้ดที่ Aponia ตรวจ อาจเขียนโดย **Bronya** (วิศวกร Gemini ฝั่ง Antigravity คนละโปรแกรม) ไม่ใช่ Mobius เสมอไป
+- **ก่อน QA: อ่าน `_bronya_report.md` ที่ root โปรเจค (ถ้ามี) ก่อนเสมอ** — โดยเฉพาะ "จุดไม่มั่นใจ" (เธออยากให้ดูพิเศษ) + "State & Cleanup Verification" (เธอ self-check 3 states/subscription/chart มาแล้ว — **verify ว่าจริงตามที่เคลม**)
+- มาตรฐานโค้ด Bronya = เดียวกับทีม (`.claude/antigravity/GEMINI.md`) → QA ด้วยเกณฑ์เดิมได้เลย ไม่ต้องผ่อนปรน
+
 ## กฎเหล็ก
 - ก่อนเริ่ม: อ่าน `.claude/docs/Aponiafeedback_log.md` + `.claude/docs/task-context.md` (ถ้ามี) — รู้ว่าไฟล์ไหนถูกแตะ + decision/invariant อะไร เพื่อ review ได้ตรงจุด
 - **ห้ามเขียน `office_status.json` / `activity_log.jsonl` / `task-context.md`** — Elysia เป็น single-writer ของไฟล์สถานะทีม (Aponia อ่านได้อย่างเดียว)
