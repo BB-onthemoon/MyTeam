@@ -38,8 +38,9 @@ Owner → Elysia → Sakura → [Owner Approve] → Mobius → Aponia + Sakura �
 - ถามจนกว่าจะชัดเจนทุกข้อ ห้ามเดา
 - สรุป requirement เป็นข้อๆ ให้ Owner confirm ก่อนไปต่อ
 - แสดง step การทำงานทั้งหมดให้ Owner เห็นก่อนลงมือ
+- **(S038 FullStack) ถาม 2 ข้อก่อนเริ่ม coding:** (1) งานนี้มี **backend** ไหม (Express/SQLite) หรือ frontend ล้วน · (2) **"Learn หรือ Auto mode?"** (Owner เขียนเอง+Elysia mentor / Mobius·Bronya เขียน) — ดู `CLAUDE.md > Learn/Auto Mode` + FullStack Flow ด้านล่าง
 
-**Output:** requirement ที่ Owner confirm แล้ว
+**Output:** requirement ที่ Owner confirm แล้ว + รู้ว่า backend/frontend + Learn/Auto
 
 ---
 
@@ -101,6 +102,23 @@ Owner → Elysia → Sakura → [Owner Approve] → Mobius → Aponia + Sakura �
 
 ---
 
+## FullStack Flow — เมื่องานมี Backend (S038)
+
+โครง 6 step เดิมยังใช้ แต่เพิ่ม "เลนส์ backend" และ flow ต่างกันตาม **โหมด** (เลือกใน Step 1):
+
+### ลำดับงาน backend (อยู่ก่อนหรือคู่กับ frontend)
+1. **API contract first** — Elysia + Owner ตกลง endpoint + **data shape (JSON จริง)** + DB schema ก่อนเขียน (เหมือน Design ของ Sakura แต่เป็นฝั่งข้อมูล) → เป็น spec ให้คนเขียน
+2. **Implement** ตามโหมด (ดูด้านล่าง) — แยกชั้น route → handler → db, raw SQL parameterized
+3. 🔴 **Build-Gate backend** ก่อน QA — `build-gate.ps1 -Mode backend` (`tsc --noEmit` + opt-in `-SmokeUrl` ยิง 200)
+4. **Aponia backend QA** — Backend QA DoD (SQL injection / validation / endpoint / error) — **ทำเสมอทุกโหมด** (Sakura ตรวจเฉพาะถ้ามี UI)
+5. **Owner verify เครื่องจริง** — start server + ยิง endpoint จริง + เปิด frontend ผ่าน proxy ก่อน declare done
+
+### โหมดต่าง flow ตรงไหน
+- ⚡ **Auto:** ตาม 6 step ปกติ — Step 4 spawn **Mobius** (หรือ brief **Bronya** ฝั่ง Antigravity) เขียน backend
+- 🎓 **Learn:** **ไม่ spawn Mobius** — **Owner เขียน backend เอง**, Elysia = mentor (อธิบาย concept ก่อน → Owner ลงมือ, ซอยทีละ step checkpoint) → จากนั้นยังเข้า Build-Gate + **Aponia QA ตามปกติ** (QA โค้ดที่ Owner เขียน เหมือน stock-tracker)
+
+---
+
 ## Fast Path — ทางลัดที่ Owner สั่งได้ (ทางการตั้งแต่ S024)
 
 > **Default = full workflow ข้างบนเสมอ** — fast path ใช้ได้เฉพาะเมื่อ **Owner สั่งเอง** เท่านั้น
@@ -117,6 +135,7 @@ Owner → Elysia → Sakura → [Owner Approve] → Mobius → Aponia + Sakura �
 - QA Aponia + Sakura ก่อน report Owner (เมื่อมีการแก้ code feature)
 - Owner verify เครื่องจริงก่อน declare done
 - Status reporting + task-context (งานหลาย step)
+- **(backend) Build-Gate `-Mode backend` + Aponia backend QA** — ข้ามไม่ได้แม้ Fast Path (backend = ประตูข้อมูล)
 
 ---
 
@@ -128,6 +147,8 @@ Owner → Elysia → Sakura → [Owner Approve] → Mobius → Aponia + Sakura �
 | ต้องออกแบบ UI | Sakura |
 | Design ผ่าน Owner approve | Mobius |
 | Mobius coding เสร็จ | Aponia + Sakura (parallel) |
+
+> **(S038)** 🎓 **Learn mode = ไม่ spawn Mobius** (Owner เขียนเอง, Elysia mentor) แต่ยัง spawn Aponia QA ตามปกติ · backend ใน Auto mode อาจ brief **Bronya** แทน Mobius
 
 ---
 

@@ -215,3 +215,58 @@
 {"time":"2026-06-12T20:15:19+07:00","agent":"Sakura","action":"AI-tell analysis: accent-bar = tell หนักสุด (Pass4 เพิ่งเพิ่มเข้า) — เสนอ 5 fix + เห็นด้วย design-first"}
 {"time":"2026-06-12T20:20:44+07:00","agent":"Elysia","action":"bounce Pass4 FIX round1 ให้ Bronya (5 fix AI-tell จาก Sakura) ผ่าน agy โหมด2"}
 {"time":"2026-06-12T20:33:23+07:00","agent":"Elysia","action":"ปิด S032: กลั่นบทเรียนลง session-log/CLAUDE.md/memory + ลบ task-context+handoff + git-visualizer ปิดงาน"}
+{"time":"2026-06-13T10:38:00+07:00","agent":"Elysia","action":"country-explorer Step 1 done (model+service+transform ครบ edge case) เข้า Step 2 list component"}
+{"time":"2026-06-13T13:27:51+07:00","agent":"Elysia","action":"ปิด session S033 country-explorer Step 0-2 เสร็จ (model+service+transform+rxResource) + cheat-sheet fetch — ค้าง Step 3 Search"}
+{"time":"2026-06-13T13:44:11+07:00","agent":"Elysia","action":"S034 grill-me country-explorer Step 3 Search เสร็จ — design ล็อก 5 decision, รอ Owner เขียน logic"}
+{"time":"2026-06-13T14:15:23+07:00","agent":"Elysia","action":"Step 3 Search ผ่านเครื่องจริง 3 เคส (filter/clear/empty) — เริ่ม Step 4 Filter+Sort grill design"}
+{"time":"2026-06-13T15:29:39+07:00","agent":"Elysia","action":"Step 4 Filter+Sort passed real-machine 5 cases - start Step 5 Summary stats reduce grill"}
+{"time":"2026-06-14T20:43:20+07:00","agent":"Elysia","action":"S035 Step 6 Detail view: grill ครบทุกกิ่ง เริ่ม 6.1 shareReplay ใน service"}
+{"time":"2026-06-14T21:07:44+07:00","agent":"Elysia","action":"6.1 (shareReplay) + 6.2 (router setup) เสร็จ Owner เทสผ่าน ไป 6.3 สร้าง CountryDetail"}
+{"time":"2026-06-14T21:27:48+07:00","agent":"Elysia","action":"พัก session (Owner มีงานเข้า) — Step 6 เสร็จ 6.1-6.3 ค้าง 6.4 logic เขียน handoff S035 to S036 แล้ว"}
+{"time":"2026-06-15T08:14:38+07:00","agent":"Elysia","action":"S036 ต่อ country-explorer Step 6: route ครบแล้ว เริ่ม guide Owner เขียน 6.4 logic CountryDetail"}
+{"time":"2026-06-15T09:30:24+07:00","agent":"Elysia","action":"country-explorer Step 6 logic ผ่านเครื่องจริง! detail+recursive neighbors+edge cases ครบ — เข้าเฟส UX/UI"}
+{"time":"2026-06-15T09:57:39+07:00","agent":"Elysia","action":"Design Brief ตกผลึก Owner approve — spawn Sakura ทำ mockup country-explorer (Explorer/teal/Fraunces+Hanken)"}
+{"time":"2026-06-15T10:05:46+07:00","agent":"Sakura","action":"ส่ง mockup country-explorer กลับ (list+detail+skeleton+empty) — design-quality-guide self-check ผ่าน"}
+{"time":"2026-06-15T10:14:36+07:00","agent":"Elysia","action":"เขียน Task Brief Bronya (_bronya_brief.md) เสร็จ — โหมด1 Owner ขับ IDE ส่ง Bronya implement CSS"}
+{"time":"2026-06-15T10:22:47+07:00","agent":"Elysia","action":"อัปเดต Brief Bronya: เปลี่ยนเป็น Bootstrap-base + ให้ Bronya ติดตั้ง/วาง SweetAlert2 (error/not-found via effect) ตาม Owner สั่ง"}
+{"time":"2026-06-15T10:31:14+07:00","agent":"Elysia","action":"build-gate PASS + verify logic เดิมไม่ถูกแตะ — spawn Aponia+Sakura QA ขนาน (country-explorer UX/UI Bronya)"}
+{"time":"2026-06-15T10:37:28+07:00","agent":"Aponia","action":"QA country-explorer: PASS-with-nits — logic invariant ครบ ไม่แตะของเดิม, ไม่มี blocker; nit: detail effect guard + Bootstrap p-margin"}
+{"time":"2026-06-15T10:37:30+07:00","agent":"Sakura","action":"QA UI country-explorer: PASS-with-nits — port ตรง mockup ทุก token ไม่มี AI-tell; nit: Bootstrap container, ลบ inline error ซ้ำ SweetAlert"}
+{"time":"2026-06-15T10:41:13+07:00","agent":"Elysia","action":"เขียน fix-brief (_bronya_fix.md) 5 จุด: Bootstrap reset/container + detail guard + ลบ inline error + skeleton hero — บี้กลับ Bronya IDE"}
+{"time":"2026-06-15T11:04:34+07:00","agent":"Bronya","action":"แก้รอบ1 เสร็จ (5 จุด + เจอบั๊กแถม [value] sync) build-gate PASS"}
+{"time":"2026-06-15T11:04:35+07:00","agent":"Elysia","action":"re-check 5 จุดผ่านหมด build เขียว logic ไม่ถูกแตะ — ส่ง Owner เทสเครื่องจริงปิดจ็อบ"}
+{"time":"2026-06-15T11:26:52+07:00","agent":"Elysia","action":"งานใหม่: BG ภาพท่องเที่ยวจางทั้งหน้า — spawn Sakura ดู Screenshot_Main แล้วออกแบบ JSON image-gen prompt ส่ง Bronya"}
+{"time":"2026-06-15T11:31:22+07:00","agent":"Sakura","action":"ส่ง JSON image-gen prompt (_bg_image_prompt.json) — คอนเซ็ปต์ world map contour จาง + self-check ผ่าน"}
+{"time":"2026-06-15T11:31:23+07:00","agent":"Elysia","action":"เขียน Bronya bg brief (gen ภาพ + wire bg จาง + layering หลังการ์ด) — ส่ง Bronya โหมด1"}
+{"time":"2026-06-15T11:50:08+07:00","agent":"Elysia","action":"ปิด project country-explorer: กลั่นบทเรียนเข้า session-log/memory/GEMINI.md(§8 Bootstrap-base)+copy global, ลบ task-context+handoff"}
+{"time":"2026-06-15T20:19:28+07:00","agent":"Elysia","action":"S037 our_team re-design: grill 3 rounds done - HR Roster theme + org-chart tree (2 divisions) + employee badge portraits. Drafting Design Brief for Owner approval"}
+{"time":"2026-06-15T20:28:33+07:00","agent":"Elysia","action":"S037: Owner approved Design Brief -\u003e spawning Sakura for mockup (HR Roster + org-chart tree, 2 divisions)"}
+{"time":"2026-06-15T20:49:32+07:00","agent":"Sakura","action":"S037: mockup HR Roster done (desktop+mobile responsive, 2 divisions, expand inline, hybrid workflow) - sent to Elysia"}
+{"time":"2026-06-15T20:49:32+07:00","agent":"Elysia","action":"S037: reviewed Sakura mockup - looks clean, presenting to Owner for approval"}
+{"time":"2026-06-15T21:17:05+07:00","agent":"Elysia","action":"S037 rev1: Owner wants lead cards (Elysia+Bronya) prominent - horizontal layout, portrait left 100% height, name right larger text. Re-spawning Sakura to edit mockup"}
+{"time":"2026-06-15T21:32:59+07:00","agent":"Sakura","action":"S037 rev1: lead cards Elysia+Bronya now horizontal - portrait left full-height + name right larger. Verified by Elysia via fresh re-render"}
+{"time":"2026-06-15T21:32:59+07:00","agent":"Elysia","action":"S037 rev1: verified lead-card revision correct, cleaned temp pngs, presenting to Owner"}
+{"time":"2026-06-15T21:41:30+07:00","agent":"Elysia","action":"S037: mockup approved + fixed Mobius/Aponia ribbon colors. Wrote _bronya_brief.md (8-point handoff). Asking Owner: run mode (IDE dogfood subteam vs Elysia CLI)"}
+{"time":"2026-06-15T21:43:47+07:00","agent":"Elysia","action":"S037: handing off to Owner -\u003e Mode 1 (drive Antigravity IDE, dogfood new subteam). Waiting for Bronya done to run build-gate + QA"}
+{"time":"2026-06-15T22:04:14+07:00","agent":"Elysia","action":"S037: Bronya done, build-gate PASS (clean). Found font-stale in index.html + favicon nit. Spawning Aponia+Sakura QA parallel"}
+{"time":"2026-06-15T22:04:14+07:00","agent":"Bronya","action":"S037: implemented team-dashboard (3 files, signal-based accordion, 9 members) - build PASS, [BRONYA_DONE]"}
+{"time":"2026-06-15T22:20:34+07:00","agent":"Aponia","action":"S037 QA: code/a11y/security = fix-then-ship, no blocker. Flagged muted contrast 4.27, role=region unnamed, trackBy"}
+{"time":"2026-06-15T22:20:34+07:00","agent":"Sakura","action":"S037 QA: design fidelity = fix-then-ship. M1/M2 portrait crop (Bronya fake-ID), M3 mobile lead layout differs, font floor"}
+{"time":"2026-06-15T22:20:34+07:00","agent":"Elysia","action":"S037: applied QA fixes (portrait zoom+top, muted contrast, region aria-label, font floor 12px), rebuilt+rerendered clean. M3 mobile pending Owner"}
+{"time":"2026-06-15T22:22:39+07:00","agent":"Elysia","action":"S037: M3 resolved (Owner=column on mobile, no change). All team-side work done. Handing to Owner for real-machine test (ng serve)"}
+{"time":"2026-06-15T22:33:59+07:00","agent":"Elysia","action":"S037 CLOSED: our_team re-design done, Owner verified on real machine. Distilled lessons -\u003e GEMINI.md sec8 (asset path) + global copy + session-log + memory (our_team/hybrid) + Sakura/Aponia feedback. task-context deleted, temp cleaned"}
+{"time":"2026-06-16T11:22:26+07:00","agent":"Elysia","action":"S038 grill FullStack จบ 9 ข้อ — เริ่ม Phase 1 ยกระบบทีม (Step 1: CLAUDE.md)"}
+{"time":"2026-06-16T11:26:23+07:00","agent":"Elysia","action":"Phase1 Step1 เสร็จ — CLAUDE.md +backend stack +Learn/Auto mode +FullStack folder structure"}
+{"time":"2026-06-16T11:33:59+07:00","agent":"Elysia","action":"รีด CLAUDE.md 198-\u003e80 บรรทัด (two-tier contract + แยกกลไกไป rules/team-ops.md)"}
+{"time":"2026-06-16T11:41:14+07:00","agent":"Elysia","action":"Phase1 Step2 เสร็จ — agent profiles (Mobius/Aponia/Bronya GEMINI.md) +backend dev/QA standards"}
+{"time":"2026-06-16T11:47:14+07:00","agent":"Elysia","action":"รีด GEMINI.md 246-\u003e91 บรรทัด (two-tier contract + คงบทเรียน external memory ครบ + backend rules)"}
+{"time":"2026-06-16T11:51:17+07:00","agent":"Elysia","action":"Phase1 Step3 เสร็จ — build-gate.ps1 +Mode backend (tsc --noEmit + opt-in smoke test) parse+run ผ่าน"}
+{"time":"2026-06-16T11:54:13+07:00","agent":"Elysia","action":"Phase1 Step4 เสร็จ — workflow.md +FullStack Flow (API contract first, Learn/Auto variant, backend Build-Gate+QA non-negotiable)"}
+{"time":"2026-06-16T11:57:56+07:00","agent":"Elysia","action":"Phase1 จบครบ 5 step — ระบบทีมพร้อมรับ FullStack (Step5 Backend QA ยุบเข้า Aponia.md)"}
+{"time":"2026-06-16T11:59:44+07:00","agent":"Elysia","action":"Owner พัก Phase 2 — เขียน handoff.md + คง task-context (งานค้างข้าม session), set idle"}
+{"time":"2026-06-16T13:10:40+07:00","agent":"Elysia","action":"S038 Phase2 FIFA: grill done (Learn/Tournament Browser/2 endpoints/backend-first/frontend=Sakura+Bronya). Start backend setup, mentor mode."}
+{"time":"2026-06-16T14:30:28+07:00","agent":"Elysia","action":"B2 done: Express server :3000 + better-sqlite3 readonly connected (184 matches). Fixed PORT 30000-\u003e3000 + .js ext. Start B3 endpoint /api/tournaments."}
+{"time":"2026-06-16T15:10:31+07:00","agent":"Elysia","action":"B4 done (route param + parameterized query + validation; injection blocked). Build-Gate tsc PASS. Spawning Aponia for backend QA."}
+{"time":"2026-06-16T15:10:31+07:00","agent":"Aponia","action":"Spawned: backend QA fifa-worldcup (2 endpoints + health, injection/validation/security)."}
+{"time":"2026-06-16T15:34:32+07:00","agent":"Aponia","action":"Backend QA done: PASS-with-issues -\u003e Owner fixed #1 error-handler/try-catch + #2 validation 4-digit regex. Re-verified: injection/validation/tsc PASS."}
+{"time":"2026-06-16T15:34:33+07:00","agent":"Elysia","action":"B5 done: backend fifa-worldcup PASS (2 endpoints + error-handling + domain validation + Build-Gate). Backend phase COMPLETE. Next: frontend (Sakura design-first)."}

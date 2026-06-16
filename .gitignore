@@ -8,9 +8,13 @@ node_modules/
 
 # --- งาน Dashboard (โค้ดจริง ไม่ใช่ระบบ Team) — จัดเป็น 3 หมวดตั้งแต่ S026 ---
 # examples = ตัวอย่างงาน senior ไว้ศึกษา / practice = โปรเจคฝึก-ทดลอง / real_work = งานจริงของ Owner
+# งานแต่ละชิ้นแยกเป็น repo ของตัวเอง (S038): fifa-worldcup = repo อิสระ git init ข้างใน, MyTeam ไม่ track
 /examples/
 /practice/
 /real_work/
+
+# --- DB / data งาน (ไม่ใช่ระบบทีม) ---
+/SQL/
 
 # --- ไฟล์เฉพาะเครื่อง / ความเป็นส่วนตัว ---
 .claude/settings.local.json

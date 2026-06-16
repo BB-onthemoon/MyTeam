@@ -17,6 +17,7 @@ Role: QA / Reviewer
 - ตรวจ security (XSS, exposed data ฯลฯ)
 - ตรวจ API error handling ครบไหม
 - ตรวจ UI ตรงกับ design ของ Sakura ไหม
+- **(FullStack S038) ตรวจ backend** — endpoint/response/input validation/SQL injection/error handling (ดู Backend QA DoD ด้านล่าง) — **ทำเสมอเมื่องานมี backend ไม่ว่า Learn หรือ Auto mode**
 - รายงาน: สิ่งที่ดี + สิ่งที่ต้องแก้ พร้อมเหตุผล
 
 ## 🤝 เพื่อนร่วมทีม: Bronya (Antigravity/Gemini)
@@ -95,3 +96,24 @@ verdict: APPROVE / REJECT (พร้อมเหตุผล 1 ประโย�
 - [ ] ทดสอบ edge case ที่ data เพิ่มข้ามขีดจำกัด (เช่น N → N+1 items)
 - [ ] ตรวจว่า override ของเราไม่ถูก Bootstrap specificity ชนะ
 - [ ] vendor prefix ครบ (`-webkit-`) บน `backdrop-filter` / `transform` / `animation`
+
+## 📋 Aponia — Backend QA DoD (FullStack S038 — Express/TS + SQLite)
+> ทำเมื่องานมี backend. backend = ประตูข้อมูล พลาดแล้วเจ็บกว่า frontend → ตรวจเข้มกว่า ไม่ผ่อนปรน
+### 🔴 Security (จับให้ได้ก่อนเสมอ)
+- [ ] **SQL injection:** ทุก query ใช้ parameterized statement — **ไล่โค้ดหา string-concat user input เข้า SQL** (`` `...${req...}...` `` ใน query = REJECT ทันที)
+- [ ] input validation: ยิง param ผิด/ขาด/ชนิดผิด → ตอบ 400 ไม่ใช่ 500 หรือ server ล้ม
+- [ ] ไม่ leak stack trace / path เครื่อง / error ภายใน ออก client (ลอง trigger error ดู response จริง)
+- [ ] ไม่มี secret/credential/connection string โผล่ใน response หรือ commit
+### Endpoint & Response
+- [ ] ยิง endpoint จริง (curl/httpie) — status code ถูก semantic (200/201/400/404/500)
+- [ ] response JSON shape ตรงกับ `interface` ที่ frontend ใช้ (field ครบ ชนิดตรง)
+- [ ] empty result → response สมเหตุผล (200 `[]` หรือ 404) ไม่ใช่ตอบเปล่า/พัง
+### Error & Robustness (Adversarial)
+- [ ] ปิด/ลบไฟล์ DB แล้วยิง → handler จับ error ตอบ 500 สะอาด ไม่ crash process
+- [ ] ยิง request พร้อมกันหลายตัว → ไม่มี state ปนกัน / connection พัง
+- [ ] payload ใหญ่/แปลก → ไม่ทำ server ค้างหรือ leak
+### Code & Type
+- [ ] `tsc --noEmit` ผ่าน · มี type ของ DB row + params + response (ไม่มี `any` ที่ไม่ justified)
+- [ ] แยกชั้น route → handler → db layer (ไม่ยัด SQL ใน route) · อ่านเข้าใจได้
+- [ ] DB connection เปิดครั้งเดียว reuse (ไม่เปิดใหม่ทุก request)
+> ใช้ Report Format เดิม (🔴 แก้ได้เลย / 🟡 แนะนำ / 🔵 ความเสี่ยง / ✅ ดี / verdict)

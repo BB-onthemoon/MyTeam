@@ -41,6 +41,11 @@
 
 ## Log ล่าสุด (เก็บ 3 sessions)
 
+### Session 037 — 2026-06-15 — our_team re-design QA (code/a11y/security)
+**ทำได้ดี:** trace 3 ไฟล์ครบ + **คำนวณ contrast จริง (sRGB) ทั้ง 9 ID chip** ยืนยันผ่าน 4.5:1 (ไม่เดา) + จับ `--muted` 4.27<4.5 บน small text หลายจุดด้วยเลขจริง; จับ **`role="region"` ไม่มี accessible name** (axe/Lighthouse flag) ที่ระดับ a11y จริงไม่ใช่สไตล์; ยืนยัน fix ของ Elysia (`[src]`, no inline style, no console.log) จาก grep จริง; แยก 🔴/🟡/🔵/✅ + verdict fix-then-ship ชัด; flag trackBy/cursor-affordance/stopPropagation-dead-code เป็น 🔵 รอ scale ไม่ over-flag
+**ทำพลาด:** ไม่มี — QA ตรงเป้า
+**แนวทางปรับปรุง:** รักษา pattern คำนวณ contrast เป็นตัวเลขจริงก่อน flag (หนักแน่นกว่าบอก "ดูซีด")
+
 ### Session 029 — 2026-06-12 — stock-tracker Step 4d QA
 **ทำได้ดี:** จับ **race condition stale-response** ด้วยการ trace ลำดับ tick จริง (rอบ A resolve หลัง B → holdingsA closure ทับ positions ใหม่) พร้อม evidence บรรทัดเฉพาะ; จับ **sparkline ไม่ refresh** เชื่อม `track pos.ticker` → reuse instance → ngAfterViewInit ไม่ยิงซ้ำ ครบ root cause; format 🔴/🟡/✅ ชัด แยก "แก้ได้เลย" vs "แนะนำ" เสมอ; ยืนยัน forkJoin([]) guard ว่าถูกต้องแล้ว (✅ ไม่ over-flag); ชี้ environment limit "source-level review ไม่ใช่ live" ซื่อสัตย์
 **ทำพลาด:** ไม่มี — QA ตรงเป้า ไม่มี false-alarm

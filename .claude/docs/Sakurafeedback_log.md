@@ -18,6 +18,11 @@
 
 ## Log ล่าสุด (เก็บ 3 sessions)
 
+### Session 037 — 2026-06-15 — our_team re-design (mockup + design fidelity QA)
+**ทำได้ดี:** mockup HR Roster/บัตรพนักงาน ครบ token system + portrait crop วงกลม + รับ rev1 (lead card แนวนอน portrait ซ้าย) เร็วและตรง; **design fidelity QA เทียบ `real_*.png` (แอป build จริง) vs mockup จับ M2 ได้ตรง invariant** (Bronya portrait โชว์ fake-ID — ตรง constraint ใน task-context) + M1 crop + แยก M3 (mobile lead deviation) เป็น "ถาม Owner ก่อน" ไม่ฟันธง + font floor S021; severity ชัด
+**ทำพลาด:** mockup เผลอใส่สี Mobius/Aponia ผิดจาก office_status (Elysia แก้); mockup mobile lead วาดเป็นแนวนอนแต่ impl ยุบ column → ต่างกัน (M3)
+**แนวทางปรับปรุง:** ทำ mockup ทีม → ดึง**สีประจำตัว agent จาก `office_status.json` (canonical)** ไม่เดาสีเอง; ทำ mobile breakpoint ใน mockup ให้ตรง spec ที่ระบุ (stack/แนวนอน) กัน deviation ตอน QA
+
 ### Session 029 — 2026-06-12 — stock-tracker Step 4d UI Review
 **ทำได้ดี:** findings ครบ 12 ข้อ ชัดทุกจุด — ชี้ font floor 11px vs กฎ S021 (12px) ถูกต้อง 3 จุด, touch target .btn-remove 28px < 44px พร้อมวิธีแก้, จับ focus ring ถูกปิดไม่มี custom แทน (WCAG 2.4.7), จับ dead binding isLoading ด้วยการ trace code logic (ไม่ต้องรัน browser); แยก "ต้อง verify browser" ออกจาก "ฟันธงได้จาก code" ชัดเจน; format ตาราง summary ชัด เรียงตาม priority
 **ทำพลาด:** ไม่มี — QA ตรงเป้า
